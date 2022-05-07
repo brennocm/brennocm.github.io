@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/6973b2ca41.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="assets/styles.css">
+    <title>Brenno Cavalcante Miranda</title>
+</head>
+<body>
+    
+     <main>
+        <h1>Brenno Cavalcante Miranda</h1>
+        <h2>Desenvolvedor Full-Stack</h2>
+
+            <div class="icons">
+                <a href="mailto:brennocmiranda@outlook.com"><img src="img/email1.png" width="3%"></a>      
+               <a target="_blank" href="https://www.linkedin.com/in/brennocm/"><img src="img/linedin1.png" width="3%"></a> 
+               <a target="_blank" href="http://github.com/brennocm"><img src="img/github.jpg" width="3%"></a>
+            </div>
+
+            <div onclick="displayAbout()" id="arrow">
+                <i id="animation" class="fa-solid fa-arrow-turn-down"></i>
+            </div>
+
+            <div style="display: none;" id="about">
+                <p class="about-">
+                    Sou um estudante de Análise e Desenvolvimento de Sistemas na UNICAMP. De momento, possuo conhecimentos básicos em HTML, CSS, Bootstrap, SASS, Javascript, Typescript, Java e Spring Boot.
+                </p>
+            </div>
+    </main>
+
+    <script>
+        function displayAbout(){
+            var arrow = document.getElementById('animation');
+            arrow.classList.toggle('rotate');
+            var display = document.getElementById('about');
+            display.classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>
