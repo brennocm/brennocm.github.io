@@ -29,7 +29,7 @@ img{
     padding-left: 25px;
 }
 
-#arrow {
+#xmark {
     font-size: 20px;
     cursor: pointer;
     animation: blink 1s steps(5, start) infinite;
