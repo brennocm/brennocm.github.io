@@ -1,8 +1,7 @@
 * {
-    
     padding: 0;
     margin: 0;
-    background-color: #222222;
+    background-color: #000000;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color: white;
 }
@@ -17,8 +16,8 @@ main h1{
 }
 
 main h2{
-    margin-top: 30px;
-    font-size: 45px;
+    margin-top: 50px;
+    font-size: 35px;
 }
 
 main .icons{
@@ -30,9 +29,8 @@ img{
     padding-left: 25px;
 }
 
-
 #arrow {
-    font-size: 40px;
+    font-size: 20px;
     cursor: pointer;
     animation: blink 1s steps(5, start) infinite;
 }
@@ -41,22 +39,4 @@ img{
     to {
         visibility: hidden;
     }
-}
-
-.rotate{
-    transform: rotate(180deg);
-    transition: 300ms;
-}
-
-#about p{
-    max-width: 600px;
-    margin: 0 auto;
-    margin-top: 20px;
-    color: white;
-    font-size: 25px;
-}
-
-
-.active{
-    display: block !important;
 }

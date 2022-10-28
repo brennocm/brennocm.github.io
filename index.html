@@ -5,40 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/6973b2ca41.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="https://iconifier.net/iconified/20221029093441_fav/apple-touch-icon-152x152.png" />
     <link rel="stylesheet" href="assets/styles.css">
-    <title>Brenno Cavalcante Miranda</title>
+    <title>Brenno C. M.</title>
 </head>
-<body>
-    
+<body> 
      <main>
-        <h1>Brenno Cavalcante Miranda</h1>
-        <h2>Desenvolvedor Full-Stack</h2>
-
+        <img src="img/bcm.jpg">
+        <h2>B. C. M.</h2>
             <div class="icons">
-                <a href="mailto:brennocmiranda@outlook.com"><img src="img/email1.png" width="3%"></a>      
-               <a target="_blank" href="https://www.linkedin.com/in/brennocm/"><img src="img/linedin1.png" width="3%"></a> 
-               <a target="_blank" href="http://github.com/brennocm"><img src="img/github.jpg" width="3%"></a>
+                <a target="_blank" href="http://github.com/brennocm"><img src="img/github.jpg" width="3%"></a>
+                <a target="_blank" href="https://www.instagram.com/naotalentoso/"><img src="img/insta.png" width="3%"></a>      
+                <a target="_blank" href="https://brennocm.gitbook.io/profile/"><img src="img/gitbook.png" width="3%"></a> 
+                <a target="_blank" href="https://www.linkedin.com/in/brennocm/"><img src="img/linedin.png" width="3%"></a> 
+                <a target="_blank" href="https://tryhackme.com/p/brennocm"><img src="img/thm.jpg" width="4%"></a> 
             </div>
-
             <div onclick="displayAbout()" id="arrow">
-                <i id="animation" class="fa-solid fa-arrow-turn-down"></i>
+                <a target="_blank" href="https://drive.google.com/file/d/1hs7DzKWujs-uoxfpCPV1qeyCUNAyZSGM/view?usp=sharing"><i id="animation" class="fa-solid fa-arrow-turn-down"></i></a>
             </div>
-
-            <div style="display: none;" id="about">
-                <p class="about-">
-                    Sou um estudante de Análise e Desenvolvimento de Sistemas na UNICAMP. De momento, possuo conhecimentos básicos em HTML, CSS, Bootstrap, SASS, Javascript, Typescript, Java e Spring Boot.
-                </p>
-            </div>
-    </main>
-
     <script>
         function displayAbout(){
             var arrow = document.getElementById('animation');
-            arrow.classList.toggle('rotate');
-            var display = document.getElementById('about');
-            display.classList.toggle('active');
         }
     </script>
-
 </body>
 </html>
