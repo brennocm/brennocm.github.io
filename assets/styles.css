@@ -6,16 +6,11 @@
     color: white;
 }
 
-main{
+.container{
     text-align: center;
 }
 
-main h1{
-    margin-top: 5%;
-    font-size: 70px;
-}
-
-main h2{
+.container h2{
     margin-top: 50px;
     font-size: 35px;
 }
@@ -25,18 +20,54 @@ main .icons{
     justify-content: center;
 }
 
-img{
+.icons img{
     padding-left: 25px;
+}
+
+#icon:hover{
+    animation: blink 0.7s steps(5, start) infinite;
 }
 
 #xmark {
     font-size: 20px;
-    cursor: pointer;
-    animation: blink 1s steps(5, start) infinite;
+    animation: blink 0.7s steps(5, start) infinite;
+    padding-bottom: 1em;
 }
 
 @keyframes blink {
     to {
         visibility: hidden;
+    }
+}
+
+@media(max-width: 800px){
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .container h2{
+        margin-top: 50px;
+        font-size: 3.5em;
+    }
+    
+    main .icons{
+        justify-content: center;
+    }
+
+    #main{
+        width: 20em;
+    }
+
+    #xmark {
+        font-size: 25px;
+        padding-top: 0.3em;
+        padding-bottom: 0.5em;
+    }
+    
+    #xmark {
+        font-size: 20px;
+        animation: blink 0.7s steps(5, start) infinite;
+        padding-bottom: 1em;
     }
 }
