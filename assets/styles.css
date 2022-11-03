@@ -45,7 +45,7 @@ main .icons{
  * {
     padding: 0;
     margin: 0;
-}
+    }
 
     .container h2{
         margin-top: 50px;
@@ -64,12 +64,6 @@ main .icons{
     #xmark {
         font-size: 25px;
         padding-top: 0.3em;
-        padding-bottom: 0.5em;
-    }
-    
-    #xmark {
-        font-size: 20px;
-        animation: blink 0.7s steps(5, start) infinite;
-        padding-bottom: 1em;
+        padding-bottom: 1.0em;
     }
 }
