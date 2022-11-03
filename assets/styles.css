@@ -22,23 +22,24 @@ main .icons{
 }
 
 .icons img{
-    padding-left: 25px;
+    padding: 0 10px;
+    width: 4.5em;
+}
+
+
+#icon{
+    transform: scale(0.8);
 }
 
 #icon:hover{
-    animation: blink 0.7s steps(5, start) infinite;
+    transform: scale(1);
+    transition: 0.3s;
 }
 
 #xmark {
     font-size: 20px;
     animation: blink 0.7s steps(5, start) infinite;
     padding-bottom: 1em;
-}
-
-@keyframes blink {
-    to {
-        visibility: hidden;
-    }
 }
 
 @media(max-width: 800px){
@@ -64,6 +65,25 @@ main .icons{
     #xmark {
         font-size: 25px;
         padding-top: 0.3em;
-        padding-bottom: 1.0em;
+
+    }
+
+    #icon{
+        transform: scale(1);
+    }
+    
+    #icon:hover{
+        transform: scale(1);
+    }
+
+    .icons img{
+        padding: 0 10px;
+        width: 3.2em;
+    }
+}
+
+@keyframes blink {
+    to {
+        visibility: hidden;
     }
 }
