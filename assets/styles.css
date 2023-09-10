@@ -4,6 +4,8 @@
     background-color: #000000;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color: white;
+    justify-content: center;
+  align-items: center;
 }
 
 .container{
@@ -11,8 +13,8 @@
 }
 
 .container h2{
-    margin-top: 50px;
-    font-size: 35px;
+    margin-top: 20px;
+    font-size: 60px !important;
 }
 
 main .icons{
@@ -37,10 +39,10 @@ main .icons{
 }
 
 #xmark {
-    font-size: 20px;
-    animation: blink 0.7s steps(5, start) infinite;
-    padding-bottom: 1em;
+    animation: blink 2.5s steps(5, start) infinite;
+    
 }
+
 
 @media(max-width: 800px){
  * {
