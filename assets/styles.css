@@ -1,11 +1,14 @@
-* {
-    padding: 0;
-    margin: 0;
-    background-color: #000000;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+body{
+    background: black;
     color: white;
+    display: flex;
     justify-content: center;
-  align-items: center;
+    align-items: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#main{
+    width: 50%;
 }
 
 .container{
@@ -13,7 +16,7 @@
 }
 
 .container h2{
-    margin-top: 20px;
+    margin-top: 50px;
     font-size: 60px !important;
 }
 
@@ -25,9 +28,8 @@ main .icons{
 
 .icons img{
     padding: 0 10px;
-    width: 4.5em;
+    width: 5.0em;
 }
-
 
 #icon{
     transform: scale(0.8);
@@ -44,7 +46,7 @@ main .icons{
 }
 
 
-@media(max-width: 800px){
+@media(max-width: 900px){
  * {
     padding: 0;
     margin: 0;
@@ -52,22 +54,17 @@ main .icons{
 
     .container h2{
         margin-top: 50px;
-        font-size: 3.5em;
+        font-size: 2em;
     }
     
     main .icons{
         display: flex;
         justify-content: center;
+        align-items: center;
     }
 
     #main{
         width: 20em;
-    }
-
-    #xmark {
-        font-size: 25px;
-        padding-top: 0.3em;
-
     }
 
     #icon{
@@ -81,11 +78,5 @@ main .icons{
     .icons img{
         padding: 0 10px;
         width: 3.2em;
-    }
-}
-
-@keyframes blink {
-    to {
-        visibility: hidden;
     }
 }
