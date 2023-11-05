@@ -1,81 +1,82 @@
-body{
+body {
     background: black;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    height: 100vh; /* Defina a altura como 100% da altura da tela */
+    overflow: hidden; /* Impede a barra de rolagem vertical */
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 0; /* Remove margens padrão do corpo */
+    padding: 0; /* Remove preenchimento padrão do corpo */
 }
 
-#main{
-    width: 50%;
+#main {
+    width: 60%;
+    max-width: 100%; /* Evita que a imagem seja maior do que a largura da tela */
 }
 
-.container{
+.container {
     text-align: center;
+    max-width: 100%; /* Garante que o conteúdo não se estenda além da largura da tela */
 }
 
-.container h2{
-    margin-top: 50px;
+.container h2 {
+    padding-top: 15%;
+    padding-bottom: 8%;
     font-size: 60px !important;
+    margin: 0; /* Remove margens superiores e inferiores do título */
 }
 
-main .icons{
-    padding: 35px;
+main .icons {
     display: flex;
     justify-content: center;
+    align-items: center;
+    padding-bottom: 18%;
 }
 
-.icons img{
+.icons img {
     padding: 0 10px;
     width: 5.0em;
 }
 
-#icon{
+#icon {
     transform: scale(0.8);
 }
 
-#icon:hover{
+#icon:hover {
     transform: scale(1);
     transition: 0.3s;
 }
 
 #xmark {
     animation: blink 2.5s steps(5, start) infinite;
-    
 }
 
-
-@media(max-width: 900px){
- * {
-    padding: 0;
-    margin: 0;
+@media (max-width: 900px) {
+    body {
+        justify-content: center; /* Centralize o conteúdo verticalmente */
     }
 
-    .container h2{
-        margin-top: 50px;
+    .container h2 {
         font-size: 2em;
     }
-    
-    main .icons{
-        display: flex;
-        justify-content: center;
-        align-items: center;
+
+    #main {
+        width: 100%; /* Preenche a largura da tela em telas menores */
+        max-width: 100%;
     }
 
-    #main{
-        width: 20em;
-    }
-
-    #icon{
-        transform: scale(1);
-    }
-    
-    #icon:hover{
+    #icon {
         transform: scale(1);
     }
 
-    .icons img{
+    #icon:hover {
+        transform: scale(1);
+    }
+
+    .icons img {
         padding: 0 10px;
         width: 3.2em;
     }
