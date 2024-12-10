@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/articles.css">
+    <link rel="icon" type="image/x-icon" href="../img/icon.png" />
+    <title>tor website</title>
+</head>
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a target="_blank" href="../index.html">
+            <img id="main" src="../img/angel-article.png" alt="Angel">
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+        <header class="article-header">
+            <h1>Criação de sites na rede Tor</h1>
+            <p class="meta">
+                <span>dez 05, 2024</span> by 
+                <a target="_blank" href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+            </p>
+        </header>
+
+        <section class="article-body">
+            <p>
+                Os websites na rede Tor desempenham um papel crucial em um mundo onde a privacidade e a liberdade de expressão enfrentam desafios crescentes, oferecendo, quando utilizados corretamente, um meio de navegação segura e acesso à informação não censurada.
+            </p>
+            <h2>Conceito:</h2>
+            <p>
+                O Tor (The Onion Router) é um software livre e uma rede aberta que possibilita a navegação anônima, visto que mascara o endereço IP dos usuários ao redirecionar o tráfego por uma rede global de voluntários (nós) antes de alcançar o destino final, além de utilizar múltiplas camadas de criptografia. Além disso, permite o acesso a serviços ocultos (.onion), que são sites inacessíveis pela internet convencional e fazem parte da rede Tor.
+            </p>
+            <img id="main" src="../img/articles/tor-website/tor-working.png" alt="tor-working">
+            <p>
+                <b>Atenção:</b> A fins de segurança, aconselham-se realizar as ações citadas a partir de uma VPS isolada.
+            </p>
+            <p>
+                Para a criação de sites na rede Tor, será usado:
+            </p>
+            <ul>
+                <li>Um servidor web (Apache);</li>
+                <li>O sistema operacional Ubuntu (Linux);</li>
+                <li>O software Tor;</li>
+                <li>O navegador Tor;</li>
+                <li>Um conteúdo estático para exemplificação.</li>
+            </ul>
+            <h2>Instalação do Tor Browser</h2>
+            <p>A princípio, é preciso instalar o Tor Browser, o navegador que possibilita o acesso aos serviços provenientes da rede Onion vinculado ao Tor Project. Em <a target="_blank" href="https://www.torproject.org/download/">https://www.torproject.org/download/</a>, baixe o Tor Browser. Em seguida, descompacte o arquvivo para sua utilização futura:</p>
+            <pre class="code-block">
+                <code>tar -xvf tor-browser-linux-x86_64-14.0.3.tar.xz</code>
+            </pre>
+            <h2>Instalação do Tor:</h2>
+            <p>
+                Em seguida, deve-se instalar o Tor. Portanto, com permissões administrativas, utilize o comando abaixo:
+            </p>
+            <pre class="code-block">
+                <code>sudo apt install tor -y</code>
+            </pre>
+            <p>
+                Após a instalação, verifique se o serviço está ativo: 
+            </p>
+            <pre class="code-block">
+                <code>systemctl status tor</code>
+            </pre>
+            <h2>Configurando o Serviço Oculto:</h2>
+            <p>
+                O próximo passo seria configurar o software Tor, permitindo o acesso ao website. Para isso, vá no arquivo de configurações e edite-o:
+            </p>
+            <pre class="code-block">
+                <code>sudo vim /etc/tor/torrc</code>
+            </pre>
+            <p>
+                Em seguida, encontre as linhas a seguir e descomente-as:
+            </p>
+            <pre class="code-block">
+                <code>HiddenServiceDir /var/lib/tor/hidden_service/</code>
+            </pre>
+            <pre class="code-block">
+                <code>HiddenServicePort 80 127.0.0.1:8080</code>
+            </pre>
+            <p>
+                Por fim, com o intuito de aplicar as mudanças, reinicie o serviço Tor:
+            </p>
+            <pre class="code-block">
+                <code>sudo systemctl restart tor</code>
+            </pre>
+            <p>
+                Após o reiniciamento, o endereço onion referente ao site criado estará em "/var/lib/tor/hidden_service/hostname". Portanto, é possível vê-lo a partir de:
+            </p>
+            <pre class="code-block">
+                <code>cat /var/lib/tor/hidden_service/hostname</code>
+            </pre>
+            <h2>Configurando o servidor Web:</h2>
+            <p>
+                Por último, necessita-se a configuração do servidor web. A fins de exemplo, o Apache foi o escolhido.
+            </p>
+            <pre class="code-block">
+                <code>sudo apt install apache2</code>
+            </pre>
+            <p>
+               Em <b>/var/www/html</b>, insira o site estático
+            </p>
+            <pre class="code-block">
+                <code>cd /var/www/html</code>
+            </pre>
+            <pre class="code-block">
+                <code>vim index.html</code>
+            </pre>
+            <p>
+                Com isso, ao colocar a URL obtda em <b>var/lib/tor/hidden_service/hostname</b> no tor browser, o site estático inserido anteriormente carregará. Concluindo assim, o processo de criação de site estático no Tor.
+            </p>
+            <img id="example-tor" src="../img/articles/tor-website/tor-web-example.png" alt="website-example">
+            <p>
+               Assim, foi-se criado um website na rede Onion vinculado ao Tor Project, possibilitando a customização do site perante a vontade do usuário.
+             </p>
+        </section>
+    </main>
+    <br>
+    <footer>
+        <p>&copy; 20∞</p>
+    </footer>
+</body>
+</html>
