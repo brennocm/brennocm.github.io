@@ -176,12 +176,12 @@ footer {
 /* Smartphones and small devices */
 @media (max-width: 480px) {
     .hero-section img {
-        width: 100%;
+        width: 70%;
     }
 
     .hero-section h2 {
-        font-size: 30px;
-        margin: 15px 0;
+        font-size: 50px;
+        margin: 30px 0;
     }
 
     .hero-section .icons {
@@ -189,8 +189,8 @@ footer {
     }
 
     .hero-section .icons img {
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
     }
 
     .posts .post {
