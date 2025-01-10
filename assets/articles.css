@@ -48,16 +48,19 @@ body {
 .article-header .meta {
     font-size: 14px;
     color: #bbb;
+
 }
 
 .article-header .meta a {
     color: #b3ff00;
     text-decoration: none;
+    
 }
 
 .article-header .meta .read-time {
     float: right;
     color: #777;
+    
 }
 
 /* Article Body */
@@ -86,24 +89,31 @@ a{
     color: #fff;
 }
 
-/* Code Block Styling Centered */
+/* Code Block - Ajuste final para dispositivos móveis */
 .code-block {
     background-color: #1e1e1e;
     color: #b3ff00;
-    padding: 1px 15px; /* Reduz o espaçamento interno superior/inferior */
-    border-radius: 4px; /* Mantém bordas arredondadas */
-    font-family: 'Ubuntu Mono', 'Courier New', Courier, monospace; /* Fonte de terminal */
-    font-size: 14px; /* Tamanho do texto ajustado */
-    margin: 10px auto; /* Centraliza e define espaçamento externo */
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-family: 'Ubuntu Mono', 'Courier New', Courier, monospace;
+    font-size: 14px;
+    margin: 10px 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    line-height: 1.5;
+    width: 100%;
+    box-sizing: border-box;
     text-align: left;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Sombra leve */
-    line-height: 1.2; /* Reduz espaçamento entre linhas */
+    white-space: pre; /* Mantém o formato original sem quebras */
+    overflow-x: auto; /* Adiciona rolagem horizontal para conteúdo longo */
+    word-wrap: normal; /* Evita quebras automáticas de palavras */
 }
 
+/* Ajuste para o conteúdo do bloco de código */
 .code-block code {
     display: block;
-    font-weight: normal; /* Visual mais próximo de terminais */
-    line-height: 1.2; /* Mantém consistência no espaçamento */
+    white-space: pre; /* Mantém formatação original */
+    overflow-wrap: normal; /* Garante que palavras não sejam quebradas */
+    word-wrap: normal; /* Compatibilidade adicional */
 }
 
 footer {
@@ -145,7 +155,8 @@ footer {
     }
 
     .code-block {
-        font-size: 13px; /* Ajusta o tamanho do texto nos blocos de código */
+        font-size: 13px; /* Tamanho do texto reduzido */
+        padding: 8px 12px; /* Reduz espaçamento */
     }
 }
 
@@ -169,6 +180,10 @@ footer {
     .article-body p {
         font-size: 13px; /* Ajusta o texto para ser mais legível */
     }
+    .code-block {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -190,7 +205,8 @@ footer {
     }
 
     .code-block {
-        font-size: 12px; /* Menor texto em blocos de código */
+        font-size: 12px;
+        padding: 6px 10px;
     }
 }
 
