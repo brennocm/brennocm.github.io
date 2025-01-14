@@ -13,6 +13,11 @@ a {
     color: inherit;
 }
 
+#hackingops {
+    width: 90px; 
+    height: auto;
+}
+
 /* Header */
 .hero-section {
     background: black;
