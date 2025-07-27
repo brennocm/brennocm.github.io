@@ -333,6 +333,11 @@
                 gap: 8px;
                 align-items: flex-start;
             }
+
+                    #hackingops {
+            width: 75px;
+            height: auto;
+        }
         }
 
         @media (max-width: 480px) {
