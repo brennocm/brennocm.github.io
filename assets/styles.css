@@ -18,19 +18,18 @@
             height: auto;
         }
 
-        /* Header */
-        .hero-section {
-            background: black;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 80vh;
-            position: relative;
-            z-index: 10;
-        }
+.hero-section {
+    background: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 10;
+}
 
         .hero-section img {
             width: 80%;

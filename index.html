@@ -1,226 +1,226 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/styles.css">
-    <link rel="icon" type="image/x-icon" href="/img/home/icon.png   " />
-    <title>home.</title>
-</head>
-<body>
-    <!-- header -->
-    <header class="hero-section">
-        <div class="container">
-            <a target="_blank" href="https://www.youtube.com/watch?v=OtUgra5BtwI">
-                <img id="main" src="img/home/angel.jpg" alt="Angel">
-            </a>
-            <h2>B. C. M.</h2> 
-            <div class="icons">
-                <a id="icon" target="_blank" href="http://github.com/brennocm"><img src="img//home/github.jpg" alt="GitHub"></a>  
-                <a id="icon" target="_blank" href="https://tryhackme.com/p/brennocm"><img src="img/home/thm.png" alt="TryHackMe"></a>
-                 <!--
-                <a id="icon" target="_blank" href="https://app.hackthebox.com/profile/1394828"><img src="img//home/htb.svg" alt="Hack The Box"></a> 
-                -->
-                <a id="icon" target="_blank" href="https://www.linkedin.com/in/brennocm/"><img src="img/home/linkedin.png" alt="LinkedIn"></a> 
-                <a id="icon" target="_blank" href="https://hackingops.github.io/"><img src="img/home/hackingops.png " alt="HackingOps" id="hackingops"></a> 
-            </div>
-        </div>
-    </header>
- <!-- About Me Section -->
-    <section class="about-section">
-        <div class="about-container">
-            <h2 class="about-title">Sobre Mim</h2>
-            <div class="about-content">
-                <p>
-                    Sou um profissional especializado em segurança cibernética com foco em segurança ofensiva, emulação de adversário, análise de vulnerabilidades, segurança de aplicações e infraestrutura. Minha experiência abrange desde testes de intrusão até implementação de soluções de segurança em ambientes cloud.
-                </p>
-                <p>
-                    Com certificações em  application security, cloud security, network security e blockchain, busco constantemente 
-                    aprimorar meus conhecimentos e compartilhar experiências através de write-ups, artigos técnicos e reviews 
-                    de certificações. Acredito que a segurança digital é fundamental no mundo atual e me dedico 
-                    a contribuir para uma internet mais segura.
-                </p>
-                <p>
-                    Quando não estou trabalhando com segurança, gosto de explorar novas tecnologias, 
-                    contribuir para projetos open source e participar da comunidade de segurança cibernética.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- articles -->
-    <div class="container-title">
-        <div class="section-title">
-            Artigos
-        </div>
-    </div>
-
-    <main class="main-content">
-        <!-- Reviews Category -->
-        <div class="category" id="reviews-category">
-            <div class="category-header" onclick="toggleCategory('reviews')">
-                <div class="category-title">
-                    <span>Reviews</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="category-count">4 itens</span>
-                        <span class="category-arrow">▼</span>
-                    </div>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/styles.css">
+        <link rel="icon" type="image/x-icon" href="/img/home/icon.png   " />
+        <title>home.</title>
+    </head>
+    <body>
+        <!-- header -->
+        <header class="hero-section">
+            <div class="container">
+                <a target="_blank" href="https://www.youtube.com/watch?v=OtUgra5BtwI">
+                    <img id="main" src="img/home/angel.jpg" alt="Angel">
+                </a>
+                <h2>B. C. M.</h2> 
+                <div class="icons">
+                    <a id="icon" target="_blank" href="http://github.com/brennocm"><img src="img//home/github.jpg" alt="GitHub"></a>  
+                    <a id="icon" target="_blank" href="https://tryhackme.com/p/brennocm"><img src="img/home/thm.png" alt="TryHackMe"></a>
+                    <!--
+                    <a id="icon" target="_blank" href="https://app.hackthebox.com/profile/1394828"><img src="img//home/htb.svg" alt="Hack The Box"></a> 
+                    -->
+                    <a id="icon" target="_blank" href="https://www.linkedin.com/in/brennocm/"><img src="img/home/linkedin.png" alt="LinkedIn"></a> 
+                    <a id="icon" target="_blank" href="https://hackingops.github.io/"><img src="img/home/hackingops.png " alt="HackingOps" id="hackingops"></a> 
                 </div>
             </div>
-            <div class="category-content" id="reviews-content">
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/cbp-review.html')">
-                        <div>
-                            <h2>Certified Blockchain Practitioner (CBP) Review</h2>
-                            <p>Referência de estudo para a CBP, da The SecOps Group.</p>
-                            <div class="meta">
-                                <span>11, abr 2025</span>
-                                <span>blockchain</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/ccsp-aws-review.html')">
-                        <div>
-                            <h2>Certified Cloud Security Practitioner – AWS (CCSP-AWS) Review</h2>
-                            <p>Referência de estudo para a CCSP-AWS, da The SecOps Group.</p>
-                            <div class="meta">
-                                <span>07, abr 2025</span>
-                                <span>aws, cloudsec</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/cnsp-review.html')">
-                        <div>
-                            <h2>Certified Network Security Practitioner (CNSP) Review</h2>
-                            <p>Referência de estudo para a CNSP, da The SecOps Group.</p>
-                            <div class="meta">
-                                <span>31, mar 2025</span>
-                                <span>network security, infrastructure</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/cap-review.html')">
-                        <div>
-                            <h2>Certified AppSec Practitioner (CAP) Review</h2>
-                            <p>Referência de estudo para a CAP, da The SecOps Group.</p>
-                            <div class="meta">
-                                <span>21, jan 2025</span>
-                                <span>webapp, appsec</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-            </div>
-        </div>
-
-        <!-- Technical Articles Category -->
-        <div class="category" id="technical-category">
-            <div class="category-header" onclick="toggleCategory('technical')">
-                <div class="category-title">
-                    <span>Tutoriais</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="category-count">4 itens</span>
-                        <span class="category-arrow">▼</span>
-                    </div>
+        </header>
+    <!-- About Me Section -->
+        <section class="about-section">
+            <div class="about-container">
+                <h2 class="about-title">Sobre Mim</h2>
+                <div class="about-content">
+                    <p>
+                        Sou um profissional especializado em segurança cibernética com foco em segurança ofensiva, emulação de adversário, análise de vulnerabilidades, segurança de aplicações e infraestrutura. Minha experiência abrange desde testes de intrusão até implementação de soluções de segurança em ambientes cloud.
+                    </p>
+                    <p>
+                        Com certificações em  application security, cloud security, network security e blockchain, busco constantemente 
+                        aprimorar meus conhecimentos e compartilhar experiências através de write-ups, artigos técnicos e reviews 
+                        de certificações. Acredito que a segurança digital é fundamental no mundo atual e me dedico 
+                        a contribuir para uma internet mais segura.
+                    </p>
+                    <p>
+                        Quando não estou trabalhando com segurança, gosto de explorar novas tecnologias, 
+                        contribuir para projetos open source e participar da comunidade de segurança cibernética.
+                    </p>
                 </div>
             </div>
-            <div class="category-content" id="technical-content">
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/own-vpn.html')">
-                        <div>
-                            <h2>Criação de VPN própria</h2>
-                            <p>Criação e configuração de uma VPN confeccionada a partir de um servidor próprio.</p>
-                            <div class="meta">
-                                <span>10, jan 2025</span>
-                                <span>opsec</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/proxychains-use.html')">
-                        <div>
-                            <h2>Utilização do Proxychains</h2>
-                            <p>Ferramenta que redireciona o tráfego de programas para um ou mais proxies.</p>
-                            <div class="meta">
-                                <span>30, dez 2024</span>
-                                <span>opsec</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/opsec-environment.html')">
-                        <div>
-                            <h2>Configuração de ambiente OPSEC</h2>
-                            <p>Configuração de um ambiente Windows voltado à privacidade por meio do Whonix.</p>
-                            <div class="meta">
-                                <span>18, dez 2024</span>
-                                <span>opsec</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-                <section class="posts">
-                    <article class="post" onclick="openArticle('articles/creating-tor-website.html')">
-                        <div>
-                            <h2>Criação de sites na rede Tor</h2>
-                            <p>Configuração de um website estático na rede Tor, implementada e mantida pelo Tor Project.</p>
-                            <div class="meta">
-                                <span>05, dez 2024</span>
-                                <span>tor project, deep web</span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
+        </section>
+
+        <!-- articles -->
+        <div class="container-title">
+            <div class="section-title">
+                Artigos
             </div>
         </div>
-    </main>
 
-    <!-- footer -->
-    <footer>
-        <p>&copy; 20∞</p>
-    </footer>
+        <main class="main-content">
+            <!-- Reviews Category -->
+            <div class="category" id="reviews-category">
+                <div class="category-header" onclick="toggleCategory('reviews')">
+                    <div class="category-title">
+                        <span>Reviews</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="category-count">4 itens</span>
+                            <span class="category-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content" id="reviews-content">
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/cbp-review.html')">
+                            <div>
+                                <h2>Certified Blockchain Practitioner (CBP) Review</h2>
+                                <p>Referência de estudo para a CBP, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span>11, abr 2025</span>
+                                    <span>blockchain</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/ccsp-aws-review.html')">
+                            <div>
+                                <h2>Certified Cloud Security Practitioner – AWS (CCSP-AWS) Review</h2>
+                                <p>Referência de estudo para a CCSP-AWS, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span>07, abr 2025</span>
+                                    <span>aws, cloudsec</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/cnsp-review.html')">
+                            <div>
+                                <h2>Certified Network Security Practitioner (CNSP) Review</h2>
+                                <p>Referência de estudo para a CNSP, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span>31, mar 2025</span>
+                                    <span>network security, infrastructure</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/cap-review.html')">
+                            <div>
+                                <h2>Certified AppSec Practitioner (CAP) Review</h2>
+                                <p>Referência de estudo para a CAP, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span>21, jan 2025</span>
+                                    <span>webapp, appsec</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+            </div>
 
-    <script>
-        function toggleCategory(categoryName) {
-            const category = document.getElementById(categoryName + '-category');
-            const isExpanded = category.classList.contains('expanded');
-            
-            if (isExpanded) {
-                category.classList.remove('expanded');
-            } else {
-                category.classList.add('expanded');
+            <!-- Technical Articles Category -->
+            <div class="category" id="technical-category">
+                <div class="category-header" onclick="toggleCategory('technical')">
+                    <div class="category-title">
+                        <span>Tutoriais</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="category-count">4 itens</span>
+                            <span class="category-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content" id="technical-content">
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/own-vpn.html')">
+                            <div>
+                                <h2>Criação de VPN própria</h2>
+                                <p>Criação e configuração de uma VPN confeccionada a partir de um servidor próprio.</p>
+                                <div class="meta">
+                                    <span>10, jan 2025</span>
+                                    <span>opsec</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/proxychains-use.html')">
+                            <div>
+                                <h2>Utilização do Proxychains</h2>
+                                <p>Ferramenta que redireciona o tráfego de programas para um ou mais proxies.</p>
+                                <div class="meta">
+                                    <span>30, dez 2024</span>
+                                    <span>opsec</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/opsec-environment.html')">
+                            <div>
+                                <h2>Configuração de ambiente OPSEC</h2>
+                                <p>Configuração de um ambiente Windows voltado à privacidade por meio do Whonix.</p>
+                                <div class="meta">
+                                    <span>18, dez 2024</span>
+                                    <span>opsec</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                    <section class="posts">
+                        <article class="post" onclick="openArticle('articles/creating-tor-website.html')">
+                            <div>
+                                <h2>Criação de sites na rede Tor</h2>
+                                <p>Configuração de um website estático na rede Tor, implementada e mantida pelo Tor Project.</p>
+                                <div class="meta">
+                                    <span>05, dez 2024</span>
+                                    <span>tor project, deep web</span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <!-- footer -->
+        <footer>
+            <p>&copy; 20∞</p>
+        </footer>
+
+        <script>
+            function toggleCategory(categoryName) {
+                const category = document.getElementById(categoryName + '-category');
+                const isExpanded = category.classList.contains('expanded');
+                
+                if (isExpanded) {
+                    category.classList.remove('expanded');
+                } else {
+                    category.classList.add('expanded');
+                }
             }
-        }
 
-        function openArticle(url) {
-            // Prevent event bubbling
-            event.stopPropagation();
-            
-            // Open in new tab
-            window.open(url, '_blank');
-        }
+            function openArticle(url) {
+                // Prevent event bubbling
+                event.stopPropagation();
+                
+                // Open in new tab
+                window.open(url, '_blank');
+            }
 
-        // Optional: Start with one category expanded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Uncomment the line below if you want Reviews to start expanded
-            // document.getElementById('reviews-category').classList.add('expanded');
-        });
-
-        // Prevent clicks on posts from bubbling up to category toggle
-        document.querySelectorAll('.post').forEach(post => {
-            post.addEventListener('click', function(e) {
-                e.stopPropagation();
+            // Optional: Start with one category expanded
+            document.addEventListener('DOMContentLoaded', function() {
+                // Uncomment the line below if you want Reviews to start expanded
+                // document.getElementById('reviews-category').classList.add('expanded');
             });
-        });
-    </script>
-</body>
-</html>
+
+            // Prevent clicks on posts from bubbling up to category toggle
+            document.querySelectorAll('.post').forEach(post => {
+                post.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+        </script>
+    </body>
+    </html>
