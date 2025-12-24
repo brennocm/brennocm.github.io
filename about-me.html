@@ -251,6 +251,51 @@
             height: 20px;
         }
 
+        /* Tooltip for email */
+        .contact-link.email-tooltip {
+            position: relative;
+        }
+
+        .contact-link.email-tooltip::after {
+            content: attr(data-email);
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(17, 17, 17, 0.95);
+            color: #9fef00;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(159, 239, 0, 0.3);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .contact-link.email-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(159, 239, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .contact-link.email-tooltip:hover::after,
+        .contact-link.email-tooltip:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* Placeholder styles - remove when filling real content */
         .placeholder {
             color: #b0b0b0;
@@ -644,13 +689,13 @@
                         </svg>
                         GitHub
                     </a>
-                    <a href="mailto:brennocmiranda@outlook.com" class="contact-link">
+                    <a href="mailto:brennocmiranda@outlook.com" class="contact-link email-tooltip" data-email="brennocmiranda@outlook.com">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
                             </path>
                             <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
-                       Email
+                        Email
                     </a>
                 </div>
             </div>
