@@ -1,57 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
     <title>home.</title>
 </head>
+
 <body>
     <header class="hero-section">
-        <div class="container">
-            <a target="_blank" href="https://www.youtube.com/watch?v=OtUgra5BtwI">
-                <img id="main" src="img/home/angel.jpg" alt="Angel">
-            </a>
-            <h2>B. C. M.</h2>
-            <div class="icons">
-                <a id="icon" target="_blank" href="http://github.com/brennocm"><img src="img//home/github.jpg" alt="GitHub"></a>
-                <a id="icon" target="_blank" href="https://tryhackme.com/p/brennocm"><img src="img/home/thm.png" alt="TryHackMe"></a>
-                <a id="icon" target="_blank" href="https://www.linkedin.com/in/brennocm/"><img src="img/home/linkedin.png" alt="LinkedIn"></a>
-                <a id="icon" target="_blank" href="https://hackingops.github.io/"><img src="img/home/hackingops.png " alt="HackingOps" id="hackingops"></a>
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>Brenno M.</h1>
+                <p class="hero-description">
+                    Sou especialista em segurança ofensiva, focado em pentest e operações de Red Team (emulação e
+                    simulação de adversário).
+                </p>
             </div>
+
+            <div class="hero-image">
+                <a href="https://www.youtube.com/watch?v=OtUgra5BtwI">
+                    <img src="img/home/new-logo.png" alt="Brenno M. Avatar">
+                </a>
+            </div>
+        </div>
+        <div class="icons">
+            <a href="https://www.linkedin.com/in/brennocm/" title="LinkedIn">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                </svg>
+            </a>
+            <a href="http://github.com/brennocm" title="GitHub">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
+                </svg>
+            </a>
+            <a href="https://app.hackthebox.com/public/users/1394828" title="HackTheBox" class="htb-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.8 3.4L12 11l-6.8-3.42L12 4.18zM4 8.62l7 3.5v7.78l-7-3.5V8.62zm9 11.28v-7.78l7-3.5v7.78l-7 3.5z" />
+                </svg>
+            </a>
+            <a href="https://tryhackme.com/p/brennocm" title="TryHackMe" class="thm-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cloud shape -->
+                    <path
+                        d="M38.5 18.5c0-0.5-0.1-1-0.2-1.5C37.5 11.5 32.5 7 26.5 7c-4.5 0-8.5 2.5-10.5 6.2C15 13.1 14 13 13 13c-5.5 0-10 4.5-10 10s4.5 10 10 10h2"
+                        stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                    <path d="M42 23c0-3.3-2.7-6-6-6h-1" stroke="currentColor" stroke-width="3.5" fill="none"
+                        stroke-linecap="round" />
+                    <!-- Binary rain numbers -->
+                    <text x="20" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                        fill="currentColor">10</text>
+                    <text x="32" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                        fill="currentColor">10</text>
+                    <text x="22" y="39" font-family="Arial, sans-serif" font-size="7" font-weight="bold"
+                        fill="currentColor">1110</text>
+                    <text x="18" y="45" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
+                        fill="currentColor">01</text>
+                    <text x="27" y="46" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
+                        fill="currentColor">01</text>
+                    <text x="36" y="44" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
+                        fill="currentColor">10</text>
+                </svg>
+            </a>
+
+        </div>
+        <div class="scroll-indicator" onclick="scrollToPosts()">
+            <span>Ver posts</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
         </div>
     </header>
-    <section class="about-section">
-        <div class="about-container">
-            <h2 class="about-title">Sobre Mim</h2>
-            <div class="about-content">
-                <p>
-                    Sou um profissional especializado em segurança cibernética com foco em segurança ofensiva, emulação de adversário, análise de vulnerabilidades, segurança de aplicações e infraestrutura. Minha experiência abrange desde testes de intrusão até implementação de soluções de segurança em ambientes cloud.
-                </p>
-                <p>
-                    Com certificações em application security, cloud security, network security e blockchain, busco constantemente
-                    aprimorar meus conhecimentos e compartilhar experiências através de write-ups, artigos técnicos e reviews
-                    de certificações. Acredito que a segurança digital é fundamental no mundo atual e me dedico
-                    a contribuir para uma internet mais segura.
-                </p>
-                <p>
-                    Quando não estou trabalhando com segurança, gosto de explorar novas tecnologias,
-                    contribuir para projetos open source e participar da comunidade de segurança cibernética.
-                </p>
-            </div>
-        </div>
-    </section>
 
-    <div class="container-title">
+    <div class="container-title" id="posts-section">
         <div class="section-title">
-            Artigos
+
         </div>
     </div>
 
     <main class="main-content">
-                <div class="category" id="technical-category">
+        <div class="category" id="technical-category">
             <div class="category-header" onclick="toggleCategory('technical')">
                 <div class="category-title">
                     <span>Tutoriais Técnicos</span>
@@ -181,6 +218,61 @@
             </div>
         </div>
 
+        <div class="category" id="career-category">
+            <div class="category-header" onclick="toggleCategory('career')">
+                <div class="category-title">
+                    <span>Dicas de Carreira</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="category-count">3 itens</span>
+                        <span class="category-arrow">▼</span>
+                    </div>
+                </div>
+            </div>
+            <div class="category-content" id="career-content">
+                <article class="post" onclick="openArticle('articles/tips/suggested-courses.html', event)">
+                    <div>
+                        <h2>Sugestões de Conteúdo</h2>
+                        <p>Curadoria de cursos, certificações e materiais de estudo de instituições reconhecidas.</p>
+                        <div class="meta">
+                            <span class="meta-date">📅 14 out 2025</span>
+                        </div>
+                        <div class="post-tags">
+                            <span class="tag">Estudos</span>
+                            <span class="tag">Carreira</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openArticle('articles/tips/privacy.html', event)">
+                    <div>
+                        <h2>Guia de Privacidade</h2>
+                        <p>Ferramentas e práticas para proteger sua privacidade online e adotar um estilo de vida
+                            digital seguro.</p>
+                        <div class="meta">
+                            <span class="meta-date">📅 20 jan 2025</span>
+                        </div>
+                        <div class="post-tags">
+                            <span class="tag">Privacy</span>
+                            <span class="tag">Carreira</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openArticle('articles/tips/hacking.html', event)">
+                    <div>
+                        <h2>Roadmap Hacking</h2>
+                        <p>Guia completo para construir fundamentos sólidos e se especializar em segurança ofensiva.</p>
+                        <div class="meta">
+                            <span class="meta-date">📅 10 jan 2025</span>
+                        </div>
+                        <div class="post-tags">
+                            <span class="tag">Hacking</span>
+                            <span class="tag">Roadmap</span>
+                            <span class="tag">Carreira</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
     </main>
 
     <footer>
@@ -192,7 +284,7 @@
         function toggleCategory(categoryName) {
             const category = document.getElementById(categoryName + '-category');
             if (!category) return;
-            
+
             // Close all other expanded categories
             document.querySelectorAll('.category.expanded').forEach(cat => {
                 if (cat.id !== category.id) {
@@ -204,13 +296,21 @@
             category.classList.toggle('expanded');
         }
 
-        // Open article in new tab
+        // Open article in same tab
         function openArticle(url, event) {
             if (event) {
                 event.stopPropagation();
             }
-            window.open(url, '_blank');
+            window.location.href = url;
+        }
+
+        // Scroll to posts section
+        function scrollToPosts() {
+            document.getElementById('posts-section').scrollIntoView({
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
+
 </html>

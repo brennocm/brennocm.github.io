@@ -11,8 +11,11 @@
 <body>
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
-        <a target="_blank" href="/index.html">
-        <img id="main" src="/img/articles/angel-article.png" alt="Angel">
+        <a href="/index.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Home
         </a>
     </nav>
 
@@ -21,7 +24,7 @@
         <header class="article-header">
             <h1>Utilização do Proxychains</h1>
             <p class="meta">
-                <span>dez 30, 2024</span> by <a target="_blank" href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+                <span>dez 30, 2024</span> by <a  href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
             </p>
         </header>
         <section class="article-body">
@@ -37,7 +40,7 @@
              <p>
                 <b>Proxychains</b> 
                 <br><br>
-                <a target="_blank" href="https://github.com/haad/proxychains">Proxychains</a> é uma ferramenta de redirecionamento de tráfego de rede que permite executar programas através de uma cadeia de proxies, proporcionando maior anonimidade e controle sobre as conexões. Sua principal função é interceptar as chamadas de rede de aplicações e as redirecionar por servidores intermediários (proxies), como SOCKS4, SOCKS5 e HTTP(S), na qual são configurados em um arquivo específico. 
+                <a  href="https://github.com/haad/proxychains">Proxychains</a> é uma ferramenta de redirecionamento de tráfego de rede que permite executar programas através de uma cadeia de proxies, proporcionando maior anonimidade e controle sobre as conexões. Sua principal função é interceptar as chamadas de rede de aplicações e as redirecionar por servidores intermediários (proxies), como SOCKS4, SOCKS5 e HTTP(S), na qual são configurados em um arquivo específico. 
                 <img id="main" src="../img/articles/proxychains-use/02-proxychain.png" alt="02-proxychain">
                 <br><br>
              </p>
@@ -60,9 +63,9 @@
                 <br><br>
                 A rede Tor (The Onion Router) é uma rede de comunicação que permite anonimizar a navegação na internet ao encaminhar o tráfego de dados por uma série de nós (servidores) distribuídos globalmente. A comunicação é criptografada em várias camadas, como as camadas de uma cebola, garantindo que a origem, o destino e o conteúdo dos dados sejam protegidos.
                 <br><br>
-                Para a criação de sites na rede tor, <a target="_blank" href="/articles/creating-tor-website.html">clique aqui</a>.
+                Para a criação de sites na rede tor, <a  href="/articles/creating-tor-website.html">clique aqui</a>.
                 <br><br>
-                Para a criação de um ambiente Windows voltado à OPSEC, na qual todo tráfego passa pela rede tor, <a target="_blank" href="/articles/opsec-environment.html">clique aqui</a>.
+                Para a criação de um ambiente Windows voltado à OPSEC, na qual todo tráfego passa pela rede tor, <a  href="/articles/opsec-environment.html">clique aqui</a>.
             </p>
             <br>
             <h2>Hands-on</h2>
@@ -79,7 +82,7 @@
                <br><br>
                 Em redes sensíveis, o uso de ferramentas como TOR pode ajudar a mitigar esses riscos ao adicionar camadas adicionais de anonimidade.
                 <br><br>
-                A fins de estudo, foi-se utilizado proxies encontrados nessa <a href="https://github.com/TheSpeedX/PROXY-List" target="_blank">proxy-list</a>. Porém, não recomenda-se utiliza-la para fins não didáticos, visto que a mesma não assegura nenhuma segurança e confiabilidade.
+                A fins de estudo, foi-se utilizado proxies encontrados nessa <a href="https://github.com/TheSpeedX/PROXY-List" >proxy-list</a>. Porém, não recomenda-se utiliza-la para fins não didáticos, visto que a mesma não assegura nenhuma segurança e confiabilidade.
                 <br><br>
 
             </p>
@@ -145,7 +148,7 @@
             <br><br>
             Para o uso com o tor, basta, com o serviço tor ativado localmente, redirecionar o proxy para o próprio com o indicativo <b>socks5 127.0.0.1 9050</b>
             <img id="main" src="../img/articles/proxychains-use/07-tor-usage.png" alt="07-tor-usage">
-            Para validar seu uso, utilize o comando  <b>proxychains4 firefox</b> no terminal, para abrir o navegador sob a ferramenta, e acesse <a href="https://check.torproject.org/" target="_blank">https://check.torproject.org/</a>
+            Para validar seu uso, utilize o comando  <b>proxychains4 firefox</b> no terminal, para abrir o navegador sob a ferramenta, e acesse <a href="https://check.torproject.org/" >https://check.torproject.org/</a>
         </p>
         <img id="main" src="../img/articles/proxychains-use/08-tor-usage.png" alt="08-tor-usage">
         <b>Uso do proxychains com ferramentas</b> 
@@ -156,7 +159,7 @@
     <p>
         <b>Extra: proxy_dns</b> 
         <br><br>
-       A configuração proxy_dns, presente em <b>proxychains4.conf</b>, requisita a resolução de DNS através da cadeia de proxies. Isso é importante para manter a anonimidade, pois previne o vazamentos de DNS na qual poderia revelar o endereço IP real por meio de consultas DNS não roteadas pelo proxy. Para validar se há vazamento de DNS em sua conexão, acesse <a href="https://dnsleaktest.com" target="_blank">https://dnsleaktest.com</a>.
+       A configuração proxy_dns, presente em <b>proxychains4.conf</b>, requisita a resolução de DNS através da cadeia de proxies. Isso é importante para manter a anonimidade, pois previne o vazamentos de DNS na qual poderia revelar o endereço IP real por meio de consultas DNS não roteadas pelo proxy. Para validar se há vazamento de DNS em sua conexão, acesse <a href="https://dnsleaktest.com" >https://dnsleaktest.com</a>.
     </p>
         </section>
     </main>

@@ -11,8 +11,11 @@
 <body>
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
-        <a target="_blank" href="/index.html">
-        <img id="main" src="/img/articles/angel-article.png" alt="Angel">
+        <a href="/index.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Home
         </a>
     </nav>
 
@@ -21,7 +24,7 @@
         <header class="article-header">
             <h1>Configuração de ambiente OPSEC</h1>
             <p class="meta">
-                <span>dez 18, 2024</span> by <a target="_blank" href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+                <span>dez 18, 2024</span> by <a  href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
             </p>
         </header>
         <section class="article-body">
@@ -57,7 +60,7 @@
                 <br><br>
                 A rede Tor (The Onion Router) é uma rede de comunicação que permite anonimizar a navegação na internet ao encaminhar o tráfego de dados por uma série de nós (servidores) distribuídos globalmente. A comunicação é criptografada em várias camadas, como as camadas de uma cebola, garantindo que a origem, o destino e o conteúdo dos dados sejam protegidos.
                 <br><br>
-                Para a criação de sites na rede tor, <a target="_blank" href="/articles/creating-tor-website.html">clique aqui</a>.
+                Para a criação de sites na rede tor, <a  href="/articles/creating-tor-website.html">clique aqui</a>.
             </p>
             <p>
                 <br>
@@ -70,7 +73,7 @@
             <p>
                 <b>Instalação do VirtualBox</b> 
                 <br><br>
-                A princípio, para a virtualização de todo o sistema, necessita-se da instalação do VirtualBox, utilize o <a target="_blank" href="https://www.virtualbox.org/wiki/Downloads">site oficial</a>. Para isso, e escolha o binário de acordo com o sistema operacional instalado em sua máquina física (por exemplo, a opção Windows hosts para usuários do sistema operacional windows).
+                A princípio, para a virtualização de todo o sistema, necessita-se da instalação do VirtualBox, utilize o <a  href="https://www.virtualbox.org/wiki/Downloads">site oficial</a>. Para isso, e escolha o binário de acordo com o sistema operacional instalado em sua máquina física (por exemplo, a opção Windows hosts para usuários do sistema operacional windows).
             </p>
             <img id="main" src="../img/articles/opsec-environment/01-virtualbox-installation.png" alt="01-virtualbox-installation">
             <p>
@@ -80,7 +83,7 @@
                 <br>
                 <b>Instalação do Whonix</b> 
                 <br><br>
-                No <a target="_blank" href="https://www.whonix.org/wiki/Download">site oficial</a>, baixe o Whonix voltado ao VirtualBox.
+                No <a  href="https://www.whonix.org/wiki/Download">site oficial</a>, baixe o Whonix voltado ao VirtualBox.
             </p>
             <img id="main" src="../img/articles/opsec-environment/02-whonix-installation.png" alt="02-whonix-installation">
             <p>
@@ -96,14 +99,14 @@
                 <img id="main" src="../img/articles/opsec-environment/05-whonix-installation.png" alt="05-whonix-installation">
             </p>
             <p>
-                Logo depois, nas mensagens de aviso, selecione OK. No Whonix-Workstation, abra o navegador e acesse o site <a target="_blank" href="https://check.torproject.org/">https://check.torproject.org/</a> , na qual valida a conexão com a rede tor. Após essa ação, desligue ambas as máqunas virtuais.
+                Logo depois, nas mensagens de aviso, selecione OK. No Whonix-Workstation, abra o navegador e acesse o site <a  href="https://check.torproject.org/">https://check.torproject.org/</a> , na qual valida a conexão com a rede tor. Após essa ação, desligue ambas as máqunas virtuais.
                 <img id="main" src="../img/articles/opsec-environment/06-whonix-installation.png" alt="06-whonix-installation">
             </p>
             <p>
                 <br>
                 <b>Instalação do Windows</b> 
                 <br><br>
-                No <a target="_blank" href="https://www.microsoft.com/pt-br/software-download/windows10">site oficial</a>, baixe o Media Creator Tool, da Microsoft.
+                No <a  href="https://www.microsoft.com/pt-br/software-download/windows10">site oficial</a>, baixe o Media Creator Tool, da Microsoft.
                 <img id="main" src="../img/articles/opsec-environment/07-windows-installation.png" alt="07-windows-installation">
             </p>
             <p>
@@ -155,7 +158,7 @@
                 <br>
                 <b>Teste de conexão</b> 
                 <br><br>
-                A fins de validação, no navegador, acesse <a target="_blank" href="https://whoer.net/">https://whoer.net/</a>. Caso todas as etapas anteriores tenham sido concluídas com sucesso, o retorno da análise do site acessado será um IP pertencente à rede Tor.
+                A fins de validação, no navegador, acesse <a  href="https://whoer.net/">https://whoer.net/</a>. Caso todas as etapas anteriores tenham sido concluídas com sucesso, o retorno da análise do site acessado será um IP pertencente à rede Tor.
                 <img id="main" src="../img/articles/opsec-environment/16-windows-whonix-connection.png" alt="16-windows-whonix-connection">
             </p>
             <p>
@@ -166,8 +169,8 @@
                 <b>Extras</b> 
                 <br><br>
                 - A utilização de VPN no sistema operacional principal (host) pode ser extremamente eficiente, a fim de adicionar uma camada extra de anonimidade além de evitar que o provedor de internet identifique o uso constante do Tor;<br><br>
-                - O uso de extensões voltadas a privacidade são grandes aliadas para a busca pela anonimidade, como:  <a href="https://chromewebstore.google.com/detail/privacy-badger/pkehgijcmpdhfbdbbnkijodmdjhbjlgp" target="_blank">Privacy Badger</a>, <a href="https://chromewebstore.google.com/detail/smart-https/cmleijjdpceldbelpnpkddofmcmcaknm" target="_blank">Smart HTTPS</a>, <a href="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh" target="_blank">uBlock Origin</a> e <a href="https://chromewebstore.google.com/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkg" target="_blank">User-Agent Switcher and Manager</a>;<br><br>
-                - Perante o cenário nacional, recomendo a leitura da obra <a target="_blank" href="https://www.amazon.com.br/Opsec-Vin%C3%ADcius-Vieira/dp/6500384989/">OPSEC, Inteligência Cibernética na Prática</a>, do autor <a target="_blank" href="https://www.linkedin.com/in/v1n1v131r4/">Vinícius Vieira</a>.
+                - O uso de extensões voltadas a privacidade são grandes aliadas para a busca pela anonimidade, como:  <a href="https://chromewebstore.google.com/detail/privacy-badger/pkehgijcmpdhfbdbbnkijodmdjhbjlgp" >Privacy Badger</a>, <a href="https://chromewebstore.google.com/detail/smart-https/cmleijjdpceldbelpnpkddofmcmcaknm" >Smart HTTPS</a>, <a href="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh" >uBlock Origin</a> e <a href="https://chromewebstore.google.com/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkg" >User-Agent Switcher and Manager</a>;<br><br>
+                - Perante o cenário nacional, recomendo a leitura da obra <a  href="https://www.amazon.com.br/Opsec-Vin%C3%ADcius-Vieira/dp/6500384989/">OPSEC, Inteligência Cibernética na Prática</a>, do autor <a  href="https://www.linkedin.com/in/v1n1v131r4/">Vinícius Vieira</a>.
             </p>
         </section>
     </main>

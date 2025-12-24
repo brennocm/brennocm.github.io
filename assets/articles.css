@@ -3,29 +3,64 @@ body {
     font-family: 'Raleway', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #000000;
+    background-color: #1a1a1a;
     color: #e4e4e4;
     line-height: 1.6;
 }
 
-/* Breadcrumb */
+/* Breadcrumb / Home Navigation */
 .breadcrumb {
-    background: black;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.breadcrumb a {
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 16vh;
-    z-index: 10; /* Guarantees header stays above other sections */
+    gap: 8px;
+    background: rgba(26, 26, 26, 0.9);
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.breadcrumb img {
-    width: 25%;
-    transition: transform 0.3s;
+.breadcrumb a:hover {
+    background: rgba(159, 239, 0, 0.2);
+    border-color: #9fef00;
+    color: #9fef00;
 }
 
-.breadcrumb img:hover {
-    transform: scale(1.1); 
+.breadcrumb svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Responsive Breadcrumb */
+@media (max-width: 768px) {
+    .breadcrumb {
+        position: relative;
+        top: 0;
+        left: 0;
+        padding: 15px;
+        background: #1a1a1a;
+    }
+
+    .breadcrumb a {
+        display: inline-flex;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    .breadcrumb svg {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 /* Main Content */
@@ -54,13 +89,13 @@ body {
 .article-header .meta a {
     color: #b3ff00;
     text-decoration: none;
-    
+
 }
 
 .article-header .meta .read-time {
     float: right;
     color: #777;
-    
+
 }
 
 /* Article Body */
@@ -85,7 +120,7 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-a{
+a {
     color: #fff;
 }
 
@@ -103,17 +138,23 @@ a{
     width: 100%;
     box-sizing: border-box;
     text-align: left;
-    white-space: pre; /* Mantém o formato original sem quebras */
-    overflow-x: auto; /* Adiciona rolagem horizontal para conteúdo longo */
-    word-wrap: normal; /* Evita quebras automáticas de palavras */
+    white-space: pre;
+    /* Mantém o formato original sem quebras */
+    overflow-x: auto;
+    /* Adiciona rolagem horizontal para conteúdo longo */
+    word-wrap: normal;
+    /* Evita quebras automáticas de palavras */
 }
 
 /* Ajuste para o conteúdo do bloco de código */
 .code-block code {
     display: block;
-    white-space: pre; /* Mantém formatação original */
-    overflow-wrap: normal; /* Garante que palavras não sejam quebradas */
-    word-wrap: normal; /* Compatibilidade adicional */
+    white-space: pre;
+    /* Mantém formatação original */
+    overflow-wrap: normal;
+    /* Garante que palavras não sejam quebradas */
+    word-wrap: normal;
+    /* Compatibilidade adicional */
 }
 
 footer {
@@ -127,59 +168,74 @@ footer {
 /* Responsiveness */
 @media (max-width: 1024px) {
     .breadcrumb img {
-        width: 40%; /* Ajusta o tamanho da imagem para tablets */
+        width: 40%;
+        /* Ajusta o tamanho da imagem para tablets */
     }
 
     .content {
-        max-width: 90%; /* Reduz a largura do conteúdo em telas menores */
+        max-width: 90%;
+        /* Reduz a largura do conteúdo em telas menores */
     }
 
     .article-header h1 {
-        font-size: 28px; /* Reduz o tamanho do título */
+        font-size: 28px;
+        /* Reduz o tamanho do título */
     }
 
     .article-header .meta {
-        font-size: 12px; /* Ajusta o tamanho do texto meta */
+        font-size: 12px;
+        /* Ajusta o tamanho do texto meta */
     }
 
     .article-body h2 {
-        font-size: 20px; /* Reduz o tamanho dos subtítulos */
+        font-size: 20px;
+        /* Reduz o tamanho dos subtítulos */
     }
 
     .article-body p {
-        font-size: 14px; /* Ajusta o tamanho do texto do corpo */
+        font-size: 14px;
+        /* Ajusta o tamanho do texto do corpo */
     }
 
     .article-body img {
-        max-width: 80%; /* Reduz a largura máxima das imagens */
+        max-width: 80%;
+        /* Reduz a largura máxima das imagens */
     }
 
     .code-block {
-        font-size: 13px; /* Tamanho do texto reduzido */
-        padding: 8px 12px; /* Reduz espaçamento */
+        font-size: 13px;
+        /* Tamanho do texto reduzido */
+        padding: 8px 12px;
+        /* Reduz espaçamento */
     }
 }
 
 @media (max-width: 768px) {
     .breadcrumb img {
-        width: 50%; /* Reduz ainda mais o tamanho da imagem em telas menores */
+        width: 50%;
+        /* Reduz ainda mais o tamanho da imagem em telas menores */
     }
 
     .content {
-        padding: 15px; /* Reduz o espaçamento interno */
+        padding: 15px;
+        /* Reduz o espaçamento interno */
     }
 
     .article-header h1 {
-        font-size: 24px; /* Tamanho menor para títulos */
+        font-size: 24px;
+        /* Tamanho menor para títulos */
     }
 
     .article-body h2 {
-        font-size: 18px; /* Reduz ainda mais os subtítulos */
+        font-size: 18px;
+        /* Reduz ainda mais os subtítulos */
     }
 
     .article-body p {
-        font-size: 13px; /* Ajusta o texto para ser mais legível */
+        font-size: 13px;
+        /* Ajusta o texto para ser mais legível */
     }
+
     .code-block {
         font-size: 13px;
         padding: 8px 12px;
@@ -188,44 +244,29 @@ footer {
 
 @media (max-width: 480px) {
     .breadcrumb img {
-        width: 70%; /* Ajusta o tamanho da imagem para smartphones */
+        width: 70%;
+        /* Ajusta o tamanho da imagem para smartphones */
     }
 
     .content {
-        max-width: 100%; /* Usa toda a largura disponível */
-        padding: 10px; /* Espaçamento interno menor */
+        max-width: 100%;
+        /* Usa toda a largura disponível */
+        padding: 10px;
+        /* Espaçamento interno menor */
     }
 
     .article-header h1 {
-        font-size: 20px; /* Reduz significativamente o tamanho do título */
+        font-size: 20px;
+        /* Reduz significativamente o tamanho do título */
     }
 
     .article-body img {
-        max-width: 90%; /* Imagens ocupam quase toda a largura */
+        max-width: 90%;
+        /* Imagens ocupam quase toda a largura */
     }
 
     .code-block {
         font-size: 12px;
         padding: 6px 10px;
-    }
-}
-
-
-.breadcrumb img {
-    width: 25%; /* Valor padrão para telas grandes */
-    max-width: 100%; /* Garante que nunca ultrapasse o contêiner */
-    height: auto; /* Mantém a proporção da imagem */
-    transition: transform 0.3s;
-}
-
-@media (max-width: 768px) {
-    .breadcrumb img {
-        width: 35%; /* Ajusta para dispositivos móveis e tablets */
-    }
-}
-
-@media (max-width: 480px) {
-    .breadcrumb img {
-        width: 35%; /* Reduz o tamanho para smartphones */
     }
 }
