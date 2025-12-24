@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/articles.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
+    <title>own vpn.</title>
+</head>
+
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="/index-en.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Home
+        </a>
+    </nav>
+    <!-- Main Content -->
+    <main class="content">
+        <header class="article-header">
+            <h1>Creating Your Own VPN</h1>
+            <p class="meta">
+                <span>Jan 10, 2025</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+            </p>
+        </header>
+        <section class="article-body">
+            <p>
+                In the current context of digital connectivity, online security and privacy have become priorities. With
+                this, Virtual Private Networks (VPNs) play a crucial role, offering an effective solution to protect
+                data and maintain anonymity. Furthermore, with the increase of data collection by governments,
+                companies, and advertisers, the use of VPNs becomes essential to protect user privacy by masking the IP
+                address and encrypting data traffic, preventing online activities from being tracked, reinforcing
+                anonymity and making user identification difficult.
+            </p>
+            <h2>Concepts</h2>
+            <p>
+                <b>VPN</b>
+                <br>
+                <br> A VPN (Virtual Private Network) is a technology that creates a secure and encrypted connection
+                between the user's device and a remote server operated by the VPN provider. From a technical
+                perspective, the VPN encapsulates data packets using protocols such as OpenVPN, WireGuard, IPsec, or
+                L2TP, protecting them with end-to-end encryption. This encapsulation hides the packet content and
+                metadata, such as source and destination IP addresses, from interceptors or internet service providers
+                (ISPs). Additionally, by routing traffic through the VPN server, the user's actual location is masked,
+                displaying the remote server's IP address. This process amplifies privacy, protects against
+                man-in-the-middle (MITM) attacks, and allows access to geographically restricted content. The
+                reliability of a VPN depends on the provider's logging policy, the complexity of the applied encryption,
+                and the robustness of the protocol used.
+                <img id="main" src="../../img/articles/own-vpn/01-vpn-theory.png" alt="01-vpn theory">
+                <br>
+                <br>
+            </p>
+            <p>
+                <b>VPN Protocols</b>
+                <br>
+                <br> VPN protocols are sets of rules that define how data is securely transmitted between the user's
+                device and the VPN server. These protocols specify encapsulation, authentication, and encryption methods
+                to protect data. For example, OpenVPN uses TLS for initial authentication and OpenSSL-based encryption,
+                allowing flexibility and high security. IPsec (Internet Protocol Security) operates at the network level
+                and uses Transport and Tunnel modes to protect IP packets, with support for AES encryption and HMAC
+                authentication. WireGuard, a more recent protocol, is designed for simplicity and performance, employing
+                modern algorithms like ChaCha20 for encryption and Poly1305 for authentication. Other protocols, such as
+                L2TP/IPsec, combine simple encapsulation with IPsec security, while SSTP uses the TLS protocol over TCP,
+                making it effective in restrictive networks. Each protocol has specific security, speed, and
+                compatibility characteristics, chosen based on user or network needs.
+                <br>
+                <br>
+            </p>
+            <p>
+                <b>Proxy vs VPN</b>
+                <br>
+                <br> The main difference between proxy and VPN lies in the level of security, encryption, and protection
+                coverage. A proxy acts as an intermediary between the user's device and the internet, redirecting
+                requests to mask the client's IP address. Technically, it operates at the application level (e.g.,
+                browsers) and does not offer standard encryption, being limited to hiding the data origin. A VPN, on the
+                other hand, creates an encrypted tunnel between the user's device and a remote server, protecting not
+                only the IP but all network traffic from the device, regardless of the application used. In summary,
+                while a proxy is ideal for masking IPs in specific tasks, a VPN offers a more robust solution for
+                security and anonymity across the entire connection.
+                <br>
+                <br>
+            </p>
+            <p>
+                <b>No-Logs Policy</b>
+                <br>
+                <br> The No-Logs Policy is a technical commitment adopted by some VPN providers to not record or store
+                information related to user activities or connections. This policy implies that the provider configures
+                their servers to operate ephemerally, using systems that avoid recording metadata such as IP addresses,
+                timestamps, bandwidth used, or websites visited. Therefore, this configuration may include the use of
+                RAM-only servers (volatile memory), which automatically erase all information when restarted, and the
+                adoption of communication protocols that minimize the need for log storage. Effective implementation
+                depends on independent audits to ensure that the provider does not collect data surreptitiously, and on
+                server locations in privacy-friendly jurisdictions where local legislation does not require data
+                retention. This approach is crucial to ensure anonymity and protection against surveillance or legal
+                requests for user information.
+                <br>
+                <br>
+            </p>
+            <p>
+                <b>Kill Switch and DNS Leak</b>
+                <br>
+                <br> Kill Switch and DNS Leak Protection are technical features implemented in VPNs to ensure user
+                security and privacy. The Kill Switch works by constantly monitoring the connection to the VPN server.
+                If the connection is interrupted, it immediately blocks the device's network traffic to prevent data
+                from being sent without the encrypted tunnel protection, protecting the real IP and other sensitive
+                information. On the other hand, DNS Leak Protection prevents domain name resolution (DNS) requests from
+                escaping the VPN tunnel and being sent directly to the internet service provider (ISP). Without this
+                protection, even with the VPN active, the ISP could record the websites visited by the user. This
+                feature redirects all DNS queries to servers managed by the VPN, encapsulating them in the encrypted
+                tunnel. Both mechanisms work together to prevent failures that compromise user anonymity and privacy
+                during VPN use.
+            </p>
+            <br>
+            <h2>Hands-on</h2>
+            <p>
+                <b>VPS</b>
+                <br>
+                <br> Choosing a VPS (Virtual Private Server) for VPN creation is crucial, as its location directly
+                influences latency, connection speed, and the geographic location of the user's connection.
+                <br>
+                <br>
+            </p>
+            <p>
+                <b>Choosing the VPN Protocol</b>
+                <br>
+                <br> When choosing a VPN protocol, it is essential to consider security, performance, and ease of
+                implementation. WireGuard has stood out as a modern and efficient choice, offering a simplified
+                architecture based on state-of-the-art cryptography, such as ChaCha20 and Poly1305. Unlike more
+                traditional alternatives like OpenVPN and IPSec, WireGuard is lighter, providing fast and stable
+                connections even on devices with limited resources. Additionally, its lean codebase reduces the attack
+                surface and facilitates security audits, making it ideal for those seeking anonymity and data protection
+                with high performance. Therefore, the software application and protocol chosen was WireGuard.
+                <br>
+                <br>
+                <i>*It is worth noting that only the VPN server can decrypt the data, ensuring that no one in between
+                    (such as internet providers, hackers, or government agencies) can read the information.</i>
+                <br>
+                <br>
+            </p>
+            <p>
+                <b>Preparations for VPN Setup</b>
+                <br>
+                <br> After choosing a VPS provider, such as Digital Ocean, Vultr, or Linode, and creating your instance,
+                and accessing it, update the operating system.
+            <pre class="code-block">
+                    <code>apt update && apt upgrade -y</code>
+                </pre>
+            </p>
+            <p>
+                Then, install <b>WireGuard</b> and its dependencies.
+            <pre class="code-block">
+                <code>apt install wireguard wireguard-tools -y</code>
+            </pre>
+            </p>
+            <p>
+                Before configuring the VPN, first, you need to enable IP forwarding so that the server forwards traffic
+                between the WireGuard interface and the internet.
+            <pre class="code-block">
+                <code>vim /etc/sysctl.conf</code>
+            </pre>
+            <pre class="code-block">
+               <code>Uncomment the line "#net.ipv4.ip_forward=1"</code>
+           </pre>
+            <p>
+                Then, apply the change
+            <pre class="code-block">
+            <code>sudo sysctl -p</code>
+            </pre>
+            </p>
+            <p>
+                Now, ensure the WireGuard kernel module is loaded:
+            <pre class="code-block">
+                <code>lsmod | grep wireguard</code>
+            </pre>
+            </p>
+            <p>
+                If the command has no return, load the module.
+            <pre class="code-block">
+                <code>sudo modprobe wireguard</code>
+            </pre>
+            </p>
+            <br>
+            <p>
+                <b>Configuring WireGuard on the Server</b>
+                <br><br>
+                In the WireGuard folder, which corresponds to <b>/etc/wireguard</b>, generate the public and private
+                keys.
+            <pre class="code-block">
+                    <code>wg genkey | tee privatekey | wg pubkey > publickey </code>
+                </pre>
+            </p>
+            <p>
+                Then, create the WireGuard interface by defining the wg0.conf file.
+            <pre class="code-block">
+                    <code>sudo vim /etc/wireguard/wg0.conf</code>
+                </pre>
+            <pre class="code-block">
+                    <code>[Interface]
+                     PrivateKey =  "privatekey file content"
+                     Address = 10.10.10.1/24 # Server's internal IP address on the VPN network
+                     ListenPort = 51820 # WireGuard default port
+                     # SaveConfig = true # Optional: to save configuration changes
+                     PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o "main_network_interface" -j MASQUERADE
+                     PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o "main_network_interface" -j MASQUERADE </code>
+                </pre>
+            </p>
+            <p>
+                Then, enable WireGuard.
+            <pre class="code-block">
+                    <code>sudo systemctl enable wg-quick@wg0 </code>
+                </pre>
+            <pre class="code-block">
+                  <code>sudo systemctl start wg-quick@wg0 </code>
+              </pre>
+            </p>
+            <p>
+                Finally, check the status. If the wg0 interface appears active, the process was successful.
+            <pre class="code-block">
+                    <code>sudo wg show wg0 </code>
+                </pre>
+            </p>
+            <p>
+                <br>
+                <b>Configuring the WireGuard Client</b>
+                <br><br>
+                On the device that will be the VPN <b>client</b>, open the terminal and generate the client keys.
+            <pre class="code-block">
+                  <code>wg genkey | tee privatekey | wg pubkey > publickey </code>
+              </pre>
+            </p>
+            <p>
+                Then, still on the <b>client</b> device, create a "client.conf" file and add the content:
+            <pre class="code-block">
+                  <code>[Interface]
+                     PrivateKey = "client's privatekey file content"
+                     Address = 10.10.10.2/24  # Unique IP for each client
+                     DNS = 8.8.8.8, 8.8.4.4 # Optional: DNS Servers
+                     [Peer]
+                     PublicKey = "server's publickey file content"
+                     AllowedIPs = 0.0.0.0/0 # Route everything through VPN
+                     Endpoint = "server_public_ip":"server_port" # Server IP and port
+                     PersistentKeepalive = 25 # Sends a packet every 25 seconds </code>
+              </pre>
+            </p>
+            <p>
+                Back on the <b>server</b>, edit the WireGuard interface file again to add the [peer] section for the new
+                client.
+            <pre class="code-block">
+                  <code>vim /etc/wireguard/wg0.conf </code>
+              </pre>
+            <pre class="code-block">
+               <code>[Peer]
+                  PublicKey = "client's publickey file content"
+                  AllowedIPs = 10.10.10.2/32 # Client's individual IP </code>
+           </pre>
+            </p>
+            <p>
+                Finally, to apply the new WireGuard interface update, restart the WireGuard service.
+            <pre class="code-block">
+                  <code>sudo systemctl restart wg-quick@wg0</code>
+              </pre>
+            </p>
+            <p>
+                <br>
+                <b>Usage</b>
+                <br><br>
+                In a <b>Linux</b> environment, simply use the command "wg-quick up client.conf"
+                <br><br>
+                In a <b>Windows</b> environment, download the WireGuard application from <a
+                    href="https://www.wireguard.com/install/">https://www.wireguard.com/install/</a>. Then, click on
+                <b>"Add Tunnel"</b> and select the "client.conf" file
+                <img id="main" src="../../img/articles/own-vpn/02-install.png" alt="02-install">
+            </p>
+            <p>
+                Therefore, automatically, the VPN will be connected.
+                <img id="main" src="../../img/articles/own-vpn/03-own-vpn.png" alt="03-own-vpn">
+            </p>
+            <p>For validation purposes, access the sites <a href="https://ipaddress.my/">https://ipaddress.my/</a> and
+                <a href="https://dnsleaktest.com">https://dnsleaktest.com</a>. Both sites should return the VPS's public
+                IP, thus creating a VPN.
+                <img id="main" src="../../img/articles/own-vpn/04-testing.png" alt="03-testing-vpn">
+            </p>
+            <p>
+                Finally, it is worth noting the importance of configuring an appropriate firewall for the VPS
+                environment, thus protecting against unauthorized access. Additionally, keep private keys in a secure
+                environment.
+            </p>
+            <p>
+                <br>
+                <b>Process Automation</b>
+                <br><br>
+                In order to automate the entire process mentioned, from both the server and client perspective,
+                <b>WG-Auto</b> was created, a tool that performs WireGuard installation and configuration. It can be
+                accessed through <a href="https://github.com/brennocm/wg-auto">https://github.com/brennocm/wg-auto</a>,
+                which includes the installation process, as well as a <a
+                    href="https://www.youtube.com/watch?v=Nr_En-eo2c0">video</a> that exemplifies its usage.
+
+                <br><br>
+                <i>* It is worth noting that the tool was designed for clients with Debian-based environments.</i>
+            </p>
+        </section>
+    </main>
+    <br>
+    <footer>
+        <p>&copy; 20∞</p>
+    </footer>
+</body>
+
+</html>

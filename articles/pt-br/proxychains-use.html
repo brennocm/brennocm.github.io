@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/articles.css">
+    <link rel="stylesheet" href="../../assets/articles.css">
     <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
     <title>proxychains use.</title>
 </head>
@@ -34,14 +34,14 @@
                 <b>Proxies</b> 
                 <br><br>
                 Proxy é um servidor intermediário que atua como um ponto de intermediação entre o dispositivo do usuário e o servidor de destino, redirecionando e gerenciando o tráfego de rede. Ele permite que solicitações de acesso sejam mascaradas, ocultando o IP original do usuário e atribuindo um novo IP associado ao proxy. Além de fornecer anonimidade, os proxies são amplamente utilizados para contornar restrições de acesso, balancear cargas de rede e monitorar tráfego. 
-                <img id="main" src="../img/articles/proxychains-use/01-proxy.png" alt="01-proxies">
+                <img id="main" src="../../img/articles/proxychains-use/01-proxy.png" alt="01-proxies">
                 <br><br>
              </p>
              <p>
                 <b>Proxychains</b> 
                 <br><br>
                 <a  href="https://github.com/haad/proxychains">Proxychains</a> é uma ferramenta de redirecionamento de tráfego de rede que permite executar programas através de uma cadeia de proxies, proporcionando maior anonimidade e controle sobre as conexões. Sua principal função é interceptar as chamadas de rede de aplicações e as redirecionar por servidores intermediários (proxies), como SOCKS4, SOCKS5 e HTTP(S), na qual são configurados em um arquivo específico. 
-                <img id="main" src="../img/articles/proxychains-use/02-proxychain.png" alt="02-proxychain">
+                <img id="main" src="../../img/articles/proxychains-use/02-proxychain.png" alt="02-proxychain">
                 <br><br>
              </p>
              <p>
@@ -102,7 +102,7 @@
             <pre class="code-block">
                 <code>systemctl status tor</code>
             </pre>
-            <img id="main" src="../img/articles/proxychains-use/05-tor-usage.png" alt="05-tor-usage">
+            <img id="main" src="../../img/articles/proxychains-use/05-tor-usage.png" alt="05-tor-usage">
             <p>
                 <b>Instalando Proxychains</b> 
                 <br><br>
@@ -114,7 +114,7 @@
             <p>
                 Para validar sua instalação, escreva o comando <i>proxychains4</i> no terminal e espere pela resposta padrão da ferramenta.
             <p>
-                <img id="main" src="../img/articles/proxychains-use/03-proxychain-install.png" alt="03-proxychain-install">
+                <img id="main" src="../../img/articles/proxychains-use/03-proxychain-install.png" alt="03-proxychain-install">
                 <br><br>
                 <b>Entendendo o Proxychains</b> 
                 <br><br>
@@ -133,13 +133,13 @@
                <b>Anonimidade</b>: Random Chain pode proporcionar maior anonimidade, por escolher os proxies de forma aleatória.
                <br><br>
                <b>Confiabilidade</b>: Dynamic Chain oferece resiliência ao ignorar proxies que falham, garantindo assim estabilidade de conexão.
-                <img id="main" src="../img/articles/proxychains-use/04-proxychain-config.png" alt="04-proxychain-config">
+                <img id="main" src="../../img/articles/proxychains-use/04-proxychain-config.png" alt="04-proxychain-config">
             </p>
             <p>
                 <b>Configuração de proxies</b> 
                 <br><br>
                 Para seu uso, recomenda-se a configuração mediante a rede tor ou um servidor proxy <b>extremamente</b> confiável. Para configuração, basta colocar, no formato <b>"PROTOCOLO" "IP" "PORTA"</b> ao final do arquivo, o proxy escolhido, por exemplo:
-                <img id="main" src="../img/articles/proxychains-use/06-proxychain-usage.png" alt="06-proxychain-usage">
+                <img id="main" src="../../img/articles/proxychains-use/06-proxychain-usage.png" alt="06-proxychain-usage">
             </p>
         </p>
 
@@ -147,15 +147,15 @@
             <b>Uso com o tor</b> 
             <br><br>
             Para o uso com o tor, basta, com o serviço tor ativado localmente, redirecionar o proxy para o próprio com o indicativo <b>socks5 127.0.0.1 9050</b>
-            <img id="main" src="../img/articles/proxychains-use/07-tor-usage.png" alt="07-tor-usage">
+            <img id="main" src="../../img/articles/proxychains-use/07-tor-usage.png" alt="07-tor-usage">
             Para validar seu uso, utilize o comando  <b>proxychains4 firefox</b> no terminal, para abrir o navegador sob a ferramenta, e acesse <a href="https://check.torproject.org/" >https://check.torproject.org/</a>
         </p>
-        <img id="main" src="../img/articles/proxychains-use/08-tor-usage.png" alt="08-tor-usage">
+        <img id="main" src="../../img/articles/proxychains-use/08-tor-usage.png" alt="08-tor-usage">
         <b>Uso do proxychains com ferramentas</b> 
         <br><br>
         Para redirecionar o tráfego de outros programas para o proxychains, basta inserir, no terminal, o comando <b>proxychains NOME_DA_FERRAMENTA</b>, exemplificando:
     </p>
-    <img id="main" src="../img/articles/proxychains-use/09-proxychain-usage.png" alt="09-proxychain-usage">
+    <img id="main" src="../../img/articles/proxychains-use/09-proxychain-usage.png" alt="09-proxychain-usage">
     <p>
         <b>Extra: proxy_dns</b> 
         <br><br>
@@ -169,3 +169,5 @@
     </footer>
 </body>
 </html>
+
+

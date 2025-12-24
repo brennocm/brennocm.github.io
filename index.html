@@ -13,6 +13,48 @@
 
 <body>
     <header class="hero-section">
+        <!-- Language Toggle -->
+        <div class="language-toggle">
+            <a href="index.html" class="active" title="Português (Brasil)">
+                <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Green background -->
+                    <rect width="72" height="48" fill="#009c3b" />
+                    <!-- Yellow diamond -->
+                    <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                    <!-- Blue circle -->
+                    <circle cx="36" cy="24" r="12" fill="#002776" />
+                    <!-- White curved band -->
+                    <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                    <!-- Stars (simplified representation) -->
+                    <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                    <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                    <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                    <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                    <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    <circle cx="31" cy="26" r="0.4" fill="#fff" />
+                    <circle cx="35" cy="27" r="0.4" fill="#fff" />
+                    <circle cx="37" cy="27" r="0.4" fill="#fff" />
+                    <circle cx="41" cy="26" r="0.4" fill="#fff" />
+                    <circle cx="34" cy="18" r="0.5" fill="#fff" />
+                    <!-- Ordem e Progresso text -->
+                    <text x="36" y="23" font-family="Arial, sans-serif" font-size="3" fill="#009c3b"
+                        text-anchor="middle" font-weight="bold">ORDEM E PROGRESSO</text>
+                </svg>
+            </a>
+            <a href="index-en.html" title="English (US)">
+                <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="36" height="24" fill="#fff" />
+                    <rect width="36" height="1.85" y="0" fill="#b22234" />
+                    <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                    <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                    <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                    <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                    <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                    <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                    <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                </svg>
+            </a>
+        </div>
         <div class="hero-container">
             <div class="hero-text">
                 <h1>Brenno M.</h1>
@@ -99,7 +141,7 @@
                 </div>
             </div>
             <div class="category-content" id="technical-content">
-                <article class="post" onclick="openArticle('articles/own-vpn.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/own-vpn.html', event)">
                     <div>
                         <h2>Criação de VPN Própria</h2>
                         <p>Criação e configuração de uma VPN confeccionada a partir de um servidor próprio.</p>
@@ -112,7 +154,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/proxychains-use.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/proxychains-use.html', event)">
                     <div>
                         <h2>Utilização do Proxychains</h2>
                         <p>Ferramenta que redireciona o tráfego de programas para um ou mais proxies.</p>
@@ -126,7 +168,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/opsec-environment.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/opsec-environment.html', event)">
                     <div>
                         <h2>Configuração de Ambiente OPSEC</h2>
                         <p>Configuração de um ambiente Windows voltado à privacidade por meio do Whonix.</p>
@@ -138,7 +180,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/creating-tor-website.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/creating-tor-website.html', event)">
                     <div>
                         <h2>Criação de Sites na Rede Tor</h2>
                         <p>Configuração de um website estático na rede Tor.</p>
@@ -165,7 +207,7 @@
                 </div>
             </div>
             <div class="category-content" id="reviews-content">
-                <article class="post" onclick="openArticle('articles/cbp-review.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/cbp-review.html', event)">
                     <div>
                         <h2>Certified Blockchain Practitioner (CBP) Review</h2>
                         <p>Referência de estudo para a CBP, da The SecOps Group.</p>
@@ -178,7 +220,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/ccsp-aws-review.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/ccsp-aws-review.html', event)">
                     <div>
                         <h2>Certified Cloud Security Practitioner – AWS Review</h2>
                         <p>Referência de estudo para a CCSP-AWS, da The SecOps Group.</p>
@@ -191,7 +233,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/cnsp-review.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/cnsp-review.html', event)">
                     <div>
                         <h2>Certified Network Security Practitioner Review</h2>
                         <p>Referência de estudo para a CNSP, da The SecOps Group.</p>
@@ -203,7 +245,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/cap-review.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/cap-review.html', event)">
                     <div>
                         <h2>Certified AppSec Practitioner (CAP) Review</h2>
                         <p>Referência de estudo para a CAP, da The SecOps Group.</p>
@@ -229,7 +271,7 @@
                 </div>
             </div>
             <div class="category-content" id="career-content">
-                <article class="post" onclick="openArticle('articles/tips/suggested-courses.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/tips/suggested-courses.html', event)">
                     <div>
                         <h2>Sugestões de Conteúdo</h2>
                         <p>Curadoria de cursos, certificações e materiais de estudo de instituições reconhecidas.</p>
@@ -242,7 +284,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/tips/privacy.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/tips/privacy.html', event)">
                     <div>
                         <h2>Guia de Privacidade</h2>
                         <p>Ferramentas e práticas para proteger sua privacidade online e adotar um estilo de vida
@@ -256,7 +298,7 @@
                         </div>
                     </div>
                 </article>
-                <article class="post" onclick="openArticle('articles/tips/hacking.html', event)">
+                <article class="post" onclick="openArticle('articles/pt-br/tips/hacking.html', event)">
                     <div>
                         <h2>Roadmap Hacking</h2>
                         <p>Guia completo para construir fundamentos sólidos e se especializar em segurança ofensiva.</p>

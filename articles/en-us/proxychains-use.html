@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/articles.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
+    <title>proxychains use.</title>
+</head>
+
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="/index-en.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Home
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+        <header class="article-header">
+            <h1>Using Proxychains</h1>
+            <p class="meta">
+                <span>Dec 30, 2024</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+            </p>
+        </header>
+        <section class="article-body">
+            <p>Proxychains can be an essential tool in the current digital context, where issues of privacy, censorship,
+                and security are constantly in evidence, given the possibility of anonymizing internet connections by
+                redirecting them through a chain of proxies, masking the user's real IP address.</p>
+            <h2>Concepts</h2>
+            <p>
+                <b>Proxies</b>
+                <br><br>
+                A proxy is an intermediary server that acts as a point of intermediation between the user's device and
+                the destination server, redirecting and managing network traffic. It allows access requests to be
+                masked, hiding the user's original IP and assigning a new IP associated with the proxy. In addition to
+                providing anonymity, proxies are widely used to bypass access restrictions, balance network loads, and
+                monitor traffic.
+                <img id="main" src="../../img/articles/proxychains-use/01-proxy.png" alt="01-proxies">
+                <br><br>
+            </p>
+            <p>
+                <b>Proxychains</b>
+                <br><br>
+                <a href="https://github.com/haad/proxychains">Proxychains</a> is a network traffic redirection tool that
+                allows running programs through a chain of proxies, providing greater anonymity and control over
+                connections. Its main function is to intercept application network calls and redirect them through
+                intermediate servers (proxies), such as SOCKS4, SOCKS5, and HTTP(S), which are configured in a specific
+                file.
+                <img id="main" src="../../img/articles/proxychains-use/02-proxychain.png" alt="02-proxychain">
+                <br><br>
+            </p>
+            <p>
+                <b>HTTP/HTTPS</b>
+                <br><br>
+                HTTP (Hypertext Transfer Protocol) is the communication protocol that allows the exchange of information
+                between browsers and servers on the web. It works as a request and response system, where the browser
+                requests resources, such as text or images, and the server responds by sending the requested data.
+                <br><br>
+                HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP, which uses encryption through
+                the TLS (Transport Layer Security) protocol to protect transmitted data. This security is essential to
+                protect sensitive information, such as passwords and financial data, especially in online transactions.
+                <br><br>
+            </p>
+            <p>
+                <b>SOCKS4/SOCKS5</b>
+                <br><br>
+                SOCKS4 and SOCKS5 are versions of a proxy protocol that operates at the network transport level,
+                redirecting traffic between client and server without interpreting the transmitted data. SOCKS4 only
+                supports TCP connections, being mainly used for basic traffic redirection. SOCKS5 is a more advanced
+                evolution, with support for TCP and UDP connections, username and password authentication, and
+                compatibility with IPv6, making it more versatile for modern applications that require greater
+                flexibility and security.
+                <br><br>
+            </p>
+            <p>
+                <b>Tor</b>
+                <br><br>
+                The Tor network (The Onion Router) is a communication network that allows anonymizing internet browsing
+                by routing data traffic through a series of nodes (servers) distributed globally. Communication is
+                encrypted in multiple layers, like the layers of an onion, ensuring that the origin, destination, and
+                content of the data are protected.
+                <br><br>
+                For creating websites on the Tor network, <a href="/articles/en-us/creating-tor-website.html">click
+                    here</a>.
+                <br><br>
+                For creating a Windows environment focused on OPSEC, where all traffic passes through the Tor network,
+                <a href="/articles/en-us/opsec-environment.html">click here</a>.
+            </p>
+            <br>
+            <h2>Hands-on</h2>
+            <p>
+                <b>Searching for Proxy Lists</b>
+                <br><br>
+                Searching for proxy lists is essential for the effective functioning of Proxychains, as its operation
+                depends directly on the quality and availability of the configured proxies. A reliable and diverse list
+                ensures greater anonymity, allowing connections to be routed through multiple intermediate servers and
+                making traffic tracking difficult. It is worth noting that proxy servers can see the connection, but
+                what they can observe depends on the type of proxy and the protocol used.
+                <br><br>
+                An <b>HTTP proxy</b> can see all the content of unencrypted requests and responses, such as URLs,
+                headers, and transmitted data. In the case of <b>HTTPS connections</b>, the proxy only sees the domain
+                being accessed (via SNI), but not the content, which is protected by TLS encryption.
+                <br><br>
+                <b>SOCKS4 and SOCKS5 proxies</b> operate at a lower level, only retransmitting data packets between the
+                client and the destination server. They do not interpret the connection content but can see the
+                communication metadata, such as the source and destination IP addresses.
+                <br><br>
+                Even in encrypted connections (such as HTTPS or VPNs), the final proxy, which forwards the traffic to
+                the destination, can record information such as the client's IP address, connection times, and the
+                volume of transmitted data. Therefore, trust in the proxy operator is crucial to ensure privacy and
+                security.
+                <br><br>
+                In sensitive networks, using tools like TOR can help mitigate these risks by adding additional layers of
+                anonymity.
+                <br><br>
+                For study purposes, proxies found in this <a
+                    href="https://github.com/TheSpeedX/PROXY-List">proxy-list</a> were used. However, it is not
+                recommended to use it for non-educational purposes, as it does not ensure any security and reliability.
+                <br><br>
+
+            </p>
+            <p>
+                <b>Installing Tor</b>
+                <br><br>
+                Using Tor in conjunction with the Proxychains tool is essential to increase anonymity and security in
+                network connections. While Proxychains allows chaining multiple proxies, TOR adds a robust layer of
+                anonymization by routing them through its distributed network, composed of volunteer nodes that make
+                tracing the origin and destination of traffic difficult.
+                <br><br>
+                Therefore, to install Tor, with administrative permissions, use the command below:
+            </p>
+            <pre class="code-block">
+                <code>sudo apt install tor -y</code>
+            </pre>
+            <p>
+                After installation, verify if the service is active:
+            </p>
+            <pre class="code-block">
+                <code>systemctl status tor</code>
+            </pre>
+            <img id="main" src="../../img/articles/proxychains-use/05-tor-usage.png" alt="05-tor-usage">
+            <p>
+                <b>Installing Proxychains</b>
+                <br><br>
+                To install the Proxychains tool, with administrative permissions, use the command below:
+            </p>
+            <pre class="code-block">
+                <code>sudo apt install proxychains4</code>
+            </pre>
+            <p>
+                To validate your installation, type the command <i>proxychains4</i> in the terminal and wait for the
+                tool's default response.
+            <p>
+                <img id="main" src="../../img/articles/proxychains-use/03-proxychain-install.png"
+                    alt="03-proxychain-install">
+                <br><br>
+                <b>Understanding Proxychains</b>
+                <br><br>
+                Proxychains configuration is done through the default definition file, located at
+                <b>/etc/proxychains4.conf</b>. This file defines how the tool operates, allowing 4 proxy management
+                options, which are:
+                <br><br>
+                <b>Dynamic Chain</b>: With this configuration, the tool will attempt to use proxies in the listed order.
+                However, if a proxy fails, it will be skipped and the tool will move on to the next one.
+                <br><br>
+                <b>Strict Chain</b>: Each proxy is used in the listed order, from first to second, third, and so on. If
+                a proxy fails, the entire connection will be interrupted.
+                <br><br>
+                <b>Round-Robin Chain</b>: Chained proxies are used in a circular fashion to distribute connections among
+                the provided proxies. Each connection request goes to the next one in the list, and upon reaching the
+                end, starts again at the beginning.
+                <br><br>
+                <b>Random Chain</b>: As the name suggests, this configuration randomly selects proxies for each
+                connection. It does not follow a specific order and creates a unique path each time the tool is
+                executed.
+                <br><br>
+                The choice of management type depends on the need, such as:
+                <br><br>
+                <b>Anonymity</b>: Random Chain can provide greater anonymity by choosing proxies randomly.
+                <br><br>
+                <b>Reliability</b>: Dynamic Chain offers resilience by ignoring proxies that fail, thus ensuring
+                connection stability.
+                <img id="main" src="../../img/articles/proxychains-use/04-proxychain-config.png"
+                    alt="04-proxychain-config">
+            </p>
+            <p>
+                <b>Proxy Configuration</b>
+                <br><br>
+                For its use, configuration through the Tor network or an <b>extremely</b> reliable proxy server is
+                recommended. For configuration, simply add, in the format <b>"PROTOCOL" "IP" "PORT"</b> at the end of
+                the file, the chosen proxy, for example:
+                <img id="main" src="../../img/articles/proxychains-use/06-proxychain-usage.png"
+                    alt="06-proxychain-usage">
+            </p>
+            </p>
+
+            <p>
+                <b>Usage with Tor</b>
+                <br><br>
+                To use with Tor, simply, with the Tor service activated locally, redirect the proxy to itself with the
+                indicator <b>socks5 127.0.0.1 9050</b>
+                <img id="main" src="../../img/articles/proxychains-use/07-tor-usage.png" alt="07-tor-usage">
+                To validate its use, use the command <b>proxychains4 firefox</b> in the terminal to open the browser
+                under the tool, and access <a href="https://check.torproject.org/">https://check.torproject.org/</a>
+            </p>
+            <img id="main" src="../../img/articles/proxychains-use/08-tor-usage.png" alt="08-tor-usage">
+            <b>Using Proxychains with Tools</b>
+            <br><br>
+            To redirect traffic from other programs to proxychains, simply enter in the terminal the command
+            <b>proxychains TOOL_NAME</b>, for example:
+            </p>
+            <img id="main" src="../../img/articles/proxychains-use/09-proxychain-usage.png" alt="09-proxychain-usage">
+            <p>
+                <b>Extra: proxy_dns</b>
+                <br><br>
+                The proxy_dns configuration, present in <b>proxychains4.conf</b>, requests DNS resolution through the
+                proxy chain. This is important for maintaining anonymity, as it prevents DNS leaks that could reveal the
+                real IP address through DNS queries not routed through the proxy. To validate if there are DNS leaks in
+                your connection, access <a href="https://dnsleaktest.com">https://dnsleaktest.com</a>.
+            </p>
+        </section>
+    </main>
+    <br>
+    <footer>
+        <p>&copy; 20∞</p>
+    </footer>
+</body>
+
+</html>

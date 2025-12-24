@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/articles.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
+    <title>tor website.</title>
+</head>
+
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="/index-en.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Home
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+        <header class="article-header">
+            <h1>Creating Websites on the Tor Network</h1>
+            <p class="meta">
+                <span>Dec 05, 2024</span> by
+                <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+            </p>
+        </header>
+
+        <section class="article-body">
+            <p>
+                Websites on the Tor network play a crucial role in a world where privacy and freedom of expression face
+                growing challenges, offering, when used correctly, a means of secure browsing and access to uncensored
+                information.
+            </p>
+            <h2>Concept:</h2>
+            <p>
+                Tor (The Onion Router) is free software and an open network that enables anonymous browsing, as it masks
+                users' IP addresses by redirecting traffic through a global network of volunteers (nodes) before
+                reaching the final destination, in addition to using multiple layers of encryption. Furthermore, it
+                allows access to hidden services (.onion), which are websites inaccessible through the conventional
+                internet and are part of the Tor network.
+            </p>
+            <img id="main" src="../../img/articles/tor-website/tor-working.png" alt="tor-working">
+            <p>
+                <b>Attention:</b> For security purposes, it is recommended to perform the mentioned actions from an
+                isolated VPS.
+            </p>
+            <p>
+                For creating websites on the Tor network, the following will be used:
+            </p>
+            <ul>
+                <li>A web server (Apache);</li>
+                <li>Ubuntu operating system (Linux);</li>
+                <li>Tor software;</li>
+                <li>Tor browser;</li>
+                <li>Static content for demonstration.</li>
+            </ul>
+            <h2>Installing Tor Browser</h2>
+            <p>First, you need to install the Tor Browser, the browser that enables access to services from the Onion
+                network linked to the Tor Project. At <a
+                    href="https://www.torproject.org/download/">https://www.torproject.org/download/</a>, download the
+                Tor Browser. Then, extract the file for future use:</p>
+            <pre class="code-block">
+                <code>tar -xvf tor-browser-linux-x86_64-14.0.3.tar.xz</code>
+            </pre>
+            <h2>Installing Tor:</h2>
+            <p>
+                Next, you need to install Tor. Therefore, with administrative permissions, use the command below:
+            </p>
+            <pre class="code-block">
+                <code>sudo apt install tor -y</code>
+            </pre>
+            <p>
+                After installation, verify if the service is active:
+            </p>
+            <pre class="code-block">
+                <code>systemctl status tor</code>
+            </pre>
+            <h2>Configuring the Hidden Service:</h2>
+            <p>
+                The next step would be to configure the Tor software, allowing access to the website. To do this, go to
+                the configuration file and edit it:
+            </p>
+            <pre class="code-block">
+                <code>sudo vim /etc/tor/torrc</code>
+            </pre>
+            <p>
+                Then, find the following lines and uncomment them:
+            </p>
+            <pre class="code-block">
+                <code>HiddenServiceDir /var/lib/tor/hidden_service/</code>
+            </pre>
+            <pre class="code-block">
+                <code>HiddenServicePort 80 127.0.0.1:8080</code>
+            </pre>
+            <p>
+                Finally, to apply the changes, restart the Tor service:
+            </p>
+            <pre class="code-block">
+                <code>sudo systemctl restart tor</code>
+            </pre>
+            <p>
+                After restarting, the onion address for the created site will be in
+                "/var/lib/tor/hidden_service/hostname". Therefore, you can view it using:
+            </p>
+            <pre class="code-block">
+                <code>cat /var/lib/tor/hidden_service/hostname</code>
+            </pre>
+            <h2>Configuring the Web Server:</h2>
+            <p>
+                Lastly, you need to configure the web server. For demonstration purposes, Apache was chosen.
+            </p>
+            <pre class="code-block">
+                <code>sudo apt install apache2</code>
+            </pre>
+            <p>
+                In <b>/var/www/html</b>, insert the static site
+            </p>
+            <pre class="code-block">
+                <code>cd /var/www/html</code>
+            </pre>
+            <pre class="code-block">
+                <code>vim index.html</code>
+            </pre>
+            <p>
+                With this, when entering the URL obtained from <b>var/lib/tor/hidden_service/hostname</b> in the Tor
+                browser, the previously inserted static site will load. Thus completing the process of creating a static
+                site on Tor.
+            </p>
+            <img id="example-tor" src="../../img/articles/tor-website/tor-web-example.png" alt="website-example">
+            <p>
+                Thus, a website was created on the Onion network linked to the Tor Project, enabling customization of
+                the site according to the user's wishes.
+            </p>
+        </section>
+    </main>
+    <br>
+    <footer>
+        <p>&copy; 20∞</p>
+    </footer>
+</body>
+
+</html>

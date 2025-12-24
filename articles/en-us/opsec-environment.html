@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/articles.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
+    <title>opsec environment.</title>
+</head>
+
+<body>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="/index-en.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Home
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+        <header class="article-header">
+            <h1>OPSEC Environment Configuration</h1>
+            <p class="meta">
+                <span>Dec 18, 2024</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+            </p>
+        </header>
+        <section class="article-body">
+            <p>
+                In an increasingly connected world, protecting online privacy has become essential, highlighting the
+                importance of seeking anonymity. Therefore, this article aims to address the configuration of a
+                virtualized Windows environment, in which all traffic is routed through the Tor network via
+                Whonix-Gateway, thus ensuring an additional layer of security and protection.
+                <br><br>
+                For this, VirtualBox, Windows 10, and Whonix will be used.
+
+            </p>
+            <h2>Concepts</h2>
+            <p>
+                <b>Virtualization</b>
+                <br><br>
+                Virtualization is a technology that allows creating virtual versions of computing resources, such as
+                operating systems, servers, or networks, on a single physical hardware. It uses a hypervisor to allocate
+                and manage these resources, allowing multiple virtual machines to operate independently and in isolation
+                on the same physical device.
+                <br><br>
+                <i><b>*</b>It is worth noting that virtualization and containerization are distinct concepts.</i>
+            </p>
+            <p>
+                <br>
+                <b>VirtualBox</b>
+                <br><br>
+                VirtualBox is open-source virtualization software developed by Oracle, used to create and manage virtual
+                machines on operating systems such as Windows, Linux, and macOS, which become hosts for virtualized
+                entities. In summary, it allows the user to run multiple virtualized operating systems from a single
+                physical computer.
+            </p>
+            <p>
+                <br>
+                <b>Whonix</b>
+                <br><br>
+                Whonix is an operating system focused on anonymity and security, designed to protect the user's identity
+                online. It consists of two virtual machines: Whonix-Gateway, which routes all traffic through the Tor
+                network, and Whonix-Workstation, where applications are executed in isolation.
+            </p>
+            <p>
+                <br>
+                <b>Tor Network</b>
+                <br><br>
+                The Tor network (The Onion Router) is a communication network that allows anonymizing internet browsing
+                by routing data traffic through a series of nodes (servers) distributed globally. Communication is
+                encrypted in multiple layers, like the layers of an onion, ensuring that the origin, destination, and
+                content of the data are protected.
+                <br><br>
+                For creating websites on the Tor network, <a href="/articles/en-us/creating-tor-website.html">click
+                    here</a>.
+            </p>
+            <p>
+                <br>
+                <b>Windows</b>
+                <br><br>
+                Windows is an operating system developed by Microsoft, widely used on personal computers, corporate
+                systems, and servers. It provides a user-friendly graphical interface and essential tools that allow
+                users to interact with hardware, run programs, manage files, and connect to the internet.
+            </p>
+            <br>
+            <h2>Hands-on</h2>
+            <p>
+                <b>VirtualBox Installation</b>
+                <br><br>
+                First, for virtualization of the entire system, you need to install VirtualBox, using the <a
+                    href="https://www.virtualbox.org/wiki/Downloads">official website</a>. Choose the binary according
+                to the operating system installed on your physical machine (for example, the Windows hosts option for
+                Windows operating system users).
+            </p>
+            <img id="main" src="../../img/articles/opsec-environment/01-virtualbox-installation.png"
+                alt="01-virtualbox-installation">
+            <p>
+                On the installation screen, select the recommended default components and agree to the "Network
+                interfaces" warnings.
+            </p>
+            <p>
+                <br>
+                <b>Whonix Installation</b>
+                <br><br>
+                On the <a href="https://www.whonix.org/wiki/Download">official website</a>, download Whonix for
+                VirtualBox.
+            </p>
+            <img id="main" src="../../img/articles/opsec-environment/02-whonix-installation.png"
+                alt="02-whonix-installation">
+            <p>
+                Then, after downloading, open the .ova file with a double-click, and do not change the default settings,
+                also agreeing to the software license.
+                <img id="main" src="../../img/articles/opsec-environment/03-whonix-installation.png"
+                    alt="03-whonix-installation">
+            </p>
+            <p>
+                After importing, you should have two new instances in VirtualBox (Whonix-Gateway-Xfce and
+                Whonix-Workstation-Xfce).
+                <img id="main" src="../../img/articles/opsec-environment/04-whonix-installation.png"
+                    alt="04-whonix-installation">
+            </p>
+            <p>
+                Then, start both machines. Initially, both instances perform a systemcheck to validate the installation.
+                <img id="main" src="../../img/articles/opsec-environment/05-whonix-installation.png"
+                    alt="05-whonix-installation">
+            </p>
+            <p>
+                Then, in the warning messages, select OK. In Whonix-Workstation, open the browser and access the site <a
+                    href="https://check.torproject.org/">https://check.torproject.org/</a>, which validates the
+                connection to the Tor network. After this action, shut down both virtual machines.
+                <img id="main" src="../../img/articles/opsec-environment/06-whonix-installation.png"
+                    alt="06-whonix-installation">
+            </p>
+            <p>
+                <br>
+                <b>Windows Installation</b>
+                <br><br>
+                On the <a href="https://www.microsoft.com/en-us/software-download/windows10">official website</a>,
+                download the Media Creator Tool from Microsoft.
+                <img id="main" src="../../img/articles/opsec-environment/07-windows-installation.png"
+                    alt="07-windows-installation">
+            </p>
+            <p>
+                Subsequently, with the tool initialized, choose to download the Windows ISO.
+                <img id="main" src="../../img/articles/opsec-environment/08-windows-installation.png"
+                    alt="08-windows-installation">
+            </p>
+            <p>
+                In VirtualBox, create a virtual machine with the newly downloaded Windows 10 ISO.
+                <img id="main" src="../../img/articles/opsec-environment/09-windows-installation.png"
+                    alt="09-windows-installation">
+            </p>
+            <p>
+                Then, proceed with the conventional installation.
+                <img id="main" src="../../img/articles/opsec-environment/10-windows-installation.png"
+                    alt="10-windows-installation">
+            </p>
+            <p>
+                <br>
+                <b>Windows 10 - Whonix Connection</b>
+                <br><br>
+                After installing Windows on the virtual machine, in addition to properly updating the drivers and
+                operating system, shut down the instance. In the VirtualBox menu, on the newly created machine, choose
+                "Settings", and search for "Network". At this point, select "Internal Network".
+                <img id="main" src="../../img/articles/opsec-environment/11-windows-whonix-connection.png"
+                    alt="11-windows-whonix-connection">
+            </p>
+            <p>
+                After the previous configuration, run <b>first</b> the Whonix Gateway instance. Then, after its complete
+                initialization, start the Windows virtual machine.
+                <img id="main" src="../../img/articles/opsec-environment/12-windows-whonix-connection.png"
+                    alt="12-windows-whonix-connection">
+            </p>
+            <p>
+                When initializing Windows 10, in the control panel, choose <b>Network and Internet</b> > <b>Network and
+                    Sharing Center</b> > <b>Change adapter settings</b>. By right-clicking on <b>Ethernet</b>, select
+                <b>Properties</b>
+                <img id="main" src="../../img/articles/opsec-environment/13-windows-whonix-connection.png"
+                    alt="13-windows-whonix-connection">
+            </p>
+            <p>
+                Then, search for <b>Internet Protocol Version 4 (TCP/IPv4)</b>. When you find it, select
+                <b>Properties</b>
+                <img id="main" src="../../img/articles/opsec-environment/14-windows-whonix-connection.png"
+                    alt="14-windows-whonix-connection">
+            </p>
+            <p>
+                Finally, select <b>Use the following IP address</b>, and set:
+                <br><br>
+                <b>IP Address:</b> 10.152.152.100
+                <br>
+                <b>Subnet Mask:</b> 255.0.0.0
+                <br>
+                <b>Default Gateway:</b> 10.152.152.10
+                <br>
+                <b>Preferred DNS:</b> 10.152.152.10
+                <br><br>
+                Then, click <b>OK</b> to save
+                <img id="main" src="../../img/articles/opsec-environment/15-windows-whonix-connection.png"
+                    alt="15-windows-whonix-connection">
+            </p>
+            <p>
+                <br>
+                <b>Connection Test</b>
+                <br><br>
+                For validation, in the browser, access <a href="https://whoer.net/">https://whoer.net/</a>. If all
+                previous steps have been successfully completed, the result of the site analysis will be an IP belonging
+                to the Tor network.
+                <img id="main" src="../../img/articles/opsec-environment/16-windows-whonix-connection.png"
+                    alt="16-windows-whonix-connection">
+            </p>
+            <p>
+                With this, you obtain a Windows environment where all its traffic is passed through the Tor network,
+                natively.
+            </p>
+            <p>
+                <br>
+                <b>Extras</b>
+                <br><br>
+                - Using a VPN on the main operating system (host) can be extremely efficient, in order to add an extra
+                layer of anonymity and also prevent the internet provider from identifying constant use of Tor;<br><br>
+                - Using privacy-focused extensions are great allies in the search for anonymity, such as: <a
+                    href="https://chromewebstore.google.com/detail/privacy-badger/pkehgijcmpdhfbdbbnkijodmdjhbjlgp">Privacy
+                    Badger</a>, <a
+                    href="https://chromewebstore.google.com/detail/smart-https/cmleijjdpceldbelpnpkddofmcmcaknm">Smart
+                    HTTPS</a>, <a
+                    href="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh">uBlock
+                    Origin</a> and <a
+                    href="https://chromewebstore.google.com/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkg">User-Agent
+                    Switcher and Manager</a>;<br><br>
+                - For the national scenario (Brazil), I recommend reading the work <a
+                    href="https://www.amazon.com.br/Opsec-Vin%C3%ADcius-Vieira/dp/6500384989/">OPSEC, Practical Cyber
+                    Intelligence</a>, by author <a href="https://www.linkedin.com/in/v1n1v131r4/">Vinícius Vieira</a>.
+            </p>
+        </section>
+    </main>
+    <br>
+    <footer>
+        <p>&copy; 20∞</p>
+    </footer>
+</body>
+
+</html>
