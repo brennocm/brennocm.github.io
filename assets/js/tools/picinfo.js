@@ -11,7 +11,7 @@ const i18n = {
         subtitle: 'Extraia metadados de imagens com segurança',
         privacyBadge: 'Sua imagem nunca sai do navegador. Processamento 100% local.',
         uploadLabel: 'Arraste uma imagem ou clique para selecionar',
-        uploadHint: 'Suporta JPG, PNG, GIF, WebP, TIFF',
+        uploadHint: 'Suporta JPG e PNG',
         dropText: 'Solte a imagem aqui',
         analyze: 'Analisar',
         clear: 'Limpar',
@@ -69,7 +69,7 @@ const i18n = {
         subtitle: 'Extract image metadata securely',
         privacyBadge: 'Your image never leaves your browser. 100% local processing.',
         uploadLabel: 'Drag an image or click to select',
-        uploadHint: 'Supports JPG, PNG, GIF, WebP, TIFF',
+        uploadHint: 'Supports JPG and PNG',
         dropText: 'Drop the image here',
         analyze: 'Analyze',
         clear: 'Clear',
@@ -134,7 +134,7 @@ const state = {
 };
 
 // ============================================
-// EXIF Parser (Basic Implementation)
+// EXIF Parser (JPEG & PNG Support)
 // ============================================
 
 function parseExif(arrayBuffer) {
@@ -142,71 +142,112 @@ function parseExif(arrayBuffer) {
         const dataView = new DataView(arrayBuffer);
         const exifData = {};
 
-        // Check for JPEG marker
-        if (dataView.byteLength < 2 || dataView.getUint16(0) !== 0xFFD8) {
-            return exifData; // Not a JPEG
+        if (dataView.byteLength < 4) return exifData;
+
+        // JPEG signature (0xFFD8)
+        if (dataView.getUint16(0) === 0xFFD8) {
+            return parseJpeg(dataView, exifData);
+        }
+        // PNG signature (0x89504E47)
+        else if (dataView.getUint32(0) === 0x89504E47) {
+            return parsePng(dataView, exifData);
         }
 
-        let offset = 2;
-        const length = dataView.byteLength;
-        let iterationCount = 0;
-        const maxIterations = 1000; // Prevent infinite loops
-
-        while (offset < length && iterationCount < maxIterations) {
-            iterationCount++;
-
-            if (offset + 1 >= length) break;
-
-            if (dataView.getUint8(offset) !== 0xFF) {
-                offset++;
-                continue;
-            }
-
-            const marker = dataView.getUint8(offset + 1);
-
-            // APP1 marker (EXIF)
-            if (marker === 0xE1) {
-                if (offset + 10 >= length) break;
-
-                const exifOffset = offset + 4;
-
-                // Check for "Exif" string
-                const exifStr = String.fromCharCode(
-                    dataView.getUint8(exifOffset),
-                    dataView.getUint8(exifOffset + 1),
-                    dataView.getUint8(exifOffset + 2),
-                    dataView.getUint8(exifOffset + 3)
-                );
-
-                if (exifStr === 'Exif') {
-                    const tiffOffset = exifOffset + 6;
-                    if (tiffOffset + 8 >= length) break;
-
-                    const isLittleEndian = dataView.getUint16(tiffOffset) === 0x4949;
-                    const ifdOffset = dataView.getUint32(tiffOffset + 4, isLittleEndian);
-
-                    // Validate IFD offset is within bounds
-                    if (tiffOffset + ifdOffset < length) {
-                        parseIFD(dataView, tiffOffset, tiffOffset + ifdOffset, isLittleEndian, exifData, 0);
-                    }
-                }
-                break;
-            }
-
-            // Move to next marker
-            if (marker !== 0x00 && marker !== 0xFF) {
-                if (offset + 3 >= length) break;
-                const segmentLength = dataView.getUint16(offset + 2);
-                offset += segmentLength + 2;
-            } else {
-                offset++;
-            }
-        }
-
-        return exifData;
+        return exifData; // Unsupported format
     } catch (e) {
-        console.error("Error parsing EXIF:", e);
-        return {}; // Return empty object on error
+        console.error("Error parsing Metadata:", e);
+        return {};
+    }
+}
+
+function parseJpeg(dataView, exifData) {
+    let offset = 2;
+    const length = dataView.byteLength;
+    let iterationCount = 0;
+    const maxIterations = 1000;
+
+    while (offset < length && iterationCount < maxIterations) {
+        iterationCount++;
+        if (offset + 1 >= length) break;
+        if (dataView.getUint8(offset) !== 0xFF) {
+            offset++;
+            continue;
+        }
+
+        const marker = dataView.getUint8(offset + 1);
+
+        // APP1 marker (EXIF)
+        if (marker === 0xE1) {
+            if (offset + 10 >= length) break;
+            const exifOffset = offset + 4;
+
+            // Check for "Exif" string
+            const exifStr = String.fromCharCode(
+                dataView.getUint8(exifOffset),
+                dataView.getUint8(exifOffset + 1),
+                dataView.getUint8(exifOffset + 2),
+                dataView.getUint8(exifOffset + 3)
+            );
+
+            if (exifStr === 'Exif') {
+                // JPEG Exif header has 6 bytes padding ("Exif\0\0") before TIFF header
+                const tiffOffset = exifOffset + 6;
+                parseTiffHeader(dataView, tiffOffset, exifData);
+            }
+            break;
+        }
+
+        // Move to next marker
+        if (marker !== 0x00 && marker !== 0xFF) {
+            if (offset + 3 >= length) break;
+            const segmentLength = dataView.getUint16(offset + 2);
+            offset += segmentLength + 2;
+        } else {
+            offset++;
+        }
+    }
+    return exifData;
+}
+
+function parsePng(dataView, exifData) {
+    let offset = 8; // Skip PNG signature
+    const length = dataView.byteLength;
+    let iterationCount = 0;
+    const maxIterations = 1000;
+
+    while (offset < length && iterationCount < maxIterations) {
+        iterationCount++;
+        if (offset + 8 > length) break; // Need length + type
+
+        const chunkLength = dataView.getUint32(offset);
+        const chunkType = String.fromCharCode(
+            dataView.getUint8(offset + 4),
+            dataView.getUint8(offset + 5),
+            dataView.getUint8(offset + 6),
+            dataView.getUint8(offset + 7)
+        );
+
+        // The 'eXIf' chunk contains raw TIFF/Exif data (without JPEG's "Exif\0\0" header)
+        if (chunkType === 'eXIf') {
+            const tiffOffset = offset + 8;
+            parseTiffHeader(dataView, tiffOffset, exifData);
+            break;
+        }
+
+        // Move to next chunk: Length (4) + Type (4) + Data (chunkLength) + CRC (4)
+        offset += 12 + chunkLength;
+    }
+    return exifData;
+}
+
+function parseTiffHeader(dataView, tiffOffset, exifData) {
+    if (tiffOffset + 8 >= dataView.byteLength) return;
+
+    const isLittleEndian = dataView.getUint16(tiffOffset) === 0x4949;
+    const ifdOffset = dataView.getUint32(tiffOffset + 4, isLittleEndian);
+
+    if (tiffOffset + ifdOffset < dataView.byteLength) {
+        parseIFD(dataView, tiffOffset, tiffOffset + ifdOffset, isLittleEndian, exifData, 0);
     }
 }
 
