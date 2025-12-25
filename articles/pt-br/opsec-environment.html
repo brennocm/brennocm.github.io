@@ -1,10 +1,10 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/articles.css">
+    <link rel="stylesheet" href="../../assets/css/articles.css">
     <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
     <title>opsec environment.</title>
 </head>
@@ -22,89 +22,89 @@
     <!-- Main Content -->
     <main class="content">
         <header class="article-header">
-            <h1>Configura√ß√£o de ambiente OPSEC</h1>
+            <h1>ConfiguraÁ„o de ambiente OPSEC</h1>
             <p class="meta">
                 <span>dez 18, 2024</span> by <a  href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
             </p>
         </header>
         <section class="article-body">
             <p>
-                Em um mundo cada vez mais conectado, proteger a privacidade online tornou-se essencial, destacando a import√¢ncia da busca pela anonimidade. Diante disso, este artigo tem como objetivo abordar a configura√ß√£o de um ambiente Windows virtualizado, no qual todo o tr√°fego √© encaminhado atrav√©s da rede Tor por meio do Whonix-Gateway, garantindo, assim, uma camada adicional de seguran√ßa e prote√ß√£o.
+                Em um mundo cada vez mais conectado, proteger a privacidade online tornou-se essencial, destacando a import‚ncia da busca pela anonimidade. Diante disso, este artigo tem como objetivo abordar a configuraÁ„o de um ambiente Windows virtualizado, no qual todo o tr·fego È encaminhado atravÈs da rede Tor por meio do Whonix-Gateway, garantindo, assim, uma camada adicional de seguranÁa e proteÁ„o.
                 <br><br>
-                Para isso, ser√° utilizado o VirtualBox, Windows 10 e Whonix. 
+                Para isso, ser· utilizado o VirtualBox, Windows 10 e Whonix. 
                 
             </p>
             <h2>Conceitos</h2>
             <p>
-               <b>Virtualiza√ß√£o</b> 
+               <b>VirtualizaÁ„o</b> 
                <br><br>
-               A virtualiza√ß√£o √© uma tecnologia que permite criar vers√µes virtuais de recursos computacionais, como sistemas operacionais, servidores ou redes, em um √∫nico hardware f√≠sico. Ela utiliza um hipervisor para alocar e gerenciar esses recursos, permitindo que m√∫ltiplas m√°quinas virtuais operem de forma independente e isolada no mesmo dispositivo f√≠sico.
+               A virtualizaÁ„o È uma tecnologia que permite criar versıes virtuais de recursos computacionais, como sistemas operacionais, servidores ou redes, em um ˙nico hardware fÌsico. Ela utiliza um hipervisor para alocar e gerenciar esses recursos, permitindo que m˙ltiplas m·quinas virtuais operem de forma independente e isolada no mesmo dispositivo fÌsico.
                <br><br>
-               <i><b>*</b>Vale destacar que virtualiza√ß√£o e conteineriza√ß√£o s√£o conceitos distintos.</i>
+               <i><b>*</b>Vale destacar que virtualizaÁ„o e conteinerizaÁ„o s„o conceitos distintos.</i>
             </p>
             <p>
                 <br>
                 <b>VirtualBox</b> 
                 <br><br>
-                O VirtualBox √© um software de virtualiza√ß√£o de c√≥digo aberto desenvolvido pela Oracle, utilizado para criar e gerenciar m√°quinas virtuais em sistemas operacionais como Windows, Linux e macOS, na qual se tornam hospedeiros para as entidades virtualizadas. Em suma, ele permite que o usu√°rio execute m√∫ltiplos sistemas operacionais virtualizados a partir de um mesmo computador f√≠sico.
+                O VirtualBox È um software de virtualizaÁ„o de cÛdigo aberto desenvolvido pela Oracle, utilizado para criar e gerenciar m·quinas virtuais em sistemas operacionais como Windows, Linux e macOS, na qual se tornam hospedeiros para as entidades virtualizadas. Em suma, ele permite que o usu·rio execute m˙ltiplos sistemas operacionais virtualizados a partir de um mesmo computador fÌsico.
             </p>
             <p>
                 <br>
                 <b>Whonix</b> 
                 <br><br>
-                O Whonix √© um sistema operacional focado em anonimidade e seguran√ßa, projetado para proteger a identidade do usu√°rio online. Ele √© composto por duas m√°quinas virtuais: Whonix-Gateway, que roteia todo o tr√°fego atrav√©s da rede Tor, e Whonix-Workstation, onde as aplica√ß√µes s√£o executadas de forma isolada.
+                O Whonix È um sistema operacional focado em anonimidade e seguranÁa, projetado para proteger a identidade do usu·rio online. Ele È composto por duas m·quinas virtuais: Whonix-Gateway, que roteia todo o tr·fego atravÈs da rede Tor, e Whonix-Workstation, onde as aplicaÁıes s„o executadas de forma isolada.
             </p>
             <p>
                 <br>
                 <b>Rede Tor</b> 
                 <br><br>
-                A rede Tor (The Onion Router) √© uma rede de comunica√ß√£o que permite anonimizar a navega√ß√£o na internet ao encaminhar o tr√°fego de dados por uma s√©rie de n√≥s (servidores) distribu√≠dos globalmente. A comunica√ß√£o √© criptografada em v√°rias camadas, como as camadas de uma cebola, garantindo que a origem, o destino e o conte√∫do dos dados sejam protegidos.
+                A rede Tor (The Onion Router) È uma rede de comunicaÁ„o que permite anonimizar a navegaÁ„o na internet ao encaminhar o tr·fego de dados por uma sÈrie de nÛs (servidores) distribuÌdos globalmente. A comunicaÁ„o È criptografada em v·rias camadas, como as camadas de uma cebola, garantindo que a origem, o destino e o conte˙do dos dados sejam protegidos.
                 <br><br>
-                Para a cria√ß√£o de sites na rede tor, <a  href="/articles/creating-tor-website.html">clique aqui</a>.
+                Para a criaÁ„o de sites na rede tor, <a  href="/articles/creating-tor-website.html">clique aqui</a>.
             </p>
             <p>
                 <br>
                 <b>Windows</b> 
                 <br><br>
-                O Windows √© um sistema operacional desenvolvido pela Microsoft, amplamente utilizado em computadores pessoais, corporativos e servidores. Ele fornece uma interface gr√°fica amig√°vel e ferramentas essenciais que permitem ao usu√°rio interagir com o hardware, executar programas, gerenciar arquivos e conectar-se √† internet.
+                O Windows È um sistema operacional desenvolvido pela Microsoft, amplamente utilizado em computadores pessoais, corporativos e servidores. Ele fornece uma interface gr·fica amig·vel e ferramentas essenciais que permitem ao usu·rio interagir com o hardware, executar programas, gerenciar arquivos e conectar-se ‡ internet.
             </p>
             <br>
             <h2>Hands-on</h2>
             <p>
-                <b>Instala√ß√£o do VirtualBox</b> 
+                <b>InstalaÁ„o do VirtualBox</b> 
                 <br><br>
-                A princ√≠pio, para a virtualiza√ß√£o de todo o sistema, necessita-se da instala√ß√£o do VirtualBox, utilize o <a  href="https://www.virtualbox.org/wiki/Downloads">site oficial</a>. Para isso, e escolha o bin√°rio de acordo com o sistema operacional instalado em sua m√°quina f√≠sica (por exemplo, a op√ß√£o Windows hosts para usu√°rios do sistema operacional windows).
+                A princÌpio, para a virtualizaÁ„o de todo o sistema, necessita-se da instalaÁ„o do VirtualBox, utilize o <a  href="https://www.virtualbox.org/wiki/Downloads">site oficial</a>. Para isso, e escolha o bin·rio de acordo com o sistema operacional instalado em sua m·quina fÌsica (por exemplo, a opÁ„o Windows hosts para usu·rios do sistema operacional windows).
             </p>
             <img id="main" src="../../img/articles/opsec-environment/01-virtualbox-installation.png" alt="01-virtualbox-installation">
             <p>
-                Na tela de instala√ß√£o, selecione os componentes padr√µes recomendados, al√©m de concordar com os avisos de "Network interfaces".
+                Na tela de instalaÁ„o, selecione os componentes padrıes recomendados, alÈm de concordar com os avisos de "Network interfaces".
             </p>
             <p>
                 <br>
-                <b>Instala√ß√£o do Whonix</b> 
+                <b>InstalaÁ„o do Whonix</b> 
                 <br><br>
                 No <a  href="https://www.whonix.org/wiki/Download">site oficial</a>, baixe o Whonix voltado ao VirtualBox.
             </p>
             <img id="main" src="../../img/articles/opsec-environment/02-whonix-installation.png" alt="02-whonix-installation">
             <p>
-                Em seguida, ap√≥s o download, abra o arquivo .ova com um duplo clique, e n√£o altere as configura√ß√µes padr√µes, al√©m de concordar com a licen√ßa de uso do software. 
+                Em seguida, apÛs o download, abra o arquivo .ova com um duplo clique, e n„o altere as configuraÁıes padrıes, alÈm de concordar com a licenÁa de uso do software. 
                 <img id="main" src="../../img/articles/opsec-environment/03-whonix-installation.png" alt="03-whonix-installation">
             </p>
             <p>
-                Ap√≥s a importa√ß√£o, espera-se ter duas novas int√¢ncias no Virtual Box (Whonix-Gateway-Xfce e Whonix-Workstation-Xfce).
+                ApÛs a importaÁ„o, espera-se ter duas novas int‚ncias no Virtual Box (Whonix-Gateway-Xfce e Whonix-Workstation-Xfce).
                 <img id="main" src="../../img/articles/opsec-environment/04-whonix-installation.png" alt="04-whonix-installation">
             </p>
             <p>
-                Em seguida, inicialize ambas as m√°quinas. A princ√≠pio, ambas as inst√¢ncias fazem o systemcheck, a fim de validar a instala√ß√£o.
+                Em seguida, inicialize ambas as m·quinas. A princÌpio, ambas as inst‚ncias fazem o systemcheck, a fim de validar a instalaÁ„o.
                 <img id="main" src="../../img/articles/opsec-environment/05-whonix-installation.png" alt="05-whonix-installation">
             </p>
             <p>
-                Logo depois, nas mensagens de aviso, selecione OK. No Whonix-Workstation, abra o navegador e acesse o site <a  href="https://check.torproject.org/">https://check.torproject.org/</a> , na qual valida a conex√£o com a rede tor. Ap√≥s essa a√ß√£o, desligue ambas as m√°qunas virtuais.
+                Logo depois, nas mensagens de aviso, selecione OK. No Whonix-Workstation, abra o navegador e acesse o site <a  href="https://check.torproject.org/">https://check.torproject.org/</a> , na qual valida a conex„o com a rede tor. ApÛs essa aÁ„o, desligue ambas as m·qunas virtuais.
                 <img id="main" src="../../img/articles/opsec-environment/06-whonix-installation.png" alt="06-whonix-installation">
             </p>
             <p>
                 <br>
-                <b>Instala√ß√£o do Windows</b> 
+                <b>InstalaÁ„o do Windows</b> 
                 <br><br>
                 No <a  href="https://www.microsoft.com/pt-br/software-download/windows10">site oficial</a>, baixe o Media Creator Tool, da Microsoft.
                 <img id="main" src="../../img/articles/opsec-environment/07-windows-installation.png" alt="07-windows-installation">
@@ -114,40 +114,40 @@
                 <img id="main" src="../../img/articles/opsec-environment/08-windows-installation.png" alt="08-windows-installation">
             </p>
             <p>
-                No virtualBox, crie uma m√°quina virtual com a ISO do Windows 10 rec√©m baixada.
+                No virtualBox, crie uma m·quina virtual com a ISO do Windows 10 recÈm baixada.
                 <img id="main" src="../../img/articles/opsec-environment/09-windows-installation.png" alt="09-windows-installation">
             </p>
             <p>
-                Em seguida, prossiga com a instala√ß√£o de forma convencional. 
+                Em seguida, prossiga com a instalaÁ„o de forma convencional. 
                 <img id="main" src="../../img/articles/opsec-environment/10-windows-installation.png" alt="10-windows-installation">
             </p>
             <p>
                 <br>
-                <b>Conex√£o Windows 10 - Whonix</b> 
+                <b>Conex„o Windows 10 - Whonix</b> 
                 <br><br>
-                Ap√≥s a instala√ß√£o do Windows na m√°quina virtual, al√©m da devida atualiza√ß√£o dos drivers e do sistema operacional, desligue a inst√¢ncia. No menu do virtual box, na m√°quina rec√©m criada, opte por "Configura√ß√µes", e busque por "Rede". Nesse momento, selecione "Rede Interna".
+                ApÛs a instalaÁ„o do Windows na m·quina virtual, alÈm da devida atualizaÁ„o dos drivers e do sistema operacional, desligue a inst‚ncia. No menu do virtual box, na m·quina recÈm criada, opte por "ConfiguraÁıes", e busque por "Rede". Nesse momento, selecione "Rede Interna".
                 <img id="main" src="../../img/articles/opsec-environment/11-windows-whonix-connection.png" alt="11-windows-whonix-connection">
             </p>
             <p>
-                Ap√≥s a configura√ß√£o anterior, execute, <b>primeiramente</b>, a inst√¢ncia Whonix Gateway. Em seguida, ap√≥s sua inicializa√ß√£o completa, ligue a m√°quina virtual Windows.
+                ApÛs a configuraÁ„o anterior, execute, <b>primeiramente</b>, a inst‚ncia Whonix Gateway. Em seguida, apÛs sua inicializaÁ„o completa, ligue a m·quina virtual Windows.
                 <img id="main" src="../../img/articles/opsec-environment/12-windows-whonix-connection.png" alt="12-windows-whonix-connection">
             </p>
             <p>
-                Ao inicializar o Windows 10, no painel de controle, opte por <b>Rede e Internet</b> > <b>Central de rede e compartilhamento</b> > <b>Alterar as configura√ß√µes do adaptador</b>. Ao clicar com o bot√£o direito em <b>Ethernet</b>, selecione <b>Propriedades</b>
+                Ao inicializar o Windows 10, no painel de controle, opte por <b>Rede e Internet</b> > <b>Central de rede e compartilhamento</b> > <b>Alterar as configuraÁıes do adaptador</b>. Ao clicar com o bot„o direito em <b>Ethernet</b>, selecione <b>Propriedades</b>
                 <img id="main" src="../../img/articles/opsec-environment/13-windows-whonix-connection.png" alt="13-windows-whonix-connection">
             </p>
             <p>
-                Em seguida, busque por <b>Procolo IP Vers√£o 4 (TCP/IPv4)</b>. Ao encontra-lo, selecione <b>Propriedades</b>
+                Em seguida, busque por <b>Procolo IP Vers„o 4 (TCP/IPv4)</b>. Ao encontra-lo, selecione <b>Propriedades</b>
                 <img id="main" src="../../img/articles/opsec-environment/14-windows-whonix-connection.png" alt="14-windows-whonix-connection">
             </p>
             <p>
-                Por fim, selecione <b>Usar o seguinte endere√ßo IP</b>, e opte p or:
+                Por fim, selecione <b>Usar o seguinte endereÁo IP</b>, e opte p or:
                 <br><br>
-                <b>Endere√ßo IP:</b> 10.152.152.100
+                <b>EndereÁo IP:</b> 10.152.152.100
                 <br>
-                <b>M√°scara de sub-rede:</b> 255.0.0.0
+                <b>M·scara de sub-rede:</b> 255.0.0.0
                 <br>
-                <b>Gateway padr√£o:</b> 10.152.152.10
+                <b>Gateway padr„o:</b> 10.152.152.10
                 <br>
                 <b>DNS preferencial:</b> 10.152.152.10
                 <br><br>
@@ -156,27 +156,27 @@
             </p>
             <p>
                 <br>
-                <b>Teste de conex√£o</b> 
+                <b>Teste de conex„o</b> 
                 <br><br>
-                A fins de valida√ß√£o, no navegador, acesse <a  href="https://whoer.net/">https://whoer.net/</a>. Caso todas as etapas anteriores tenham sido conclu√≠das com sucesso, o retorno da an√°lise do site acessado ser√° um IP pertencente √† rede Tor.
+                A fins de validaÁ„o, no navegador, acesse <a  href="https://whoer.net/">https://whoer.net/</a>. Caso todas as etapas anteriores tenham sido concluÌdas com sucesso, o retorno da an·lise do site acessado ser· um IP pertencente ‡ rede Tor.
                 <img id="main" src="../../img/articles/opsec-environment/16-windows-whonix-connection.png" alt="16-windows-whonix-connection">
             </p>
             <p>
-                Com isso, obt√™m-se um ambiente Windows na qual todo seu tr√°fego √© passado pela rede tor, de forma nativa.
+                Com isso, obtÍm-se um ambiente Windows na qual todo seu tr·fego È passado pela rede tor, de forma nativa.
             </p>
             <p>
                 <br>
                 <b>Extras</b> 
                 <br><br>
-                - A utiliza√ß√£o de VPN no sistema operacional principal (host) pode ser extremamente eficiente, a fim de adicionar uma camada extra de anonimidade al√©m de evitar que o provedor de internet identifique o uso constante do Tor;<br><br>
-                - O uso de extens√µes voltadas a privacidade s√£o grandes aliadas para a busca pela anonimidade, como:  <a href="https://chromewebstore.google.com/detail/privacy-badger/pkehgijcmpdhfbdbbnkijodmdjhbjlgp" >Privacy Badger</a>, <a href="https://chromewebstore.google.com/detail/smart-https/cmleijjdpceldbelpnpkddofmcmcaknm" >Smart HTTPS</a>, <a href="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh" >uBlock Origin</a> e <a href="https://chromewebstore.google.com/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkg" >User-Agent Switcher and Manager</a>;<br><br>
-                - Perante o cen√°rio nacional, recomendo a leitura da obra <a  href="https://www.amazon.com.br/Opsec-Vin%C3%ADcius-Vieira/dp/6500384989/">OPSEC, Intelig√™ncia Cibern√©tica na Pr√°tica</a>, do autor <a  href="https://www.linkedin.com/in/v1n1v131r4/">Vin√≠cius Vieira</a>.
+                - A utilizaÁ„o de VPN no sistema operacional principal (host) pode ser extremamente eficiente, a fim de adicionar uma camada extra de anonimidade alÈm de evitar que o provedor de internet identifique o uso constante do Tor;<br><br>
+                - O uso de extensıes voltadas a privacidade s„o grandes aliadas para a busca pela anonimidade, como:  <a href="https://chromewebstore.google.com/detail/privacy-badger/pkehgijcmpdhfbdbbnkijodmdjhbjlgp" >Privacy Badger</a>, <a href="https://chromewebstore.google.com/detail/smart-https/cmleijjdpceldbelpnpkddofmcmcaknm" >Smart HTTPS</a>, <a href="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh" >uBlock Origin</a> e <a href="https://chromewebstore.google.com/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkg" >User-Agent Switcher and Manager</a>;<br><br>
+                - Perante o cen·rio nacional, recomendo a leitura da obra <a  href="https://www.amazon.com.br/Opsec-Vin%C3%ADcius-Vieira/dp/6500384989/">OPSEC, InteligÍncia CibernÈtica na Pr·tica</a>, do autor <a  href="https://www.linkedin.com/in/v1n1v131r4/">VinÌcius Vieira</a>.
             </p>
         </section>
     </main>
     <br>
     <footer>
-        <p>&copy; 20‚àû</p>
+        <p>&copy; 208</p>
     </footer>
 </body>
 </html>

@@ -213,6 +213,21 @@ const state = {
 // ============================================
 // Utility Functions
 // ============================================
+
+// Regex for FQDN validation (Fully Qualified Domain Name)
+
+
+// Characters that are illegal in DNS names and could indicate malicious input
+const ILLEGAL_CHARS_REGEX = /[;()\[\]<>{}|\\`'"$!]/;
+
+function isValidDomainOrKeyword(input) {
+    if (!input || input.length === 0) return false;
+    // Block inputs with illegal/dangerous characters
+    if (ILLEGAL_CHARS_REGEX.test(input)) return false;
+    // Allow valid domains or simple keywords (alphanumeric with dots, hyphens)
+    return true;
+}
+
 function sanitizeDomain(input) {
     let domain = input.trim().toLowerCase();
     // Remove protocol if present
@@ -221,6 +236,10 @@ function sanitizeDomain(input) {
     domain = domain.replace(/\/$/, '');
     // Remove path if present
     domain = domain.split('/')[0];
+    // Validate against illegal characters
+    if (!isValidDomainOrKeyword(domain)) {
+        return '';
+    }
     return domain;
 }
 
@@ -248,79 +267,157 @@ function renderCategories() {
     Object.entries(dorkCategories).forEach(([key, category]) => {
         const isExpanded = state.expandedCategories.has(key);
         const title = lang === 'pt-BR' ? category.titlePt : category.titleEn;
-        const desc = lang === 'pt-BR' ? category.descPt : category.descEn;
 
         const card = document.createElement('div');
         card.className = `category-card ${isExpanded ? 'expanded' : ''}`;
         card.dataset.category = key;
 
-        card.innerHTML = `
-            <div class="category-header" onclick="toggleCategory('${key}')">
-                <div class="category-info">
-                    <div class="category-icon ${key}">${category.icon}</div>
-                    <div class="category-title">
-                        <h3>${title}</h3>
-                        <span>${category.dorks.length} ${i18n[lang].dorksCount}</span>
-                    </div>
-                </div>
-                <div class="category-toggle">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 9l6 6 6-6"/>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-content">
-                <div class="dorks-list">
-                    ${renderDorks(category.dorks)}
-                </div>
-            </div>
-        `;
+        // Create category header
+        const header = document.createElement('div');
+        header.className = 'category-header';
+        header.addEventListener('click', () => toggleCategory(key));
 
+        // Category info container
+        const info = document.createElement('div');
+        info.className = 'category-info';
+
+        // Icon container (using innerHTML for SVG only - static, trusted content)
+        const iconDiv = document.createElement('div');
+        iconDiv.className = `category-icon ${key}`;
+        iconDiv.innerHTML = category.icon;
+
+        // Title container
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'category-title';
+
+        const h3 = document.createElement('h3');
+        h3.textContent = title;
+
+        const countSpan = document.createElement('span');
+        countSpan.textContent = `${category.dorks.length} ${i18n[lang].dorksCount}`;
+
+        titleDiv.appendChild(h3);
+        titleDiv.appendChild(countSpan);
+
+        info.appendChild(iconDiv);
+        info.appendChild(titleDiv);
+
+        // Toggle icon
+        const toggle = document.createElement('div');
+        toggle.className = 'category-toggle';
+        toggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
+
+        header.appendChild(info);
+        header.appendChild(toggle);
+
+        // Content container
+        const content = document.createElement('div');
+        content.className = 'category-content';
+
+        const dorksList = document.createElement('div');
+        dorksList.className = 'dorks-list';
+        renderDorksSecure(dorksList, category.dorks);
+
+        content.appendChild(dorksList);
+
+        card.appendChild(header);
+        card.appendChild(content);
         container.appendChild(card);
     });
 }
 
-function renderDorks(dorks) {
+function renderDorksSecure(container, dorks) {
     const lang = state.lang;
     const domain = state.targetDomain || 'target.com';
 
-    return dorks.map((dork, index) => {
+    dorks.forEach((dork) => {
         const query = generateDorkQuery(dork.query, state.targetDomain);
-        const displayQuery = highlightDomain(query, domain);
 
-        return `
-            <div class="dork-item">
-                <div class="dork-header">
-                    <span class="dork-name">${dork.name}</span>
-                    <div class="dork-actions">
-                        <button class="dork-btn open" onclick="openInGoogle('${escapeHtml(query)}')" title="${i18n[lang].openGoogle}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                                <path d="M15 3h6v6"/>
-                                <path d="M10 14L21 3"/>
-                            </svg>
-                            ${i18n[lang].openGoogle}
-                        </button>
-                        <button class="dork-btn copy" onclick="copyToClipboard('${escapeHtml(query)}')" title="${i18n[lang].copy}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                            ${i18n[lang].copy}
-                        </button>
-                    </div>
-                </div>
-                <div class="dork-query">${displayQuery}</div>
-            </div>
-        `;
-    }).join('');
+        // Create dork item container
+        const dorkItem = document.createElement('div');
+        dorkItem.className = 'dork-item';
+
+        // Create header
+        const dorkHeader = document.createElement('div');
+        dorkHeader.className = 'dork-header';
+
+        // Dork name (using textContent for security)
+        const dorkName = document.createElement('span');
+        dorkName.className = 'dork-name';
+        dorkName.textContent = dork.name;
+
+        // Actions container
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'dork-actions';
+
+        // Open button
+        const openBtn = document.createElement('button');
+        openBtn.className = 'dork-btn open';
+        openBtn.title = i18n[lang].openGoogle;
+        openBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+            <path d="M15 3h6v6"/>
+            <path d="M10 14L21 3"/>
+        </svg>`;
+        const openText = document.createTextNode(i18n[lang].openGoogle);
+        openBtn.appendChild(openText);
+        openBtn.addEventListener('click', () => openInGoogle(query));
+
+        // Copy button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'dork-btn copy';
+        copyBtn.title = i18n[lang].copy;
+        copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+        </svg>`;
+        const copyText = document.createTextNode(i18n[lang].copy);
+        copyBtn.appendChild(copyText);
+        copyBtn.addEventListener('click', () => copyToClipboard(query));
+
+        actionsDiv.appendChild(openBtn);
+        actionsDiv.appendChild(copyBtn);
+
+        dorkHeader.appendChild(dorkName);
+        dorkHeader.appendChild(actionsDiv);
+
+        // Query display (using highlightDomainSecure for safe rendering)
+        const queryDiv = document.createElement('div');
+        queryDiv.className = 'dork-query';
+        highlightDomainSecure(queryDiv, query, domain);
+
+        dorkItem.appendChild(dorkHeader);
+        dorkItem.appendChild(queryDiv);
+        container.appendChild(dorkItem);
+    });
 }
 
-function highlightDomain(query, domain) {
-    if (!domain || domain === 'target.com') {
-        return escapeHtml(query).replace(/target\.com/g, '<span class="domain-placeholder">target.com</span>');
+
+
+// Secure version that builds DOM elements instead of using innerHTML
+function highlightDomainSecure(container, query, domain) {
+    const targetDomain = domain || 'target.com';
+    const regex = new RegExp(escapeRegExp(targetDomain), 'g');
+
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(query)) !== null) {
+        // Add text before the match
+        if (match.index > lastIndex) {
+            container.appendChild(document.createTextNode(query.substring(lastIndex, match.index)));
+        }
+        // Add highlighted domain
+        const span = document.createElement('span');
+        span.className = 'domain-placeholder';
+        span.textContent = targetDomain;
+        container.appendChild(span);
+        lastIndex = regex.lastIndex;
     }
-    return escapeHtml(query).replace(new RegExp(escapeRegExp(domain), 'g'), `<span class="domain-placeholder">${domain}</span>`);
+    // Add remaining text
+    if (lastIndex < query.length) {
+        container.appendChild(document.createTextNode(query.substring(lastIndex)));
+    }
 }
 
 function escapeHtml(text) {
@@ -329,18 +426,27 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+function escapeForAttribute(text) {
+    // Escape characters for use in HTML onclick attributes
+    return text
+        .replace(/\\/g, '\\\\')       // Escapa barras invertidas
+        .replace(/'/g, "\\'")         // Escapa aspas simples (para a string JS)
+        .replace(/"/g, '&quot;');     // Escapa aspas duplas (para não quebrar o HTML)
+}
+
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function updateDorks() {
-    // Re-render all dorks with the new domain
+    // Re-render all dorks with the new domain using secure method
     document.querySelectorAll('.category-card').forEach(card => {
         const key = card.dataset.category;
         const category = dorkCategories[key];
         const dorksList = card.querySelector('.dorks-list');
         if (dorksList && category) {
-            dorksList.innerHTML = renderDorks(category.dorks);
+            dorksList.innerHTML = '';
+            renderDorksSecure(dorksList, category.dorks);
         }
     });
 }

@@ -1,11 +1,11 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="../../assets/articles.css">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
    <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
    <title>own vpn.</title>
 </head>
@@ -23,37 +23,37 @@
    <!-- Main Content -->
    <main class="content">
       <header class="article-header">
-         <h1>Cria√ß√£o de VPN pr√≥pria</h1>
+         <h1>CriaÁ„o de VPN prÛpria</h1>
          <p class="meta">
             <span>jan 10, 2025</span> by <a  href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
          </p>
       </header>
       <section class="article-body">
          <p>
-            No contexto atual de conectividade digital, a seguran√ßa e a privacidade online tornaram-se prioridades. Com
-            isso, as Redes Privadas Virtuais (VPNs, do ingl√™s Virtual Private Networks) desempenham um papel crucial,
-            oferecendo uma solu√ß√£o eficaz para proteger
+            No contexto atual de conectividade digital, a seguranÁa e a privacidade online tornaram-se prioridades. Com
+            isso, as Redes Privadas Virtuais (VPNs, do inglÍs Virtual Private Networks) desempenham um papel crucial,
+            oferecendo uma soluÁ„o eficaz para proteger
             dados e manter o anonimato. Ademais, com o aumento da coleta de dados por governos, empresas e anunciantes,
-            o uso de VPNs se torna essencial para proteger a privacidade dos usu√°rios, ao mascarar o endere√ßo IP e
-            criptografar o tr√°fego de dados,
-            impedindo que atividades online sejam rastreadas, refor√ßando o anonimato e dificultando a identifica√ß√£o do
-            usu√°rio.
+            o uso de VPNs se torna essencial para proteger a privacidade dos usu·rios, ao mascarar o endereÁo IP e
+            criptografar o tr·fego de dados,
+            impedindo que atividades online sejam rastreadas, reforÁando o anonimato e dificultando a identificaÁ„o do
+            usu·rio.
          </p>
          <h2>Conceitos</h2>
          <p>
             <b>VPN</b>
             <br>
-            <br> Uma VPN (Virtual Private Network) √© uma tecnologia que cria uma conex√£o segura e criptografada entre o
-            dispositivo do usu√°rio e um servidor remoto operado pelo provedor da VPN. Sob uma perspectiva t√©cnica, a VPN
+            <br> Uma VPN (Virtual Private Network) È uma tecnologia que cria uma conex„o segura e criptografada entre o
+            dispositivo do usu·rio e um servidor remoto operado pelo provedor da VPN. Sob uma perspectiva tÈcnica, a VPN
             encapsula os pacotes de
             dados usando protocolos como OpenVPN, WireGuard, IPsec ou L2TP, protegendo-os com criptografia de ponta a
-            ponta. Esse encapsulamento esconde o conte√∫do dos pacotes e os metadados, como endere√ßos IP de origem e
+            ponta. Esse encapsulamento esconde o conte˙do dos pacotes e os metadados, como endereÁos IP de origem e
             destino, de interceptadores
-            ou de provedores de internet (ISPs). Al√©m disso, ao rotear o tr√°fego pelo servidor da VPN, a localiza√ß√£o
-            real do usu√°rio √© mascarada, exibindo o endere√ßo IP do servidor remoto. Esse processo amplifica a
+            ou de provedores de internet (ISPs). AlÈm disso, ao rotear o tr·fego pelo servidor da VPN, a localizaÁ„o
+            real do usu·rio È mascarada, exibindo o endereÁo IP do servidor remoto. Esse processo amplifica a
             privacidade, protege contra ataques
-            man-in-the-middle (MITM) e permite o acesso a conte√∫dos geograficamente restritos. A confiabilidade da VPN
-            depende da pol√≠tica de logs do provedor, da complexidade da criptografia aplicada e da robustez do protocolo
+            man-in-the-middle (MITM) e permite o acesso a conte˙dos geograficamente restritos. A confiabilidade da VPN
+            depende da polÌtica de logs do provedor, da complexidade da criptografia aplicada e da robustez do protocolo
             utilizado.
             <img id="main" src="../../img/articles/own-vpn/01-vpn-theory.png" alt="01-vpn theory">
             <br>
@@ -62,125 +62,125 @@
          <p>
             <b>Protocolos VPN</b>
             <br>
-            <br> Os protocolos VPN s√£o conjuntos de regras que definem como os dados s√£o transmitidos de forma segura
-            entre o dispositivo do usu√°rio e o servidor VPN. Esses protocolos especificam os m√©todos de encapsulamento,
-            autentica√ß√£o e criptografia
-            para proteger os dados. Por exemplo, o OpenVPN usa TLS para autentica√ß√£o inicial e criptografia baseada em
-            OpenSSL, permitindo flexibilidade e alta seguran√ßa. O IPsec (Internet Protocol Security) opera no n√≠vel de
+            <br> Os protocolos VPN s„o conjuntos de regras que definem como os dados s„o transmitidos de forma segura
+            entre o dispositivo do usu·rio e o servidor VPN. Esses protocolos especificam os mÈtodos de encapsulamento,
+            autenticaÁ„o e criptografia
+            para proteger os dados. Por exemplo, o OpenVPN usa TLS para autenticaÁ„o inicial e criptografia baseada em
+            OpenSSL, permitindo flexibilidade e alta seguranÁa. O IPsec (Internet Protocol Security) opera no nÌvel de
             rede e utiliza os modos
-            Transport e T√∫nel para proteger pacotes IP, com suporte a criptografia AES e autentica√ß√£o HMAC. O WireGuard,
-            mais recente, √© projetado para simplicidade e performance, empregando algoritmos modernos como ChaCha20 para
+            Transport e T˙nel para proteger pacotes IP, com suporte a criptografia AES e autenticaÁ„o HMAC. O WireGuard,
+            mais recente, È projetado para simplicidade e performance, empregando algoritmos modernos como ChaCha20 para
             criptografia e Poly1305
-            para autentica√ß√£o. Outros protocolos, como L2TP/IPsec, combinam encapsulamento simples com a seguran√ßa do
+            para autenticaÁ„o. Outros protocolos, como L2TP/IPsec, combinam encapsulamento simples com a seguranÁa do
             IPsec, enquanto o SSTP utiliza o protocolo TLS sobre TCP, tornando-o eficaz em redes restritivas. Cada
-            protocolo possui caracter√≠sticas
-            espec√≠ficas de seguran√ßa, velocidade e compatibilidade, sendo escolhidos com base nas necessidades do
-            usu√°rio ou da rede.
+            protocolo possui caracterÌsticas
+            especÌficas de seguranÁa, velocidade e compatibilidade, sendo escolhidos com base nas necessidades do
+            usu·rio ou da rede.
             <br>
             <br>
          </p>
          <p>
             <b>Proxy x VPN</b>
             <br>
-            <br> A principal diferen√ßa entre proxy e VPN est√° no n√≠vel de seguran√ßa, criptografia e abrang√™ncia de
-            prote√ß√£o. Um proxy atua como um intermedi√°rio entre o dispositivo do usu√°rio e a internet, redirecionando
-            solicita√ß√µes para mascarar o endere√ßo
-            IP do cliente. Tecnicamente, ele opera no n√≠vel da aplica√ß√£o (por exemplo, navegadores) e n√£o oferece
-            criptografia padr√£o, limitando-se a esconder a origem dos dados. J√° uma VPN, cria um t√∫nel criptografado
-            entre o dispositivo do usu√°rio
-            e um servidor remoto, protegendo n√£o apenas o IP, mas todo o tr√°fego de rede do dispositivo,
-            independentemente da aplica√ß√£o usada. Em resumo, enquanto o proxy √© ideal para mascarar IPs em tarefas
-            espec√≠ficas, a VPN oferece uma solu√ß√£o
-            mais robusta para seguran√ßa e anonimidade em toda a conex√£o.
+            <br> A principal diferenÁa entre proxy e VPN est· no nÌvel de seguranÁa, criptografia e abrangÍncia de
+            proteÁ„o. Um proxy atua como um intermedi·rio entre o dispositivo do usu·rio e a internet, redirecionando
+            solicitaÁıes para mascarar o endereÁo
+            IP do cliente. Tecnicamente, ele opera no nÌvel da aplicaÁ„o (por exemplo, navegadores) e n„o oferece
+            criptografia padr„o, limitando-se a esconder a origem dos dados. J· uma VPN, cria um t˙nel criptografado
+            entre o dispositivo do usu·rio
+            e um servidor remoto, protegendo n„o apenas o IP, mas todo o tr·fego de rede do dispositivo,
+            independentemente da aplicaÁ„o usada. Em resumo, enquanto o proxy È ideal para mascarar IPs em tarefas
+            especÌficas, a VPN oferece uma soluÁ„o
+            mais robusta para seguranÁa e anonimidade em toda a conex„o.
             <br>
             <br>
          </p>
          <p>
-            <b>Pol√≠ticas de N√£o-Armazenamento de Logs (No-Logs Policy)</b>
+            <b>PolÌticas de N„o-Armazenamento de Logs (No-Logs Policy)</b>
             <br>
-            <br> A Pol√≠tica de N√£o-Armazenamento de Logs (No-Logs Policy) √© um compromisso t√©cnico adotado por alguns
-            provedores de VPNs na qual possui o intuito de n√£o registrar ou armazenar informa√ß√µes relacionadas √†s
-            atividades ou conex√µes dos usu√°rios. Essa
-            pol√≠tica implica que o provedor configura seus servidores para operar de forma ef√™mera, utilizando sistemas
-            que evitam o registro de metadados como endere√ßos IP, timestamps, largura de banda utilizada ou sites
-            visitados. Logo, essa configura√ß√£o
-            pode incluir o uso de servidores RAM-only (mem√≥ria vol√°til), que apagam automaticamente todas as informa√ß√µes
-            ao serem reiniciados, e a ado√ß√£o de protocolos de comunica√ß√£o que minimizem a necessidade de armazenamento
-            de logs. Uma implementa√ß√£o
-            eficaz depende de auditorias independentes, para garantir que o provedor n√£o coleta dados sub-repticiamente,
-            e da localiza√ß√£o dos servidores em jurisdi√ß√µes favor√°veis √† privacidade, onde legisla√ß√µes locais n√£o
-            obriguem a reten√ß√£o de dados.
-            Essa abordagem √© crucial para garantir anonimidade e prote√ß√£o contra vigil√¢ncia ou solicita√ß√µes legais de
-            informa√ß√µes dos usu√°rios.
+            <br> A PolÌtica de N„o-Armazenamento de Logs (No-Logs Policy) È um compromisso tÈcnico adotado por alguns
+            provedores de VPNs na qual possui o intuito de n„o registrar ou armazenar informaÁıes relacionadas ‡s
+            atividades ou conexıes dos usu·rios. Essa
+            polÌtica implica que o provedor configura seus servidores para operar de forma efÍmera, utilizando sistemas
+            que evitam o registro de metadados como endereÁos IP, timestamps, largura de banda utilizada ou sites
+            visitados. Logo, essa configuraÁ„o
+            pode incluir o uso de servidores RAM-only (memÛria vol·til), que apagam automaticamente todas as informaÁıes
+            ao serem reiniciados, e a adoÁ„o de protocolos de comunicaÁ„o que minimizem a necessidade de armazenamento
+            de logs. Uma implementaÁ„o
+            eficaz depende de auditorias independentes, para garantir que o provedor n„o coleta dados sub-repticiamente,
+            e da localizaÁ„o dos servidores em jurisdiÁıes favor·veis ‡ privacidade, onde legislaÁıes locais n„o
+            obriguem a retenÁ„o de dados.
+            Essa abordagem È crucial para garantir anonimidade e proteÁ„o contra vigil‚ncia ou solicitaÁıes legais de
+            informaÁıes dos usu·rios.
             <br>
             <br>
          </p>
          <p>
             <b>Kill Switch e DNS Leak</b>
             <br>
-            <br> O Kill Switch e a DNS Leak Protection s√£o recursos t√©cnicos implementados em VPNs para garantir a
-            seguran√ßa e a privacidade do usu√°rio. O Kill Switch funciona monitorando constantemente a conex√£o com o
-            servidor VPN. Caso a conex√£o seja
-            interrompida, ele bloqueia imediatamente o tr√°fego de rede do dispositivo para evitar que os dados sejam
-            enviados sem a prote√ß√£o do t√∫nel criptografado, protegendo o IP real e outras informa√ß√µes sens√≠veis. Por
+            <br> O Kill Switch e a DNS Leak Protection s„o recursos tÈcnicos implementados em VPNs para garantir a
+            seguranÁa e a privacidade do usu·rio. O Kill Switch funciona monitorando constantemente a conex„o com o
+            servidor VPN. Caso a conex„o seja
+            interrompida, ele bloqueia imediatamente o tr·fego de rede do dispositivo para evitar que os dados sejam
+            enviados sem a proteÁ„o do t˙nel criptografado, protegendo o IP real e outras informaÁıes sensÌveis. Por
             outro lado, a DNS Leak Protection
-            previne que as solicita√ß√µes de resolu√ß√£o de nomes de dom√≠nio (DNS) escapem do t√∫nel VPN e sejam enviadas
-            diretamente ao provedor de internet (ISP). Sem essa prote√ß√£o, mesmo com a VPN ativa, o ISP poderia registrar
+            previne que as solicitaÁıes de resoluÁ„o de nomes de domÌnio (DNS) escapem do t˙nel VPN e sejam enviadas
+            diretamente ao provedor de internet (ISP). Sem essa proteÁ„o, mesmo com a VPN ativa, o ISP poderia registrar
             os sites visitados pelo
-            usu√°rio. Esse recurso redireciona todas as consultas DNS para servidores gerenciados pela VPN,
-            encapsulando-as no t√∫nel criptografado. Ambos os mecanismos trabalham em conjunto para evitar falhas que
+            usu·rio. Esse recurso redireciona todas as consultas DNS para servidores gerenciados pela VPN,
+            encapsulando-as no t˙nel criptografado. Ambos os mecanismos trabalham em conjunto para evitar falhas que
             comprometam a anonimidade e a privacidade
-            do usu√°rio durante o uso da VPN.
+            do usu·rio durante o uso da VPN.
          </p>
          <br>
          <h2>Hands-on</h2>
          <p>
             <b>VPS</b>
             <br>
-            <br> A escolha de uma VPS (Virtual Private Server) para a cria√ß√£o de uma VPN √© crucial, pois sua localiza√ß√£o
-            influencia diretamente na lat√™ncia, velocidade de conex√£o e geolocaliza√ß√£o da conex√£o do usu√°rio.
+            <br> A escolha de uma VPS (Virtual Private Server) para a criaÁ„o de uma VPN È crucial, pois sua localizaÁ„o
+            influencia diretamente na latÍncia, velocidade de conex„o e geolocalizaÁ„o da conex„o do usu·rio.
             <br>
             <br>
          </p>
          <p>
             <b>Escolha do protocolo VPN</b>
             <br>
-            <br> Ao escolher um protocolo VPN, √© essencial considerar seguran√ßa, desempenho e facilidade de
-            implementa√ß√£o. O WireGuard tem se destacado como uma escolha moderna e eficiente, oferecendo uma arquitetura
+            <br> Ao escolher um protocolo VPN, È essencial considerar seguranÁa, desempenho e facilidade de
+            implementaÁ„o. O WireGuard tem se destacado como uma escolha moderna e eficiente, oferecendo uma arquitetura
             simplificada, baseada em criptografia
-            de √∫ltima gera√ß√£o, como ChaCha20 e Poly1305. Diferente de alternativas mais tradicionais como OpenVPN e
-            IPSec, o WireGuard √© mais leve, proporcionando conex√µes r√°pidas e est√°veis, mesmo em dispositivos com
-            recursos limitados. Al√©m disso,
-            sua base de c√≥digo enxuta reduz a superf√≠cie de ataque e facilita auditorias de seguran√ßa, tornando-o ideal
-            para quem busca anonimidade e prote√ß√£o de dados com alto desempenho. Portanto, o aplicativo de software e o
+            de ˙ltima geraÁ„o, como ChaCha20 e Poly1305. Diferente de alternativas mais tradicionais como OpenVPN e
+            IPSec, o WireGuard È mais leve, proporcionando conexıes r·pidas e est·veis, mesmo em dispositivos com
+            recursos limitados. AlÈm disso,
+            sua base de cÛdigo enxuta reduz a superfÌcie de ataque e facilita auditorias de seguranÁa, tornando-o ideal
+            para quem busca anonimidade e proteÁ„o de dados com alto desempenho. Portanto, o aplicativo de software e o
             protocolo escolhido
             foi o WireGuard.
             <br>
             <br>
-            <i>*Vale ressaltar que apenas o servidor VPN pode descriptografar os dados, garantindo que ningu√©m no meio
-               do caminho (como provedores de internet, hackers ou ag√™ncias governamentais) possa ler as informa√ß√µes.
+            <i>*Vale ressaltar que apenas o servidor VPN pode descriptografar os dados, garantindo que ninguÈm no meio
+               do caminho (como provedores de internet, hackers ou agÍncias governamentais) possa ler as informaÁıes.
             </i>
             <br>
             <br>
          </p>
          <p>
-            <b>Preparativos para a confec√ß√£o da VPN</b>
+            <b>Preparativos para a confecÁ„o da VPN</b>
             <br>
-            <br> Ap√≥s escolher um provedor de VPS, como Digital Ocean, Vultr ou Linode, e criar sua inst√¢ncia na mesma,
-            al√©m de acessa-la, atualize o sistema operacional.
+            <br> ApÛs escolher um provedor de VPS, como Digital Ocean, Vultr ou Linode, e criar sua inst‚ncia na mesma,
+            alÈm de acessa-la, atualize o sistema operacional.
          <pre class="code-block">
                     <code>apt update && apt upgrade -y</code>
                 </pre>
          </p>
          <p>
-            Em seguida, instale o <b>WireGuard</b> e suas depend√™ncia.
+            Em seguida, instale o <b>WireGuard</b> e suas dependÍncia.
          <pre class="code-block">
                 <code>apt install wireguard wireguard-tools -y</code>
             </pre>
          </p>
          <p>
-            Perante a configura√ß√£o da VPN, primeiramente, necessita-se habilitar o encaminhamento IP, para que o
-            servidor encaminhe o tr√°fego entre a interface do WireGuard e a internet.
+            Perante a configuraÁ„o da VPN, primeiramente, necessita-se habilitar o encaminhamento IP, para que o
+            servidor encaminhe o tr·fego entre a interface do WireGuard e a internet.
          <pre class="code-block">
                 <code>vim /etc/sysctl.conf</code>
             </pre>
@@ -188,19 +188,19 @@
                <code>Descomente a linha "#net.ipv4.ip_forward=1"</code>
            </pre>
          <p>
-            Em seguida, aplique a altera√ß√£o
+            Em seguida, aplique a alteraÁ„o
          <pre class="code-block">
             <code>sudo sysctl -p</code>
             </pre>
          </p>
          <p>
-            Agora, certifique-se que o m√≥dulo do kernel WireGuard est√° carregado:
+            Agora, certifique-se que o mÛdulo do kernel WireGuard est· carregado:
          <pre class="code-block">
                 <code>lsmod | grep wireguard</code>
             </pre>
          </p>
          <p>
-            Caso o comando n√£o obter retorno, carregue o m√≥dulo.
+            Caso o comando n„o obter retorno, carregue o mÛdulo.
          <pre class="code-block">
                 <code>sudo modprobe wireguard</code>
             </pre>
@@ -209,7 +209,7 @@
          <p>
             <b>Configurando o WireGuard no Servidor</b>
             <br><br>
-            Na pasta do WireGuard, na qual correspond√™-se a <b>/etc/wireguard</b>, gere as chaves p√∫blica e privada.
+            Na pasta do WireGuard, na qual correspondÍ-se a <b>/etc/wireguard</b>, gere as chaves p˙blica e privada.
          <pre class="code-block">
                     <code>wg genkey | tee privatekey | wg pubkey > publickey </code>
                 </pre>
@@ -221,10 +221,10 @@
                 </pre>
          <pre class="code-block">
                     <code>[Interface]
-                     PrivateKey =  "conte√∫do do arquivo privatekey"
-                     Address = 10.10.10.1/24 # Endere√ßo IP interno do servidor na rede VPN
-                     ListenPort = 51820 # Porta padr√£o do WireGuard
-                     # SaveConfig = true # Opcional: para salvar mudan√ßas de configura√ß√£o
+                     PrivateKey =  "conte˙do do arquivo privatekey"
+                     Address = 10.10.10.1/24 # EndereÁo IP interno do servidor na rede VPN
+                     ListenPort = 51820 # Porta padr„o do WireGuard
+                     # SaveConfig = true # Opcional: para salvar mudanÁas de configuraÁ„o
                      PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o "interface_de_rede_principal" -j MASQUERADE
                      PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o "interface_de_rede_principal" -j MASQUERADE </code>
                 </pre>
@@ -239,7 +239,7 @@
               </pre>
          </p>
          <p>
-            Por fim, verifique o status. Caso a interface wg0 apare√ßa ativa, o processo foi feito com sucesso.
+            Por fim, verifique o status. Caso a interface wg0 apareÁa ativa, o processo foi feito com sucesso.
          <pre class="code-block">
                     <code>sudo wg show wg0 </code>
                 </pre>
@@ -248,77 +248,77 @@
             <br>
             <b>Configurando o Cliente WireGuard</b>
             <br><br>
-            No dispositvo na qual ser√° o <b>cliente</b> da VPN, abra o terminal, e gere as chaves do cliente.
+            No dispositvo na qual ser· o <b>cliente</b> da VPN, abra o terminal, e gere as chaves do cliente.
          <pre class="code-block">
                   <code>wg genkey | tee privatekey | wg pubkey > publickey </code>
               </pre>
          </p>
          <p>
-            Em seguida, ainda no dispositivo <b>cliente</b>, crie um arquivo "cliente.conf" e adicione o conte√∫do:
+            Em seguida, ainda no dispositivo <b>cliente</b>, crie um arquivo "cliente.conf" e adicione o conte˙do:
          <pre class="code-block">
                   <code>[Interface]
-                     PrivateKey = "conte√∫do do arquivo privatekey do cliente"
-                     Address = 10.10.10.2/24  # IP √∫nico para cada cliente
+                     PrivateKey = "conte˙do do arquivo privatekey do cliente"
+                     Address = 10.10.10.2/24  # IP ˙nico para cada cliente
                      DNS = 8.8.8.8, 8.8.4.4 # Opcional: Servidores DNS
                      [Peer]
-                     PublicKey = "conte√∫do do arquivo publickey do servidor"
+                     PublicKey = "conte˙do do arquivo publickey do servidor"
                      AllowedIPs = 0.0.0.0/0 # Rota tudo pelo VPN
                      Endpoint = "ip_publico_do_servidor":"porta_do_servidor" # IP e porta do servidor
                      PersistentKeepalive = 25 # Envia um pacote a cada 25 segundos </code>
               </pre>
          </p>
          <p>
-            De volta ao <b>servidor</b>, edite novamente o arquivo da interface WireGuard, visando adicionar a se√ß√£o
+            De volta ao <b>servidor</b>, edite novamente o arquivo da interface WireGuard, visando adicionar a seÁ„o
             [peer] para o novo cliente.
          <pre class="code-block">
                   <code>vim /etc/wireguard/wg0.conf </code>
               </pre>
          <pre class="code-block">
                <code>[Peer]
-                  PublicKey = "conte√∫do do arquivo publickey do cliente"
+                  PublicKey = "conte˙do do arquivo publickey do cliente"
                   AllowedIPs = 10.10.10.2/32 # IP individual do cliente </code>
            </pre>
          </p>
          <p>
-            Por fim, a fim de aplicar a nova atualiza√ß√£o da interface WireGuard, reinicie o servi√ßo WireGuard.
+            Por fim, a fim de aplicar a nova atualizaÁ„o da interface WireGuard, reinicie o serviÁo WireGuard.
          <pre class="code-block">
                   <code>sudo systemctl restart wg-quick@wg0</code>
               </pre>
          </p>
          <p>
             <br>
-            <b>Utiliza√ß√£o</b>
+            <b>UtilizaÁ„o</b>
             <br><br>
             No ambiente <b>Linux</b>, basta utilizar o comando "wg-quick up cliente.conf"
             <br><br>
-            No ambiente <b>Windows</b> , baixe o aplicativo WireGuard atr√°ves de <a
+            No ambiente <b>Windows</b> , baixe o aplicativo WireGuard atr·ves de <a
                href="https://www.wireguard.com/install/" >https://www.wireguard.com/install/</a>. Em
             seguida, clique em <b>"Add Tunel"</b> e selecione o arquivo "cliente.conf"
             <img id="main" src="../../img/articles/own-vpn/02-install.png" alt="02-install">
          </p>
          <p>
-            Portanto, automaticamente, a VPN ser√° conectada.
+            Portanto, automaticamente, a VPN ser· conectada.
             <img id="main" src="../../img/articles/own-vpn/03-own-vpn.png" alt="03-own-vpn">
          </p>
-         <p>A fins de valida√ß√£o, acesse os sites <a href="https://ipaddress.my/"
+         <p>A fins de validaÁ„o, acesse os sites <a href="https://ipaddress.my/"
                >https://ipaddress.my/</a> e <a href="https://dnsleaktest.com"
-               >https://dnsleaktest.com</a>. Ambos os sites devem retornar o IP p√∫blico da VPS, criando
+               >https://dnsleaktest.com</a>. Ambos os sites devem retornar o IP p˙blico da VPS, criando
             assim uma VPN.
             <img id="main" src="../../img/articles/own-vpn/04-testing.png" alt="03-testing-vpn">
          </p>
          <p>
-            Por fim, vale ressaltar a import√¢ncia de configurar um firewall adequado ao ambiente da VPS, protegendo-se
-            assim de acessos n√£o autorizados. Al√©m disso, manter as chaves privadas em ambiente seguro.
+            Por fim, vale ressaltar a import‚ncia de configurar um firewall adequado ao ambiente da VPS, protegendo-se
+            assim de acessos n„o autorizados. AlÈm disso, manter as chaves privadas em ambiente seguro.
          </p>
          <p>
             <br>
-            <b>Automatiza√ß√£o do processo</b>
+            <b>AutomatizaÁ„o do processo</b>
             <br><br>
             Com o intuito de automatizar todo o processo citado, tanto na perspectiva do servidor quanto do cliente,
-            foi-se criado a <b>WG-Auto</b>, uma ferramenta que realiza a instala√ß√£o do WireGuard, al√©m de configura-lo.
-            √â poss√≠vel acessa-la atrav√©s de <a href="https://github.com/brennocm/wg-auto"
-               >https://github.com/brennocm/wg-auto</a>, na qual consta o processo de instala√ß√£o, al√©m de
-            um <a href="https://www.youtube.com/watch?v=Nr_En-eo2c0" >v√≠deo</a> que exemplifica seu uso.
+            foi-se criado a <b>WG-Auto</b>, uma ferramenta que realiza a instalaÁ„o do WireGuard, alÈm de configura-lo.
+            … possÌvel acessa-la atravÈs de <a href="https://github.com/brennocm/wg-auto"
+               >https://github.com/brennocm/wg-auto</a>, na qual consta o processo de instalaÁ„o, alÈm de
+            um <a href="https://www.youtube.com/watch?v=Nr_En-eo2c0" >vÌdeo</a> que exemplifica seu uso.
 
             <br><br>
             <i>* Vale ressaltar que a ferramenta foi projetada para clientes que possuem ambiente baseado em Debian.</i>
@@ -327,7 +327,7 @@
    </main>
    <br>
    <footer>
-      <p>&copy; 20‚àû</p>
+      <p>&copy; 208</p>
    </footer>
 </body>
 
