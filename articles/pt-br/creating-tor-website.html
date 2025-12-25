@@ -22,7 +22,7 @@
     <!-- Main Content -->
     <main class="content">
         <header class="article-header">
-            <h1>CriaÁ„o de sites na rede Tor</h1>
+            <h1>Cria√ß√£o de sites na rede Tor</h1>
             <p class="meta">
                 <span>dez 05, 2024</span> by 
                 <a  href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
@@ -31,47 +31,47 @@
 
         <section class="article-body">
             <p>
-                Os websites na rede Tor desempenham um papel crucial em um mundo onde a privacidade e a liberdade de express„o enfrentam desafios crescentes, oferecendo, quando utilizados corretamente, um meio de navegaÁ„o segura e acesso ‡ informaÁ„o n„o censurada.
+                Os websites na rede Tor desempenham um papel crucial em um mundo onde a privacidade e a liberdade de express√£o enfrentam desafios crescentes, oferecendo, quando utilizados corretamente, um meio de navega√ß√£o segura e acesso √† informa√ß√£o n√£o censurada.
             </p>
             <h2>Conceito:</h2>
             <p>
-                O Tor (The Onion Router) È um software livre e uma rede aberta que possibilita a navegaÁ„o anÙnima, visto que mascara o endereÁo IP dos usu·rios ao redirecionar o tr·fego por uma rede global de volunt·rios (nÛs) antes de alcanÁar o destino final, alÈm de utilizar m˙ltiplas camadas de criptografia. AlÈm disso, permite o acesso a serviÁos ocultos (.onion), que s„o sites inacessÌveis pela internet convencional e fazem parte da rede Tor.
+                O Tor (The Onion Router) √© um software livre e uma rede aberta que possibilita a navega√ß√£o an√¥nima, visto que mascara o endere√ßo IP dos usu√°rios ao redirecionar o tr√°fego por uma rede global de volunt√°rios (n√≥s) antes de alcan√ßar o destino final, al√©m de utilizar m√∫ltiplas camadas de criptografia. Al√©m disso, permite o acesso a servi√ßos ocultos (.onion), que s√£o sites inacess√≠veis pela internet convencional e fazem parte da rede Tor.
             </p>
             <img id="main" src="../../img/articles/tor-website/tor-working.png" alt="tor-working">
             <p>
-                <b>AtenÁ„o:</b> A fins de seguranÁa, aconselham-se realizar as aÁıes citadas a partir de uma VPS isolada.
+                <b>Aten√ß√£o:</b> A fins de seguran√ßa, aconselham-se realizar as a√ß√µes citadas a partir de uma VPS isolada.
             </p>
             <p>
-                Para a criaÁ„o de sites na rede Tor, ser· usado:
+                Para a cria√ß√£o de sites na rede Tor, ser√° usado:
             </p>
             <ul>
                 <li>Um servidor web (Apache);</li>
                 <li>O sistema operacional Ubuntu (Linux);</li>
                 <li>O software Tor;</li>
                 <li>O navegador Tor;</li>
-                <li>Um conte˙do est·tico para exemplificaÁ„o.</li>
+                <li>Um conte√∫do est√°tico para exemplifica√ß√£o.</li>
             </ul>
-            <h2>InstalaÁ„o do Tor Browser</h2>
-            <p>A princÌpio, È preciso instalar o Tor Browser, o navegador que possibilita o acesso aos serviÁos provenientes da rede Onion vinculado ao Tor Project. Em <a  href="https://www.torproject.org/download/">https://www.torproject.org/download/</a>, baixe o Tor Browser. Em seguida, descompacte o arquvivo para sua utilizaÁ„o futura:</p>
+            <h2>Instala√ß√£o do Tor Browser</h2>
+            <p>A princ√≠pio, √© preciso instalar o Tor Browser, o navegador que possibilita o acesso aos servi√ßos provenientes da rede Onion vinculado ao Tor Project. Em <a  href="https://www.torproject.org/download/">https://www.torproject.org/download/</a>, baixe o Tor Browser. Em seguida, descompacte o arquvivo para sua utiliza√ß√£o futura:</p>
             <pre class="code-block">
                 <code>tar -xvf tor-browser-linux-x86_64-14.0.3.tar.xz</code>
             </pre>
-            <h2>InstalaÁ„o do Tor:</h2>
+            <h2>Instala√ß√£o do Tor:</h2>
             <p>
-                Em seguida, deve-se instalar o Tor. Portanto, com permissıes administrativas, utilize o comando abaixo:
+                Em seguida, deve-se instalar o Tor. Portanto, com permiss√µes administrativas, utilize o comando abaixo:
             </p>
             <pre class="code-block">
                 <code>sudo apt install tor -y</code>
             </pre>
             <p>
-                ApÛs a instalaÁ„o, verifique se o serviÁo est· ativo: 
+                Ap√≥s a instala√ß√£o, verifique se o servi√ßo est√° ativo: 
             </p>
             <pre class="code-block">
                 <code>systemctl status tor</code>
             </pre>
-            <h2>Configurando o ServiÁo Oculto:</h2>
+            <h2>Configurando o Servi√ßo Oculto:</h2>
             <p>
-                O prÛximo passo seria configurar o software Tor, permitindo o acesso ao website. Para isso, v· no arquivo de configuraÁıes e edite-o:
+                O pr√≥ximo passo seria configurar o software Tor, permitindo o acesso ao website. Para isso, v√° no arquivo de configura√ß√µes e edite-o:
             </p>
             <pre class="code-block">
                 <code>sudo vim /etc/tor/torrc</code>
@@ -86,26 +86,26 @@
                 <code>HiddenServicePort 80 127.0.0.1:8080</code>
             </pre>
             <p>
-                Por fim, com o intuito de aplicar as mudanÁas, reinicie o serviÁo Tor:
+                Por fim, com o intuito de aplicar as mudan√ßas, reinicie o servi√ßo Tor:
             </p>
             <pre class="code-block">
                 <code>sudo systemctl restart tor</code>
             </pre>
             <p>
-                ApÛs o reiniciamento, o endereÁo onion referente ao site criado estar· em "/var/lib/tor/hidden_service/hostname". Portanto, È possÌvel vÍ-lo a partir de:
+                Ap√≥s o reiniciamento, o endere√ßo onion referente ao site criado estar√° em "/var/lib/tor/hidden_service/hostname". Portanto, √© poss√≠vel v√™-lo a partir de:
             </p>
             <pre class="code-block">
                 <code>cat /var/lib/tor/hidden_service/hostname</code>
             </pre>
             <h2>Configurando o servidor Web:</h2>
             <p>
-                Por ˙ltimo, necessita-se a configuraÁ„o do servidor web. A fins de exemplo, o Apache foi o escolhido.
+                Por √∫ltimo, necessita-se a configura√ß√£o do servidor web. A fins de exemplo, o Apache foi o escolhido.
             </p>
             <pre class="code-block">
                 <code>sudo apt install apache2</code>
             </pre>
             <p>
-               Em <b>/var/www/html</b>, insira o site est·tico
+               Em <b>/var/www/html</b>, insira o site est√°tico
             </p>
             <pre class="code-block">
                 <code>cd /var/www/html</code>
@@ -114,11 +114,11 @@
                 <code>vim index.html</code>
             </pre>
             <p>
-                Com isso, ao colocar a URL obtda em <b>var/lib/tor/hidden_service/hostname</b> no tor browser, o site est·tico inserido anteriormente carregar·. Concluindo assim, o processo de criaÁ„o de site est·tico no Tor.
+                Com isso, ao colocar a URL obtda em <b>var/lib/tor/hidden_service/hostname</b> no tor browser, o site est√°tico inserido anteriormente carregar√°. Concluindo assim, o processo de cria√ß√£o de site est√°tico no Tor.
             </p>
             <img id="example-tor" src="../../img/articles/tor-website/tor-web-example.png" alt="website-example">
             <p>
-               Assim, foi-se criado um website na rede Onion vinculado ao Tor Project, possibilitando a customizaÁ„o do site perante a vontade do usu·rio.
+               Assim, foi-se criado um website na rede Onion vinculado ao Tor Project, possibilitando a customiza√ß√£o do site perante a vontade do usu√°rio.
              </p>
         </section>
     </main>

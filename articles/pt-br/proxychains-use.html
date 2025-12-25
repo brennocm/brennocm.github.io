@@ -22,82 +22,82 @@
     <!-- Main Content -->
     <main class="content">
         <header class="article-header">
-            <h1>UtilizaÁ„o do Proxychains</h1>
+            <h1>Utiliza√ß√£o do Proxychains</h1>
             <p class="meta">
                 <span>dez 30, 2024</span> by <a  href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
             </p>
         </header>
         <section class="article-body">
-            <p>O Proxychains pode ser uma ferramenta essencial no contexto digital atual, onde questıes de privacidade, censura e seguranÁa est„o em constante evidÍncia, visto a possibilidade de anonimizar conexıes na internet ao redirecion·-las por uma cadeia de proxies, mascarando o endereÁo IP real do usu·rio.</p>
+            <p>O Proxychains pode ser uma ferramenta essencial no contexto digital atual, onde quest√µes de privacidade, censura e seguran√ßa est√£o em constante evid√™ncia, visto a possibilidade de anonimizar conex√µes na internet ao redirecion√°-las por uma cadeia de proxies, mascarando o endere√ßo IP real do usu√°rio.</p>
             <h2>Conceitos</h2>
             <p>
                 <b>Proxies</b> 
                 <br><br>
-                Proxy È um servidor intermedi·rio que atua como um ponto de intermediaÁ„o entre o dispositivo do usu·rio e o servidor de destino, redirecionando e gerenciando o tr·fego de rede. Ele permite que solicitaÁıes de acesso sejam mascaradas, ocultando o IP original do usu·rio e atribuindo um novo IP associado ao proxy. AlÈm de fornecer anonimidade, os proxies s„o amplamente utilizados para contornar restriÁıes de acesso, balancear cargas de rede e monitorar tr·fego. 
+                Proxy √© um servidor intermedi√°rio que atua como um ponto de intermedia√ß√£o entre o dispositivo do usu√°rio e o servidor de destino, redirecionando e gerenciando o tr√°fego de rede. Ele permite que solicita√ß√µes de acesso sejam mascaradas, ocultando o IP original do usu√°rio e atribuindo um novo IP associado ao proxy. Al√©m de fornecer anonimidade, os proxies s√£o amplamente utilizados para contornar restri√ß√µes de acesso, balancear cargas de rede e monitorar tr√°fego. 
                 <img id="main" src="../../img/articles/proxychains-use/01-proxy.png" alt="01-proxies">
                 <br><br>
              </p>
              <p>
                 <b>Proxychains</b> 
                 <br><br>
-                <a  href="https://github.com/haad/proxychains">Proxychains</a> È uma ferramenta de redirecionamento de tr·fego de rede que permite executar programas atravÈs de uma cadeia de proxies, proporcionando maior anonimidade e controle sobre as conexıes. Sua principal funÁ„o È interceptar as chamadas de rede de aplicaÁıes e as redirecionar por servidores intermedi·rios (proxies), como SOCKS4, SOCKS5 e HTTP(S), na qual s„o configurados em um arquivo especÌfico. 
+                <a  href="https://github.com/haad/proxychains">Proxychains</a> √© uma ferramenta de redirecionamento de tr√°fego de rede que permite executar programas atrav√©s de uma cadeia de proxies, proporcionando maior anonimidade e controle sobre as conex√µes. Sua principal fun√ß√£o √© interceptar as chamadas de rede de aplica√ß√µes e as redirecionar por servidores intermedi√°rios (proxies), como SOCKS4, SOCKS5 e HTTP(S), na qual s√£o configurados em um arquivo espec√≠fico. 
                 <img id="main" src="../../img/articles/proxychains-use/02-proxychain.png" alt="02-proxychain">
                 <br><br>
              </p>
              <p>
                 <b>HTTP/HTTPS</b> 
                 <br><br>
-                HTTP (Hypertext Transfer Protocol) È o protocolo de comunicaÁ„o que permite a troca de informaÁıes entre navegadores e servidores na web. Ele funciona como um sistema de requisiÁ„o e resposta, onde o navegador solicita recursos, como texto ou imagens, e o servidor responde enviando os dados solicitados. 
+                HTTP (Hypertext Transfer Protocol) √© o protocolo de comunica√ß√£o que permite a troca de informa√ß√µes entre navegadores e servidores na web. Ele funciona como um sistema de requisi√ß√£o e resposta, onde o navegador solicita recursos, como texto ou imagens, e o servidor responde enviando os dados solicitados. 
                 <br><br>
-                HTTPS (Hypertext Transfer Protocol Secure) È a vers„o segura do HTTP, que utiliza criptografia por meio do protocolo TLS (Transport Layer Security) para proteger os dados transmitidos. Essa seguranÁa È essencial para proteger informaÁıes sensÌveis, como senhas e dados financeiros, especialmente em transaÁıes online.
+                HTTPS (Hypertext Transfer Protocol Secure) √© a vers√£o segura do HTTP, que utiliza criptografia por meio do protocolo TLS (Transport Layer Security) para proteger os dados transmitidos. Essa seguran√ßa √© essencial para proteger informa√ß√µes sens√≠veis, como senhas e dados financeiros, especialmente em transa√ß√µes online.
                 <br><br>
             </p>
             <p>
                 <b>SOCKS4/SOCKS5</b> 
                 <br><br>
-                SOCKS4 e SOCKS5 s„o versıes de um protocolo de proxy que atua no nÌvel de transporte da rede, redirecionando o tr·fego entre cliente e servidor sem interpretar os dados transmitidos. SOCKS4 suporta apenas conexıes TCP, sendo utilizado principalmente para redirecionamento b·sico de tr·fego. J· o SOCKS5 È uma evoluÁ„o mais avanÁada, com suporte a conexıes TCP e UDP, autenticaÁ„o por usu·rio e senha, e compatibilidade com IPv6, tornando-o mais vers·til para aplicaÁıes modernas que exigem maior flexibilidade e seguranÁa.
+                SOCKS4 e SOCKS5 s√£o vers√µes de um protocolo de proxy que atua no n√≠vel de transporte da rede, redirecionando o tr√°fego entre cliente e servidor sem interpretar os dados transmitidos. SOCKS4 suporta apenas conex√µes TCP, sendo utilizado principalmente para redirecionamento b√°sico de tr√°fego. J√° o SOCKS5 √© uma evolu√ß√£o mais avan√ßada, com suporte a conex√µes TCP e UDP, autentica√ß√£o por usu√°rio e senha, e compatibilidade com IPv6, tornando-o mais vers√°til para aplica√ß√µes modernas que exigem maior flexibilidade e seguran√ßa.
                 <br><br>
             </p>
             <p>
                 <b>Tor</b> 
                 <br><br>
-                A rede Tor (The Onion Router) È uma rede de comunicaÁ„o que permite anonimizar a navegaÁ„o na internet ao encaminhar o tr·fego de dados por uma sÈrie de nÛs (servidores) distribuÌdos globalmente. A comunicaÁ„o È criptografada em v·rias camadas, como as camadas de uma cebola, garantindo que a origem, o destino e o conte˙do dos dados sejam protegidos.
+                A rede Tor (The Onion Router) √© uma rede de comunica√ß√£o que permite anonimizar a navega√ß√£o na internet ao encaminhar o tr√°fego de dados por uma s√©rie de n√≥s (servidores) distribu√≠dos globalmente. A comunica√ß√£o √© criptografada em v√°rias camadas, como as camadas de uma cebola, garantindo que a origem, o destino e o conte√∫do dos dados sejam protegidos.
                 <br><br>
-                Para a criaÁ„o de sites na rede tor, <a  href="/articles/creating-tor-website.html">clique aqui</a>.
+                Para a cria√ß√£o de sites na rede tor, <a  href="/articles/creating-tor-website.html">clique aqui</a>.
                 <br><br>
-                Para a criaÁ„o de um ambiente Windows voltado ‡ OPSEC, na qual todo tr·fego passa pela rede tor, <a  href="/articles/opsec-environment.html">clique aqui</a>.
+                Para a cria√ß√£o de um ambiente Windows voltado √† OPSEC, na qual todo tr√°fego passa pela rede tor, <a  href="/articles/opsec-environment.html">clique aqui</a>.
             </p>
             <br>
             <h2>Hands-on</h2>
             <p>
                 <b>Busca por lista de Proxies</b> 
                 <br><br>
-                A busca por listas de proxies È essencial para o funcionamento eficaz do Proxychains, pois sua operaÁ„o depende diretamente da qualidade e disponibilidade dos proxies configurados. Uma lista confi·vel e diversificada garante maior anonimidade, permitindo que as conexıes sejam roteadas por m˙ltiplos servidores intermedi·rios e dificultando a rastreabilidade do tr·fego. Vale destacar que servidores proxies podem ver a conex„o, mas o que eles conseguem observar depende do tipo de proxy e do protocolo utilizado.
+                A busca por listas de proxies √© essencial para o funcionamento eficaz do Proxychains, pois sua opera√ß√£o depende diretamente da qualidade e disponibilidade dos proxies configurados. Uma lista confi√°vel e diversificada garante maior anonimidade, permitindo que as conex√µes sejam roteadas por m√∫ltiplos servidores intermedi√°rios e dificultando a rastreabilidade do tr√°fego. Vale destacar que servidores proxies podem ver a conex√£o, mas o que eles conseguem observar depende do tipo de proxy e do protocolo utilizado.
                 <br><br>
-                Um <b>proxy HTTP</b> pode ver todo o conte˙do das requisiÁıes e respostas n„o criptografadas, como URLs, cabeÁalhos e dados transmitidos. No caso de <b>conexıes HTTPS</b>, o proxy sÛ vÍ o domÌnio que est· sendo acessado (via SNI), mas n„o o conte˙do, que est· protegido pela criptografia TLS.
+                Um <b>proxy HTTP</b> pode ver todo o conte√∫do das requisi√ß√µes e respostas n√£o criptografadas, como URLs, cabe√ßalhos e dados transmitidos. No caso de <b>conex√µes HTTPS</b>, o proxy s√≥ v√™ o dom√≠nio que est√° sendo acessado (via SNI), mas n√£o o conte√∫do, que est√° protegido pela criptografia TLS.
                 <br><br>
-               <b>Proxies SOCKS4 e SOCKS5</b>  atuam em um nÌvel mais baixo, apenas retransmitindo pacotes de dados entre o cliente e o servidor de destino. Eles n„o interpretam o conte˙do da conex„o, mas podem ver os metadados da comunicaÁ„o, como os endereÁos IP de origem e destino.
+               <b>Proxies SOCKS4 e SOCKS5</b>  atuam em um n√≠vel mais baixo, apenas retransmitindo pacotes de dados entre o cliente e o servidor de destino. Eles n√£o interpretam o conte√∫do da conex√£o, mas podem ver os metadados da comunica√ß√£o, como os endere√ßos IP de origem e destino.
                <br><br>
-               Mesmo em conexıes criptografadas (como HTTPS ou VPNs), o proxy final, que encaminha o tr·fego para o destino, pode registrar informaÁıes como o endereÁo IP do cliente, os tempos de conex„o e o volume de dados transmitidos.  Por isso, a confianÁa no operador do proxy È crucial para garantir privacidade e seguranÁa.
+               Mesmo em conex√µes criptografadas (como HTTPS ou VPNs), o proxy final, que encaminha o tr√°fego para o destino, pode registrar informa√ß√µes como o endere√ßo IP do cliente, os tempos de conex√£o e o volume de dados transmitidos.  Por isso, a confian√ßa no operador do proxy √© crucial para garantir privacidade e seguran√ßa.
                <br><br>
-                Em redes sensÌveis, o uso de ferramentas como TOR pode ajudar a mitigar esses riscos ao adicionar camadas adicionais de anonimidade.
+                Em redes sens√≠veis, o uso de ferramentas como TOR pode ajudar a mitigar esses riscos ao adicionar camadas adicionais de anonimidade.
                 <br><br>
-                A fins de estudo, foi-se utilizado proxies encontrados nessa <a href="https://github.com/TheSpeedX/PROXY-List" >proxy-list</a>. PorÈm, n„o recomenda-se utiliza-la para fins n„o did·ticos, visto que a mesma n„o assegura nenhuma seguranÁa e confiabilidade.
+                A fins de estudo, foi-se utilizado proxies encontrados nessa <a href="https://github.com/TheSpeedX/PROXY-List" >proxy-list</a>. Por√©m, n√£o recomenda-se utiliza-la para fins n√£o did√°ticos, visto que a mesma n√£o assegura nenhuma seguran√ßa e confiabilidade.
                 <br><br>
 
             </p>
             <p>
                 <b>Instalando tor</b> 
                 <br><br>
-                O uso do tor em conjunto com a ferramenta Proxychains È fundamental para ampliar a anonimidade e a seguranÁa nas conexıes de rede. Enquanto o Proxychains permite encadear m˙ltiplos proxies, o TOR adiciona uma camada robusta de anonimizaÁ„o ao rote·-las por meio de sua rede distribuÌda, composta por nÛs volunt·rios que dificultam o rastreamento da origem e do destino do tr·fego.
+                O uso do tor em conjunto com a ferramenta Proxychains √© fundamental para ampliar a anonimidade e a seguran√ßa nas conex√µes de rede. Enquanto o Proxychains permite encadear m√∫ltiplos proxies, o TOR adiciona uma camada robusta de anonimiza√ß√£o ao rote√°-las por meio de sua rede distribu√≠da, composta por n√≥s volunt√°rios que dificultam o rastreamento da origem e do destino do tr√°fego.
                 <br><br>
-                Portanto, para a instalaÁ„o do tor, com permissıes administrativas, utilize o comando abaixo:
+                Portanto, para a instala√ß√£o do tor, com permiss√µes administrativas, utilize o comando abaixo:
             </p>
             <pre class="code-block">
                 <code>sudo apt install tor -y</code>
             </pre>
             <p>
-                ApÛs a instalaÁ„o, verifique se o serviÁo est· ativo: 
+                Ap√≥s a instala√ß√£o, verifique se o servi√ßo est√° ativo: 
             </p>
             <pre class="code-block">
                 <code>systemctl status tor</code>
@@ -106,39 +106,39 @@
             <p>
                 <b>Instalando Proxychains</b> 
                 <br><br>
-                Para a instalaÁ„o da ferramenta Proxychains, com permissıes administrativas, utilize o comando abaixo:
+                Para a instala√ß√£o da ferramenta Proxychains, com permiss√µes administrativas, utilize o comando abaixo:
             </p>
             <pre class="code-block">
                 <code>sudo apt install proxychains4</code>
             </pre>
             <p>
-                Para validar sua instalaÁ„o, escreva o comando <i>proxychains4</i> no terminal e espere pela resposta padr„o da ferramenta.
+                Para validar sua instala√ß√£o, escreva o comando <i>proxychains4</i> no terminal e espere pela resposta padr√£o da ferramenta.
             <p>
                 <img id="main" src="../../img/articles/proxychains-use/03-proxychain-install.png" alt="03-proxychain-install">
                 <br><br>
                 <b>Entendendo o Proxychains</b> 
                 <br><br>
-                A configuraÁ„o do Proxychains È feita  por meio do arquivo de definiÁ„o padr„o, que se encontra em <b>/etc/proxychains4.conf</b>. Esse arquivo define como a ferramenta opera, permitindo 4 opÁıes de gerenciamento dos proxies, sendo eles:
+                A configura√ß√£o do Proxychains √© feita  por meio do arquivo de defini√ß√£o padr√£o, que se encontra em <b>/etc/proxychains4.conf</b>. Esse arquivo define como a ferramenta opera, permitindo 4 op√ß√µes de gerenciamento dos proxies, sendo eles:
                 <br><br>
-                <b>Cadeia Din‚mica (Dynamic Chain)</b>: Com essa configuraÁ„o, a ferramenta tentar· usar os proxies na ordem listada. No entanto, se um proxy falhar, ele ser· ignorado e a ferramenta passar· para o prÛximo.
+                <b>Cadeia Din√¢mica (Dynamic Chain)</b>: Com essa configura√ß√£o, a ferramenta tentar√° usar os proxies na ordem listada. No entanto, se um proxy falhar, ele ser√° ignorado e a ferramenta passar√° para o pr√≥ximo.
                 <br><br>
-                <b>Cadeia Estrita (Strict Chain)</b>: Cada proxy È usado na ordem listada, do primeiro ao segundo, terceiro, e assim por diante. Se um proxy falhar, toda a conex„o ser· interrompida.
+                <b>Cadeia Estrita (Strict Chain)</b>: Cada proxy √© usado na ordem listada, do primeiro ao segundo, terceiro, e assim por diante. Se um proxy falhar, toda a conex√£o ser√° interrompida.
                 <br><br>
-                <b>Cadeia em Round-Robin (Round-Robin Chain)</b>: Os proxies encadeados s„o usados de forma circular para distribuir as conexıes entre os proxies fornecidos. Cada solicitaÁ„o de conex„o vai para o prÛximo na lista, e, ao alcanÁar o final, comeÁa novamente no inÌcio.
+                <b>Cadeia em Round-Robin (Round-Robin Chain)</b>: Os proxies encadeados s√£o usados de forma circular para distribuir as conex√µes entre os proxies fornecidos. Cada solicita√ß√£o de conex√£o vai para o pr√≥ximo na lista, e, ao alcan√ßar o final, come√ßa novamente no in√≠cio.
                 <br><br>
-               <b>Cadeia AleatÛria (Random Chain)</b> : Como o nome sugere, essa configuraÁ„o seleciona proxies de forma aleatÛria para cada conex„o. N„o segue uma ordem especÌfica e cria um caminho ˙nico a cada vez que a ferramenta È executada.
+               <b>Cadeia Aleat√≥ria (Random Chain)</b> : Como o nome sugere, essa configura√ß√£o seleciona proxies de forma aleat√≥ria para cada conex√£o. N√£o segue uma ordem espec√≠fica e cria um caminho √∫nico a cada vez que a ferramenta √© executada.
                <br><br>
                A escolha do tipo de gerenciamento depende da necessidade, como:
                <br><br>
-               <b>Anonimidade</b>: Random Chain pode proporcionar maior anonimidade, por escolher os proxies de forma aleatÛria.
+               <b>Anonimidade</b>: Random Chain pode proporcionar maior anonimidade, por escolher os proxies de forma aleat√≥ria.
                <br><br>
-               <b>Confiabilidade</b>: Dynamic Chain oferece resiliÍncia ao ignorar proxies que falham, garantindo assim estabilidade de conex„o.
+               <b>Confiabilidade</b>: Dynamic Chain oferece resili√™ncia ao ignorar proxies que falham, garantindo assim estabilidade de conex√£o.
                 <img id="main" src="../../img/articles/proxychains-use/04-proxychain-config.png" alt="04-proxychain-config">
             </p>
             <p>
-                <b>ConfiguraÁ„o de proxies</b> 
+                <b>Configura√ß√£o de proxies</b> 
                 <br><br>
-                Para seu uso, recomenda-se a configuraÁ„o mediante a rede tor ou um servidor proxy <b>extremamente</b> confi·vel. Para configuraÁ„o, basta colocar, no formato <b>"PROTOCOLO" "IP" "PORTA"</b> ao final do arquivo, o proxy escolhido, por exemplo:
+                Para seu uso, recomenda-se a configura√ß√£o mediante a rede tor ou um servidor proxy <b>extremamente</b> confi√°vel. Para configura√ß√£o, basta colocar, no formato <b>"PROTOCOLO" "IP" "PORTA"</b> ao final do arquivo, o proxy escolhido, por exemplo:
                 <img id="main" src="../../img/articles/proxychains-use/06-proxychain-usage.png" alt="06-proxychain-usage">
             </p>
         </p>
@@ -146,20 +146,20 @@
         <p>
             <b>Uso com o tor</b> 
             <br><br>
-            Para o uso com o tor, basta, com o serviÁo tor ativado localmente, redirecionar o proxy para o prÛprio com o indicativo <b>socks5 127.0.0.1 9050</b>
+            Para o uso com o tor, basta, com o servi√ßo tor ativado localmente, redirecionar o proxy para o pr√≥prio com o indicativo <b>socks5 127.0.0.1 9050</b>
             <img id="main" src="../../img/articles/proxychains-use/07-tor-usage.png" alt="07-tor-usage">
             Para validar seu uso, utilize o comando  <b>proxychains4 firefox</b> no terminal, para abrir o navegador sob a ferramenta, e acesse <a href="https://check.torproject.org/" >https://check.torproject.org/</a>
         </p>
         <img id="main" src="../../img/articles/proxychains-use/08-tor-usage.png" alt="08-tor-usage">
         <b>Uso do proxychains com ferramentas</b> 
         <br><br>
-        Para redirecionar o tr·fego de outros programas para o proxychains, basta inserir, no terminal, o comando <b>proxychains NOME_DA_FERRAMENTA</b>, exemplificando:
+        Para redirecionar o tr√°fego de outros programas para o proxychains, basta inserir, no terminal, o comando <b>proxychains NOME_DA_FERRAMENTA</b>, exemplificando:
     </p>
     <img id="main" src="../../img/articles/proxychains-use/09-proxychain-usage.png" alt="09-proxychain-usage">
     <p>
         <b>Extra: proxy_dns</b> 
         <br><br>
-       A configuraÁ„o proxy_dns, presente em <b>proxychains4.conf</b>, requisita a resoluÁ„o de DNS atravÈs da cadeia de proxies. Isso È importante para manter a anonimidade, pois previne o vazamentos de DNS na qual poderia revelar o endereÁo IP real por meio de consultas DNS n„o roteadas pelo proxy. Para validar se h· vazamento de DNS em sua conex„o, acesse <a href="https://dnsleaktest.com" >https://dnsleaktest.com</a>.
+       A configura√ß√£o proxy_dns, presente em <b>proxychains4.conf</b>, requisita a resolu√ß√£o de DNS atrav√©s da cadeia de proxies. Isso √© importante para manter a anonimidade, pois previne o vazamentos de DNS na qual poderia revelar o endere√ßo IP real por meio de consultas DNS n√£o roteadas pelo proxy. Para validar se h√° vazamento de DNS em sua conex√£o, acesse <a href="https://dnsleaktest.com" >https://dnsleaktest.com</a>.
     </p>
         </section>
     </main>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-us" data-theme="dark" data-lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none'; img-src 'self' data:;">
+    <title>jwt sentinel.</title>
+    <meta name="description"
+        content="Decode and analyze JWT tokens securely. 100% local processing - your token never leaves your browser.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/tools/jwt-sentinel.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="../index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>Home</span>
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="jwt-sentinel.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                        <text x="36" y="23" font-family="Arial, sans-serif" font-size="3" fill="#009c3b"
+                            text-anchor="middle" font-weight="bold">ORDEM E PROGRESSO</text>
+                    </svg>
+                </a>
+                <a href="jwt-sentinel-en.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0110 0v4" />
+                    <circle cx="12" cy="16" r="1" />
+                </svg>
+                JWT Sentinel
+            </h1>
+            <p>Decode and analyze JWT tokens securely</p>
+
+            <!-- Privacy Badge -->
+            <div class="privacy-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="M9 12l2 2 4-4" />
+                </svg>
+                <span>Your token never leaves your browser. 100% local processing.</span>
+            </div>
+
+            <!-- JWT Input Section -->
+            <section class="jwt-section">
+                <div class="jwt-card">
+                    <label class="jwt-label" for="jwtInput">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+                        </svg>
+                        <span>Paste your JWT token here</span>
+                    </label>
+                    <div class="jwt-input-wrapper">
+                        <textarea id="jwtInput" class="jwt-input"
+                            placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                            spellcheck="false"></textarea>
+                    </div>
+                    <div class="jwt-actions">
+                        <button type="button" id="decodeBtn" class="btn btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="16 18 22 12 16 6" />
+                                <polyline points="8 6 2 12 8 18" />
+                            </svg>
+                            Decode
+                        </button>
+                        <button type="button" id="clearBtn" class="btn btn-secondary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection">
+                <!-- Populated by JavaScript -->
+            </section>
+
+            <!-- Security Warning -->
+            <div class="security-warning-container">
+                <div class="security-warning">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    <span>Although this tool processes everything locally, avoid pasting sensitive production tokens on
+                        shared computers or if you have untrusted browser extensions installed.</span>
+                </div>
+            </div>
+
+            <!-- Guide Section -->
+            <section class="guide-section">
+                <h2 class="guide-title">Guide: What is JWT?</h2>
+
+                <div class="guide-card">
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4M12 8h.01" />
+                        </svg>
+                        What is a JSON Web Token?
+                    </h3>
+                    <p>
+                        JWT (JSON Web Token) is an open standard (RFC 7519) that defines a compact and
+                        self-contained way of securely transmitting information between parties as a JSON object.
+                        This information can be verified and trusted because it is digitally signed.
+                    </p>
+                </div>
+
+                <div class="guide-card">
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                        JWT Structure
+                    </h3>
+                    <p>A JWT consists of three parts separated by dots:</p>
+                    <div class="jwt-structure">
+                        <span class="jwt-part jwt-header">HEADER</span>
+                        <span class="jwt-dot">.</span>
+                        <span class="jwt-part payload">PAYLOAD</span>
+                        <span class="jwt-dot">.</span>
+                        <span class="jwt-part signature">SIGNATURE</span>
+                    </div>
+                    <ul>
+                        <li><strong>Header:</strong> Contains the token type and signing algorithm</li>
+                        <li><strong>Payload:</strong> Contains the claims (statements) about the entity</li>
+                        <li><strong>Signature:</strong> Used to verify the integrity of the token</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Security Considerations
+                    </h3>
+                    <ul>
+                        <li>JWTs are encoded, not encrypted - anyone can read the contents</li>
+                        <li>Never store sensitive information in the payload</li>
+                        <li>Always validate the signature on the server</li>
+                        <li>Use HTTPS to transmit tokens</li>
+                        <li>Set short expiration times when possible</li>
+                    </ul>
+                </div>
+            </section>
+    </main>
+
+    <!-- Copy Feedback Toast -->
+    <div class="copy-feedback" id="copyFeedback">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5" />
+        </svg>
+        <span>Copied!</span>
+    </div>
+
+    <script src="../assets/js/tools/jwt-sentinel.js"></script>
+</body>
+
+</html>
