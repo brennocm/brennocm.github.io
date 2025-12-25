@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-us" data-theme="dark" data-lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Dork Generator</title>
+    <meta name="description"
+        content="Tool to generate advanced Google Dorks for security researchers and OSINT professionals">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/tools/osint-dork-generator.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="../index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span data-i18n="home">Home</span>
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="osint-dork-generator.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                        <text x="36" y="23" font-family="Arial, sans-serif" font-size="3" fill="#009c3b"
+                            text-anchor="middle" font-weight="bold">ORDEM E PROGRESSO</text>
+                    </svg>
+                </a>
+                <a href="osint-dork-generator-en.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1 data-i18n="title">OSINT Dork Generator</h1>
+            <p data-i18n="subtitle">Generate advanced Google queries to discover exposed information on domains</p>
+        </div>
+
+        <!-- Target Input Section -->
+        <section class="target-section">
+            <div class="target-card">
+                <label class="target-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <circle cx="12" cy="12" r="6" />
+                        <circle cx="12" cy="12" r="2" />
+                    </svg>
+                    <span data-i18n="targetLabel">Target Domain or Keyword</span>
+                </label>
+                <div class="target-input-wrapper">
+                    <input type="text" id="targetInput" class="target-input" placeholder="example.com"
+                        autocomplete="off" spellcheck="false">
+                    <svg class="target-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" />
+                    </svg>
+                </div>
+                <p class="target-hint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4M12 8h.01" />
+                    </svg>
+                    <span data-i18n="targetHint">Enter the domain without http:// or https://</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Categories Grid -->
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Categories will be rendered by JavaScript -->
+        </div>
+
+        <!-- Guide Section -->
+        <section class="guide-section">
+            <h2 class="guide-title" data-i18n="guideTitle">About Google Dorks & OSINT</h2>
+
+            <div class="guide-card">
+                <h3 data-i18n="guideIntro">What are Google Dorks?</h3>
+                <p data-i18n="guideIntroText">
+                    Google Dorks are advanced search operators that allow you to find specific information
+                    indexed by Google. They are essential tools for security researchers, pentesters,
+                    and OSINT (Open Source Intelligence) professionals.
+                </p>
+            </div>
+
+            <div class="guide-card">
+                <h3 data-i18n="guideUseCases">Use Cases</h3>
+                <ul>
+                    <li data-i18n="guideUseCase1">Identify publicly exposed sensitive documents</li>
+                    <li data-i18n="guideUseCase2">Discover accessible directories and configuration files</li>
+                    <li data-i18n="guideUseCase3">Map the attack surface during reconnaissance</li>
+                    <li data-i18n="guideUseCase4">Check for credential and API key leaks</li>
+                    <li data-i18n="guideUseCase5">Find administrative panels and login pages</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Copy Feedback Toast -->
+    <div class="copy-feedback" id="copyFeedback">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5" />
+        </svg>
+        <span data-i18n="copied">Copied to clipboard!</span>
+    </div>
+
+    <script src="../assets/tools/osint-dork-generator.js"></script>
+</body>
+
+</html>

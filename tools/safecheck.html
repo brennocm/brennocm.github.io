@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="dark" data-lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeCheck - Analisador de Força de Senha</title>
+    <meta name="description"
+        content="Analise a força e entropia da sua senha com feedback técnico detalhado. 100% processamento local - sua senha nunca sai do navegador.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/tools/safecheck.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png">
+    <!-- zxcvbn library from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"
+        integrity="sha512-TZlMGFY9xKj38t/5m2FzJ+RM/aD5alMHDe26p0mYUMoCF5G7ibfHUQILq0qQPV3wlsnCwL+TPRNK4vIWGLOkUQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="../index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>Home</span>
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="safecheck.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                        <text x="36" y="23" font-family="Arial, sans-serif" font-size="3" fill="#009c3b"
+                            text-anchor="middle" font-weight="bold">ORDEM E PROGRESSO</text>
+                    </svg>
+                </a>
+                <a href="safecheck-en.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                SafeCheck
+            </h1>
+            <p>Analise a força e entropia da sua senha com feedback técnico detalhado</p>
+
+            <!-- Privacy Badge -->
+            <div class="privacy-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="M9 12l2 2 4-4" />
+                </svg>
+                <span>Sua senha nunca sai do seu navegador. O processamento é 100% local.</span>
+            </div>
+        </div>
+
+        <!-- Password Input Section -->
+        <section class="password-section">
+            <div class="password-card">
+                <label class="password-label" for="passwordInput">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+                    </svg>
+                    <span>Digite sua senha para análise</span>
+                </label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="passwordInput" class="password-input" placeholder="Digite uma senha..."
+                        autocomplete="off" spellcheck="false">
+                    <button type="button" id="toggleVisibility" class="toggle-visibility" aria-label="Mostrar senha">
+                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="display: none;">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strength Gauge -->
+        <section class="gauge-section">
+            <div class="gauge-card">
+                <div class="gauge-container">
+                    <div class="gauge-bg"></div>
+                    <div class="gauge-fill" id="gaugeNeedle"></div>
+                    <div class="gauge-center"></div>
+                </div>
+                <div class="gauge-labels">
+                    <span>Fraca</span>
+                    <span>Forte</span>
+                </div>
+                <div class="strength-label" id="strengthLabel">-</div>
+                <div class="strength-score" id="strengthScore"></div>
+            </div>
+        </section>
+
+        <!-- Results Grid -->
+        <div class="results-grid" id="resultsContainer" style="display: none;">
+            <!-- Entropy Card -->
+            <div class="result-card">
+                <div class="result-card-header">
+                    <div class="result-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                    </div>
+                    <span class="result-card-title">Entropia</span>
+                </div>
+                <div class="result-card-content">
+                    <div class="entropy-value" id="entropyValue">0 <span>bits</span></div>
+                    <p class="entropy-description" id="entropyDesc">Quanto maior a entropia, mais difícil de adivinhar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Crack Time Card -->
+            <div class="result-card">
+                <div class="result-card-header">
+                    <div class="result-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <span class="result-card-title">Tempo de Quebra</span>
+                </div>
+                <div class="result-card-content">
+                    <div class="crack-time-list" id="crackTimeList">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Card -->
+            <div class="result-card" style="grid-column: 1 / -1;">
+                <div class="result-card-header">
+                    <div class="result-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                        </svg>
+                    </div>
+                    <span class="result-card-title">Feedback</span>
+                </div>
+                <div class="result-card-content">
+                    <div class="feedback-list" id="feedbackList">
+                        <p class="no-feedback">Nenhuma sugestão - senha parece boa!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guide Section -->
+        <section class="guide-section">
+            <h2 class="guide-title">Guia de Segurança de Senhas</h2>
+
+            <div class="guide-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4M12 8h.01" />
+                    </svg>
+                    O que é Entropia?
+                </h3>
+                <p>
+                    Entropia é uma medida matemática da aleatoriedade de uma senha, expressa em bits.
+                    Cada bit adicional dobra o número de tentativas necessárias para um atacante
+                    adivinhar a senha por força bruta.
+                </p>
+            </div>
+
+            <div class="guide-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    Níveis de Entropia
+                </h3>
+                <ul>
+                    <li>&lt; 28 bits: Muito fraca - pode ser quebrada instantaneamente</li>
+                    <li>28-35 bits: Fraca - vulnerável a ataques básicos</li>
+                    <li>36-59 bits: Razoável - resistente a ataques online</li>
+                    <li>60-127 bits: Forte - segura para maioria dos usos</li>
+                    <li>128+ bits: Muito forte - praticamente impossível de quebrar</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    Dicas para Senhas Fortes
+                </h3>
+                <ul>
+                    <li>Use frases em vez de palavras únicas (ex: "café-gelado-segunda-feira")</li>
+                    <li>Evite informações pessoais como datas de nascimento ou nomes</li>
+                    <li>Não reutilize senhas entre diferentes serviços</li>
+                    <li>Considere usar um gerenciador de senhas</li>
+                    <li>Ative autenticação de dois fatores quando disponível</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="../assets/tools/safecheck.js"></script>
+</body>
+
+</html>

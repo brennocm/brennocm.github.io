@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="dark" data-lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cvss calculator.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/tools/cvss-calculator.css">
+    <link rel="icon" type="image/x-icon" href="/img/home/icon.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="../index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span data-i18n="home">Home</span>
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="cvss-calculator.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                        <text x="36" y="23" font-family="Arial, sans-serif" font-size="3" fill="#009c3b"
+                            text-anchor="middle" font-weight="bold">ORDEM E PROGRESSO</text>
+                    </svg>
+                </a>
+                <a href="cvss-calculator-en.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1 data-i18n="title">Calculadora CVSS</h1>
+            <p data-i18n="subtitle">Calcule scores de vulnerabilidades usando CVSS v3.1 com interface interativa
+            </p>
+        </div>
+
+        <!-- Version Title -->
+        <div class="version-title">
+            <span class="version-badge">CVSS v3.1</span>
+        </div>
+
+        <!-- Calculator Container -->
+        <div class="calculator-container">
+            <!-- Wizard Panel -->
+            <div class="wizard-panel">
+                <!-- Progress Steps -->
+                <div class="wizard-progress">
+                    <div class="progress-step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-label" data-i18n="step_attack">Vetor de Ataque</span>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-label" data-i18n="step_complexity">Complexidade</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-label" data-i18n="step_privileges">Privilégios</span>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-label" data-i18n="step_impact">Impacto</span>
+                    </div>
+                </div>
+
+                <!-- Step 1: Attack Vector & Attack Complexity -->
+                <div class="step-content active" data-step="1">
+                    <div class="step-header">
+                        <h2 data-i18n="step1_title">Vetor de Ataque</h2>
+                        <p data-i18n="step1_desc">Como o atacante pode explorar esta vulnerabilidade?</p>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="av_label">Attack Vector (AV)</span>
+                            <span class="tooltip-trigger"
+                                data-tooltip="Define o contexto pelo qual a exploração da vulnerabilidade é possível">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="AV">
+                            <button class="metric-btn" data-value="N"
+                                data-i18n="av_n">Network<br><small>Remoto/Internet</small></button>
+                            <button class="metric-btn" data-value="A" data-i18n="av_a">Adjacent<br><small>Rede
+                                    Local/Wi-Fi</small></button>
+                            <button class="metric-btn" data-value="L" data-i18n="av_l">Local<br><small>Acesso
+                                    Local</small></button>
+                            <button class="metric-btn" data-value="P"
+                                data-i18n="av_p">Physical<br><small>Físico</small></button>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="ac_label">Attack Complexity (AC)</span>
+                            <span class="tooltip-trigger"
+                                data-tooltip="Descreve as condições além do controle do atacante que devem existir para explorar a vulnerabilidade">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="AC">
+                            <button class="metric-btn" data-value="L" data-i18n="ac_l">Low<br><small>Fácil de
+                                    explorar</small></button>
+                            <button class="metric-btn" data-value="H" data-i18n="ac_h">High<br><small>Condições
+                                    específicas</small></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Privileges Required & User Interaction -->
+                <div class="step-content" data-step="2">
+                    <div class="step-header">
+                        <h2 data-i18n="step2_title">Requisitos de Acesso</h2>
+                        <p data-i18n="step2_desc">Quais privilégios e interações são necessários?</p>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="pr_label">Privileges Required (PR)</span>
+                            <span class="tooltip-trigger"
+                                data-tooltip="Nível de privilégios que um atacante deve possuir antes de explorar a vulnerabilidade">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="PR">
+                            <button class="metric-btn" data-value="N" data-i18n="pr_n">None<br><small>Sem
+                                    autenticação</small></button>
+                            <button class="metric-btn" data-value="L" data-i18n="pr_l">Low<br><small>Usuário
+                                    comum</small></button>
+                            <button class="metric-btn" data-value="H"
+                                data-i18n="pr_h">High<br><small>Admin/Root</small></button>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="ui_label">User Interaction (UI)</span>
+                            <span class="tooltip-trigger"
+                                data-tooltip="Captura o requisito de um usuário humano, além do atacante, participar do comprometimento">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="UI">
+                            <button class="metric-btn" data-value="N"
+                                data-i18n="ui_n">None<br><small>Automático</small></button>
+                            <button class="metric-btn" data-value="R" data-i18n="ui_r">Required<br><small>Clique/Ação
+                                    necessária</small></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Scope -->
+                <div class="step-content" data-step="3">
+                    <div class="step-header">
+                        <h2 data-i18n="step3_title">Escopo do Impacto</h2>
+                        <p data-i18n="step3_desc">A vulnerabilidade afeta outros componentes além do vulnerável?</p>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="s_label">Scope (S)</span>
+                            <span class="tooltip-trigger"
+                                data-tooltip="Define se a vulnerabilidade em um componente afeta recursos além de seu escopo de segurança">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="S">
+                            <button class="metric-btn" data-value="U" data-i18n="s_u">Unchanged<br><small>Impacto
+                                    limitado ao componente</small></button>
+                            <button class="metric-btn" data-value="C" data-i18n="s_c">Changed<br><small>Afeta outros
+                                    sistemas</small></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Impact Metrics -->
+                <div class="step-content" data-step="4">
+                    <div class="step-header">
+                        <h2 data-i18n="step4_title">Impacto (CIA Triad)</h2>
+                        <p data-i18n="step4_desc">Qual o impacto em Confidencialidade, Integridade e Disponibilidade?
+                        </p>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="c_label">Confidentiality (C)</span>
+                            <span class="tooltip-trigger" data-tooltip="Impacto na confidencialidade dos dados">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="C">
+                            <button class="metric-btn" data-value="N" data-i18n="impact_n">None<br><small>Sem
+                                    impacto</small></button>
+                            <button class="metric-btn" data-value="L" data-i18n="impact_l">Low<br><small>Acesso
+                                    limitado</small></button>
+                            <button class="metric-btn" data-value="H" data-i18n="impact_h">High<br><small>Acesso
+                                    total</small></button>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="i_label">Integrity (I)</span>
+                            <span class="tooltip-trigger"
+                                data-tooltip="Impacto na integridade/precisão dos dados">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="I">
+                            <button class="metric-btn" data-value="N">None<br><small>Sem impacto</small></button>
+                            <button class="metric-btn" data-value="L">Low<br><small>Modificação
+                                    limitada</small></button>
+                            <button class="metric-btn" data-value="H">High<br><small>Modificação total</small></button>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">
+                            <span data-i18n="a_label">Availability (A)</span>
+                            <span class="tooltip-trigger" data-tooltip="Impacto na disponibilidade do sistema">?</span>
+                        </div>
+                        <div class="metric-buttons" data-metric="A">
+                            <button class="metric-btn" data-value="N">None<br><small>Sem impacto</small></button>
+                            <button class="metric-btn" data-value="L">Low<br><small>Degradação parcial</small></button>
+                            <button class="metric-btn" data-value="H">High<br><small>Indisponibilidade
+                                    total</small></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="wizard-nav">
+                    <button class="nav-btn" id="prevBtn" disabled>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                        <span data-i18n="prev">Anterior</span>
+                    </button>
+                    <button class="nav-btn primary" id="nextBtn">
+                        <span data-i18n="next">Próximo</span>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Score Panel -->
+            <aside class="score-panel">
+                <div class="score-card">
+                    <div class="score-display">
+                        <div class="score-value severity-none" id="scoreValue">0.0</div>
+                        <span class="severity-badge severity-none" id="severityBadge"
+                            data-i18n="severity_none">NONE</span>
+                    </div>
+
+                    <div class="vector-string">
+                        <label data-i18n="vector_label">Vector String</label>
+                        <code id="vectorString">CVSS:3.1/AV:_/AC:_/PR:_/UI:_/S:_/C:_/I:_/A:_</code>
+                    </div>
+
+                    <div class="score-breakdown">
+                        <h4 data-i18n="breakdown">Breakdown</h4>
+                        <div class="breakdown-item">
+                            <span data-i18n="base_score">Base Score</span>
+                            <span id="baseScore">0.0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span data-i18n="impact">Impact</span>
+                            <span id="impactScore">0.0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span data-i18n="exploitability">Exploitability</span>
+                            <span id="exploitScore">0.0</span>
+                        </div>
+                    </div>
+
+                    <div class="score-actions">
+                        <button class="action-btn" id="copyVector">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                            </svg>
+                            <span data-i18n="copy_vector">Copiar Vector</span>
+                        </button>
+                        <button class="action-btn primary" id="generateReport">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+                            </svg>
+                            <span data-i18n="generate_report">Gerar Relatório</span>
+                        </button>
+                        <button class="action-btn" id="resetCalc">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8" />
+                                <path d="M3 3v5h5" />
+                            </svg>
+                            <span data-i18n="reset">Resetar</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Vulnerability Classification Guide -->
+        <section class="guide-section">
+            <h2 class="guide-title" data-i18n="guide_title">Guia Definitivo: Como Classificar Vulnerabilidades</h2>
+
+            <!-- Section 1: What is CVSS -->
+            <div class="guide-card">
+                <h3 data-i18n="guide_intro_title">1. O que é CVSS?</h3>
+                <p>O <strong>Common Vulnerability Scoring System (CVSS)</strong> é um framework aberto e padronizado
+                    para avaliar a severidade de vulnerabilidades de segurança em sistemas. Desenvolvido pelo FIRST
+                    (Forum of Incident Response and Security Teams), o CVSS fornece uma pontuação numérica de 0.0 a 10.0
+                    que reflete a gravidade de uma vulnerabilidade.</p>
+
+                <div class="guide-highlight">
+                    <h4>Por que usar CVSS?</h4>
+                    <ul>
+                        <li><strong>Padronização:</strong> Linguagem comum entre equipes de segurança, desenvolvimento e
+                            gestão</li>
+                        <li><strong>Priorização:</strong> Ajuda a decidir quais vulnerabilidades corrigir primeiro</li>
+                        <li><strong>Comunicação:</strong> Facilita reportar riscos para stakeholders não-técnicos</li>
+                        <li><strong>Compliance:</strong> Requisito em normas como PCI-DSS, ISO 27001 e frameworks de GRC
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="severity-table">
+                    <h4>Tabela de Severidade</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Score</th>
+                                <th>Severidade</th>
+                                <th>Ação Recomendada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="severity-row-none">
+                                <td>0.0</td>
+                                <td>Nenhum</td>
+                                <td>Informativo apenas</td>
+                            </tr>
+                            <tr class="severity-row-low">
+                                <td>0.1 - 3.9</td>
+                                <td>Baixo</td>
+                                <td>Correção em ciclo normal</td>
+                            </tr>
+                            <tr class="severity-row-medium">
+                                <td>4.0 - 6.9</td>
+                                <td>Médio</td>
+                                <td>Correção prioritária</td>
+                            </tr>
+                            <tr class="severity-row-high">
+                                <td>7.0 - 8.9</td>
+                                <td>Alto</td>
+                                <td>Correção urgente</td>
+                            </tr>
+                            <tr class="severity-row-critical">
+                                <td>9.0 - 10.0</td>
+                                <td>Crítico</td>
+                                <td>Correção imediata</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Section 2: Understanding Metrics -->
+            <div class="guide-card">
+                <h3 data-i18n="guide_metrics_title">2. Entendendo as Métricas</h3>
+
+                <div class="metric-explanation">
+                    <h4>Attack Vector (AV) - Vetor de Ataque</h4>
+                    <p>Define <strong>como</strong> o atacante pode alcançar o componente vulnerável:</p>
+                    <div class="metric-options">
+                        <div class="metric-option">
+                            <span class="option-value">Network (N)</span>
+                            <span class="option-score">Score: Alto</span>
+                            <p>Explorável remotamente via Internet. Exemplo: API exposta na web, servidor público.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">Adjacent (A)</span>
+                            <span class="option-score">Score: Médio-Alto</span>
+                            <p>Requer acesso à mesma rede (Wi-Fi, LAN, Bluetooth). Exemplo: ARP Spoofing em rede
+                                corporativa.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">Local (L)</span>
+                            <span class="option-score">Score: Médio</span>
+                            <p>Requer acesso local ao sistema. Exemplo: Escalação de privilégio após login SSH.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">Physical (P)</span>
+                            <span class="option-score">Score: Baixo</span>
+                            <p>Requer acesso físico ao dispositivo. Exemplo: Cold boot attack, USB malicioso.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-explanation">
+                    <h4>Attack Complexity (AC) - Complexidade do Ataque</h4>
+                    <p>Condições <strong>fora do controle do atacante</strong> que precisam existir:</p>
+                    <div class="metric-options">
+                        <div class="metric-option">
+                            <span class="option-value">Low (L)</span>
+                            <span class="option-score">Score: Alto</span>
+                            <p>Ataque repetível, sem condições especiais. Exemplo: XSS refletido simples.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">High (H)</span>
+                            <span class="option-score">Score: Baixo</span>
+                            <p>Requer condições específicas (timing, config especial). Exemplo: Race condition.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-explanation">
+                    <h4>Privileges Required (PR) - Privilégios Necessários</h4>
+                    <p>Nível de autenticação/autorização <strong>antes</strong> do ataque:</p>
+                    <div class="metric-options">
+                        <div class="metric-option">
+                            <span class="option-value">None (N)</span>
+                            <span class="option-score">Score: Alto</span>
+                            <p>Sem autenticação. Exemplo: SQL Injection em página de login.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">Low (L)</span>
+                            <span class="option-score">Score: Médio</span>
+                            <p>Usuário comum autenticado. Exemplo: IDOR acessando dados de outros usuários.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">High (H)</span>
+                            <span class="option-score">Score: Baixo</span>
+                            <p>Privilégios administrativos. Exemplo: RCE via painel admin.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-explanation">
+                    <h4>User Interaction (UI) - Interação do Usuário</h4>
+                    <p>O ataque requer ação de outro usuário?</p>
+                    <div class="metric-options">
+                        <div class="metric-option">
+                            <span class="option-value">None (N)</span>
+                            <span class="option-score">Score: Alto</span>
+                            <p>Totalmente automatizado. Exemplo: Worm, exploit remoto.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">Required (R)</span>
+                            <span class="option-score">Score: Médio</span>
+                            <p>Vítima precisa clicar/abrir algo. Exemplo: Phishing, XSS persistente + clique.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-explanation">
+                    <h4>Scope (S) - Escopo</h4>
+                    <p>A vulnerabilidade afeta <strong>outros componentes</strong> além do vulnerável?</p>
+                    <div class="metric-options">
+                        <div class="metric-option">
+                            <span class="option-value">Unchanged (U)</span>
+                            <p>Impacto limitado ao componente. Exemplo: DoS em um serviço específico.</p>
+                        </div>
+                        <div class="metric-option">
+                            <span class="option-value">Changed (C)</span>
+                            <p>Afeta outros sistemas/componentes. Exemplo: VM escape, XSS que rouba cookies de outro
+                                domínio.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-explanation">
+                    <h4>Impactos (CIA Triad)</h4>
+                    <p>Avalie cada dimensão da tríade CIA:</p>
+                    <ul>
+                        <li><strong>Confidentiality (C):</strong> Acesso não autorizado a informações</li>
+                        <li><strong>Integrity (I):</strong> Modificação não autorizada de dados</li>
+                        <li><strong>Availability (A):</strong> Interrupção do serviço ou sistema</li>
+                    </ul>
+                    <p>Para cada um: <code>None (N)</code> = sem impacto | <code>Low (L)</code> = impacto parcial |
+                        <code>High (H)</code> = impacto total
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 3: Practical Examples -->
+            <div class="guide-card">
+                <h3 data-i18n="guide_examples_title">3. Exemplos Práticos</h3>
+
+                <div class="example-box critical">
+                    <div class="example-header">
+                        <span class="example-title">Log4Shell (CVE-2021-44228)</span>
+                        <span class="example-score">Score: 10.0 CRÍTICO</span>
+                    </div>
+                    <code>CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H</code>
+                    <p><strong>Análise:</strong> RCE remoto via Internet, sem autenticação, sem interação do usuário,
+                        com impacto total em todos os pilares CIA e afetando sistemas além do vulnerável.</p>
+                </div>
+
+                <div class="example-box high">
+                    <div class="example-header">
+                        <span class="example-title">IDOR com Vazamento de Dados Sensíveis</span>
+                        <span class="example-score">Score: 7.5 ALTO</span>
+                    </div>
+                    <code>CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N</code>
+                    <p><strong>Análise:</strong> Acesso remoto a dados sensíveis sem autenticação, mas apenas impacto em
+                        confidencialidade.</p>
+                </div>
+
+                <div class="example-box medium">
+                    <div class="example-header">
+                        <span class="example-title">XSS Stored com Interação</span>
+                        <span class="example-score">Score: 6.1 MÉDIO</span>
+                    </div>
+                    <code>CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N</code>
+                    <p><strong>Análise:</strong> Requer que vítima acesse a página infectada, mas permite roubo de
+                        sessão.</p>
+                </div>
+
+                <div class="example-box low">
+                    <div class="example-header">
+                        <span class="example-title">Information Disclosure via Error Message</span>
+                        <span class="example-score">Score: 3.7 BAIXO</span>
+                    </div>
+                    <code>CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N</code>
+                    <p><strong>Análise:</strong> Vazamento menor de informações que requer condições específicas.</p>
+                </div>
+            </div>
+
+            <!-- Section 4: Best Practices -->
+            <div class="guide-card">
+                <h3 data-i18n="guide_best_title">4. Boas Práticas</h3>
+                <div class="best-practices">
+                    <div class="practice-item">
+                        <span class="practice-icon">+</span>
+                        <div>
+                            <strong>Seja consistente</strong>
+                            <p>Use os mesmos critérios em toda a organização. Crie um guia interno de classificação.</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <span class="practice-icon">+</span>
+                        <div>
+                            <strong>Considere o contexto</strong>
+                            <p>Use métricas Environmental para ajustar ao seu ambiente (criticidade do ativo, controles
+                                existentes).</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <span class="practice-icon">+</span>
+                        <div>
+                            <strong>Documente as decisões</strong>
+                            <p>Explique por que escolheu cada valor. Facilita revisões e auditorias.</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <span class="practice-icon">+</span>
+                        <div>
+                            <strong>Revise periodicamente</strong>
+                            <p>Scores podem mudar com novas informações ou exploits publicados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Common Mistakes -->
+            <div class="guide-card">
+                <h3 data-i18n="guide_errors_title">5. Erros Comuns</h3>
+                <div class="mistakes-list">
+                    <div class="mistake-item">
+                        <span class="mistake-icon">-</span>
+                        <div>
+                            <strong>Confundir Attack Complexity com dificuldade do exploit</strong>
+                            <p>AC refere-se a condições do AMBIENTE, não à habilidade técnica necessária.</p>
+                        </div>
+                    </div>
+                    <div class="mistake-item">
+                        <span class="mistake-icon">-</span>
+                        <div>
+                            <strong>Ignorar o Scope</strong>
+                            <p>Uma vulnerabilidade que permite escapar de um sandbox (S:C) é muito mais grave.</p>
+                        </div>
+                    </div>
+                    <div class="mistake-item">
+                        <span class="mistake-icon">-</span>
+                        <div>
+                            <strong>Superestimar impactos "possíveis"</strong>
+                            <p>Avalie o impacto DIRETO da vulnerabilidade, não cenários hipotéticos encadeados.</p>
+                        </div>
+                    </div>
+                    <div class="mistake-item">
+                        <span class="mistake-icon">-</span>
+                        <div>
+                            <strong>Usar apenas o Base Score</strong>
+                            <p>Temporal e Environmental existem para refinar a priorização ao seu contexto.</p>
+                        </div>
+                    </div>
+                    <div class="mistake-item">
+                        <span class="mistake-icon">-</span>
+                        <div>
+                            <strong>Copiar scores de CVEs sem análise</strong>
+                            <p>O score do NVD é genérico. Seu ambiente pode ter fatores atenuantes ou agravantes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- References -->
+            <div class="guide-references">
+                <h4>Referências Oficiais</h4>
+                <ul>
+                    <li><a href="https://www.first.org/cvss/v3.1/specification-document" target="_blank"
+                            rel="noopener">CVSS v3.1 Specification Document - FIRST.org</a></li>
+                    <li><a href="https://nvd.nist.gov/vuln-metrics/cvss" target="_blank" rel="noopener">NVD CVSS
+                            Calculator - NIST</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Copy Feedback -->
+    <div class="copy-feedback" id="copyFeedback" data-i18n="copied">Copiado!</div>
+
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="report_title">Relatório de Vulnerabilidade</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="report-content">
+                <p id="reportText"></p>
+            </div>
+            <div class="modal-actions">
+                <button class="action-btn" id="copyReport">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                    </svg>
+                    <span data-i18n="copy_report">Copiar Relatório</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/tools/cvss-calculator.js"></script>
+</body>
+
+</html>
