@@ -198,6 +198,14 @@ a {
     font-weight: 700;
     margin-bottom: 12px;
     color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.page-title h1 svg {
+    color: var(--accent-primary);
 }
 
 .page-title p {
