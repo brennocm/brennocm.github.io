@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
+   <title>oci-secops.</title>
+</head>
+
+<body>
+   <!-- Breadcrumb -->
+   <nav class="breadcrumb">
+        <a href="/index-en.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Home
+        </a>
+    </nav>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>OCI-SecOps: Automated Security Infrastructure</h1>
+         <p class="meta">
+            <span>Mar 20, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            In pentest and red team operations, having a dedicated VPS (Virtual Private Server) is almost
+            indispensable. It provides a stable public IP to host C2 (Command &amp; Control) servers, traffic
+            redirectors and continuous scanning tools, while also separating the offensive infrastructure from
+            the operator's machine — preserving anonymity and avoiding burning the working environment. At the
+            same time, it enables IP rotation between engagements and parallel execution of heavy tasks such as
+            fuzzing, brute force and mass scanning without burdening local hardware.
+            <br><br>
+            The main obstacle is cost: maintaining paid servers across multiple engagements directly impacts the
+            lab budget. Free-tier plans from major cloud providers therefore become an attractive option — as long
+            as they offer sufficient resources for real workloads.
+         </p>
+
+         <h2>Free Tiers: Current Landscape</h2>
+
+         <p>
+            In 2025-2026, the major hyperscalers and VPS providers offer the following conditions:
+            <br><br>
+
+            <b>AWS Free Tier</b>
+            <br><br>
+            AWS underwent a significant change in July 2025. Accounts created before July 15, 2025 follow the
+            legacy model: a t2.micro or t3.micro instance (1-2 vCPU, 1 GiB RAM) for 750 hours/month during
+            12 months, with 30 GB of EBS storage and 100 GB of monthly egress. New accounts receive up to
+            USD 200 in credits valid for 6 months. In both cases, there is no permanently free EC2 instance
+            after the trial period. AWS is the worst provider for persistent free infrastructure.
+            <br><br>
+
+            <b>Google Cloud Platform (GCP) Always Free</b>
+            <br><br>
+            GCP permanently offers one e2-micro instance (2 shared vCPUs, 1 GB RAM) in selected North American
+            regions, with 30 GB of HDD disk. The major limitation is egress: only 1 GB/month of outbound traffic
+            from Compute Engine. For operations generating significant traffic volume — scanning, payload delivery,
+            exfiltration simulations — this cap is unviable. Additionally, the vCPUs are shared and subject to
+            severe throttling under sustained load.
+            <br><br>
+
+            <b>Microsoft Azure Free Tier</b>
+            <br><br>
+            Azure offers a USD 200 credit for 30 days and, during the first 12 months, B1s (1 vCPU, 1 GiB),
+            B2pts v2 (2 vCPUs ARM, 1 GiB) and B2ats v2 (2 vCPUs AMD, 1 GiB) instances at 750 hours/month each,
+            with 2 disks of 64 GB. After 12 months, free VM access expires. B-series instances are burstable:
+            intensive CPU loads quickly exhaust burst credits, making them unsuitable for prolonged fuzzing or
+            brute force.
+            <br><br>
+
+            <b>Vultr, DigitalOcean and Linode (Akamai)</b>
+            <br><br>
+            None of these providers offer a permanently free tier. All operate with time-limited trial credits:
+            Vultr up to USD 300 for 30 days, DigitalOcean USD 200 for 60 days and Linode/Akamai USD 100 for
+            60 days. Useful for one-off campaigns, but unviable as a permanent lab.
+            <br><br>
+
+            <b>Oracle Cloud Infrastructure (OCI) Always Free</b>
+            <br><br>
+            OCI stands out unequivocally. The Always Free program offers, with no expiration date, a pool of
+            ARM Ampere A1 instances with up to 4 OCPUs and 24 GB of RAM distributable across up to four VMs,
+            plus 200 GB of storage in boot and block volumes, and 10 TB of monthly egress. There is no other
+            cloud provider that permanently and freely offers this volume of resources for general compute.
+         </p>
+
+         <br>
+         <h2>Why OCI?</h2>
+
+         <p>
+            The comparison makes it clear that, for any security operation requiring persistent infrastructure,
+            OCI is the only provider that delivers sufficient resources permanently and for free. 4 OCPUs and
+            24 GB of RAM are enough to simultaneously run a C2 server, a redirector, continuous reconnaissance
+            tools and even complete DevSecOps pipelines with Docker containers. The 10 TB/month egress limit
+            completely eliminates bandwidth cost concerns — something that makes GCP (1 GB/month) unviable for
+            real offensive workloads.
+            <br><br>
+            It is from this objective advantage that <b>OCI-SecOps</b> was born: an infrastructure orchestration
+            toolkit aimed at offensive and defensive security, built entirely on top of the OCI Always Free Tier,
+            leveraging ARM Ampere A1 instances as the compute foundation.
+         </p>
+
+         <br>
+         <h2>Concepts</h2>
+
+         <p>
+            <b>ARM Ampere A1</b>
+            <br>
+            <br> The ARM (Advanced RISC Machine) architecture is based on a reduced instruction set, designed for
+            energy efficiency and high performance in parallel workloads. The Ampere A1 processor used in OCI
+            instances implements the 64-bit ARMv8-A architecture, offering excellent performance for security
+            workloads such as network scanning, fuzzing and native Go tool compilation. The toolkit leverages this
+            architecture by compiling Go binaries natively for ARM64, maximizing tool performance.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Cloud-Init</b>
+            <br>
+            <br> Cloud-Init is the cloud instance initialization standard widely adopted by providers such as AWS,
+            Azure, GCP and OCI. It allows scripts and configurations to run automatically during an instance's first
+            boot. OCI-SecOps uses this mechanism to inject hardening scripts directly into the VM creation process,
+            ensuring the instance is securely configured even before any SSH access.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>System Hardening</b>
+            <br>
+            <br> Hardening is the process of reducing a system's attack surface by disabling unnecessary services,
+            applying restrictive configurations and implementing security controls. In the toolkit, hardening is
+            applied in multiple layers: kernel level via sysctl (protection against ICMP redirect, SYN flood and IP
+            spoofing), filesystem (nosuid/nodev mounts), SSH (key-only authentication, session timeout, legal
+            banners), firewall via UFW and intrusion prevention via Fail2Ban. Two hardening profiles are available:
+            one aimed at pentest environments and another optimized for Docker/CI workloads.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>DevSecOps and Security CI/CD</b>
+            <br>
+            <br> DevSecOps integrates security practices throughout the entire software development lifecycle, rather
+            than treating them as a final step. A security CI/CD pipeline typically includes static code analysis
+            (SAST), dependency scanning (SCA) and dynamic application testing (DAST). The toolkit provides this
+            complete pipeline with SonarQube (SAST), OWASP Dependency-Check (SCA) and OWASP ZAP (DAST), all
+            orchestrated via Docker Compose on a single free ARM instance.
+            <br>
+            <br>
+         </p>
+
+         <br>
+         <h2>Toolkit Architecture</h2>
+
+         <p>
+            OCI-SecOps is composed of eight specialized scripts covering the entire infrastructure lifecycle:
+            provisioning, hardening, tool deployment, monitoring, auditing and teardown. They are organized into
+            three layers:
+            <br>
+            <br>
+            <b>Orchestration Layer</b>: <i>oci_provision.sh</i>, <i>oci_teardown.sh</i>
+            <br>
+            <b>Hardening Layer</b>: <i>harden.sh</i>, <i>harden_ci.sh</i>
+            <br>
+            <b>Toolchain Layer</b>: <i>pentest_arsenal.sh</i>, <i>setup_ci.sh</i>, <i>oci_inventory.sh</i>, <i>oci_dashboard.sh</i>
+            <br>
+            <br>
+         </p>
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <p>
+            <b>Installing the OCI CLI</b>
+            <br>
+            <br> The OCI CLI is Oracle's official command-line interface for interacting with the OCI API. To install
+            it on Linux/macOS systems, run the official installer:
+         <pre class="code-block">
+            <code>bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)"</code>
+         </pre>
+         </p>
+
+         <p>
+            After installation, configure the CLI with your OCI credentials. The command below starts an interactive
+            wizard that asks for your Tenancy OCID, User OCID, region and automatically generates an API key pair.
+         <pre class="code-block">
+            <code>oci setup config</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Registering the API Key in the OCI Console</b>
+            <br>
+            <br> After running <i>oci setup config</i>, a public API key is generated (by default at
+            <b>~/.oci/oci_api_key_public.pem</b>). This key must be registered in the OCI Console so that the CLI
+            has permission to make API calls. To do this:
+            <br><br>
+            Access the OCI Console, click the profile icon in the top-right corner and select <b>My Profile</b>.
+            Under the <b>Resources</b> section in the left menu, click <b>API Keys</b> and then
+            <b>Add API Key</b>. Select the <b>Paste Public Key</b> option and paste the contents of the
+            <b>oci_api_key_public.pem</b> file.
+         <pre class="code-block">
+            <code>cat ~/.oci/oci_api_key_public.pem</code>
+         </pre>
+         </p>
+
+         <p>
+            After adding the key, the Console will display a configuration snippet. Verify that it matches the
+            contents of your <b>~/.oci/config</b> file. To validate that the CLI is correctly authenticated:
+         <pre class="code-block">
+            <code>oci iam region list</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Prerequisites</b>
+            <br>
+            <br> With the OCI CLI configured, clone the repository and ensure the remaining dependencies are present.
+         <pre class="code-block">
+            <code>git clone https://github.com/brennocm/oci-secops && cd oci-secops</code>
+         </pre>
+         <pre class="code-block">
+            <code># Required dependencies: oci-cli, jq, ssh, scp
+oci --version && jq --version</code>
+         </pre>
+         </p>
+
+         <p>
+            Then generate the SSH key pair that will be used by the instances.
+         <pre class="code-block">
+            <code>ssh-keygen -t ed25519 -f ~/.ssh/oci_vps_key -N ""</code>
+         </pre>
+         </p>
+
+         <p>
+            Configure the <b>.env</b> file from the provided example, filling in the required environment variables.
+         <pre class="code-block">
+            <code>cp .env.example .env && vim .env</code>
+         </pre>
+         <pre class="code-block">
+            <code>OCI_SSH_KEY_PATH=~/.ssh/oci_vps_key
+VNC_PASSWORD=your_vnc_password
+SONAR_DB_PASSWORD=your_sonar_password
+NVD_API_KEY=your_nvd_key  # Optional, for Dependency-Check</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Infrastructure Provisioning</b>
+            <br>
+            <br> The <b>oci_provision.sh</b> script is the toolkit's central entry point. When executed, it
+            automatically queries the OCI API to discover the Tenancy ID, Availability Domain, Subnet and the latest
+            Ubuntu 24.04 image, eliminating the need for manual parameter configuration.
+         <pre class="code-block">
+            <code>chmod +x oci_provision.sh && ./oci_provision.sh</code>
+         </pre>
+         </p>
+
+         <p>
+            When run, the script presents five deployment topologies to choose from:
+         <pre class="code-block">
+            <code>[1] Single Powerhouse  — 4 OCPU / 24GB RAM  (heavy automation, brute force)
+[2] Balanced Duo       — 2x 2 OCPU / 12GB  (parallel scanning)
+[3] Recon Cluster      — 4x 1 OCPU / 6GB   (IP rotation, distributed exploitation)
+[4] Quick Single       — 1 OCPU / 6GB      (quick testing)
+[5] CI Security Stack  — 4 OCPU / 24GB     (SonarQube, OWASP ZAP, Dependency-Check)</code>
+         </pre>
+         </p>
+
+         <p>
+            Before provisioning, the script automatically validates Always Free quotas, preventing provisioning from
+            exceeding the free-tier limits for OCPUs, RAM and storage.
+         <pre class="code-block">
+            <code>[*] Checking Always Free compliance...
+    Storage: 100GB / Limit 200GB  [OK]
+    ARM OCPUs: 0 / Limit 4        [OK]
+    ARM RAM: 0GB / Limit 24GB     [OK]</code>
+         </pre>
+         </p>
+
+         <p>
+            After validation, the instance is created with the hardening script injected via cloud-init.
+            <i>oci_provision.sh</i> waits for boot, connects via SSH and streams the hardening process logs in
+            real time.
+         <pre class="code-block">
+            <code>[*] Waiting for SSH availability...
+[*] Streaming hardening logs via cloud-init:
+    [cloud-init] Updating system...
+    [cloud-init] Applying sysctl settings...
+    [cloud-init] Configuring UFW and Fail2Ban...
+    [cloud-init] Hardening complete.
+[+] Instance ready: ARM-Monster | IP: 152.xx.xx.xx</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Hardening: Pentest Profile (harden.sh)</b>
+            <br>
+            <br> <b>harden.sh</b> is injected via cloud-init in topologies 1 through 4. It applies multi-layer
+            hardening without compromising compatibility with offensive tools. Key kernel settings applied include:
+         <pre class="code-block">
+            <code># Network protections
+net.ipv4.conf.all.accept_redirects = 0   # Block ICMP redirects
+net.ipv4.conf.all.rp_filter = 1          # Prevent IP spoofing
+net.ipv4.tcp_syncookies = 1              # Mitigate SYN flood
+net.ipv6.conf.all.disable_ipv6 = 1       # Disable IPv6
+
+# Kernel protections
+kernel.kptr_restrict = 2                 # Hide kernel pointers
+
+# High-performance pentest tuning
+fs.file-max = 2097152                    # File descriptor limit
+net.ipv4.ip_local_port_range = 1024 65535</code>
+         </pre>
+         </p>
+
+         <p>
+            Additionally, the script configures SSH to accept only public-key authentication, creates a dynamic 4 GB
+            swap (preventing OOM kills during fuzzing), enables AppArmor in enforce mode and installs Fail2Ban with
+            an aggressive policy: three failed SSH attempts result in a 24-hour IP ban.
+         </p>
+
+         <p>
+            <b>Hardening: CI/CD Profile (harden_ci.sh)</b>
+            <br>
+            <br> <b>harden_ci.sh</b> is used in topology 5. In addition to the standard hardening measures, it
+            installs the Docker Engine and applies settings required by SonarQube, which internally uses
+            Elasticsearch and requires a kernel virtual memory adjustment.
+         <pre class="code-block">
+            <code>vm.max_map_count = 524288  # Elasticsearch requirement (SonarQube)</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Pentest Arsenal (pentest_arsenal.sh)</b>
+            <br>
+            <br> After hardening, <b>pentest_arsenal.sh</b> is transferred via SCP and executed automatically. It
+            supports modular installation profiles to optimize deployment time.
+         <pre class="code-block">
+            <code>./pentest_arsenal.sh --full   # Full arsenal (web + infra + VNC)
+./pentest_arsenal.sh --web    # Web tools only
+./pentest_arsenal.sh --infra  # Infrastructure tools only
+./pentest_arsenal.sh --vnc    # Add XFCE + TigerVNC</code>
+         </pre>
+         </p>
+
+         <p>
+            The script installs Go 1.23.4 natively for ARM64 and compiles over 20 tools directly from source.
+            Web reconnaissance tools include: <i>assetfinder</i>, <i>subfinder</i>, <i>amass</i>,
+            <i>httpx</i>, <i>nuclei</i>, <i>katana</i>, <i>dalfox</i>, <i>ffuf</i> and <i>gowitness</i>.
+            For infrastructure and Active Directory: <i>bloodhound</i>, <i>impacket</i>, <i>netexec</i>,
+            <i>certipy-ad</i>, <i>metasploit</i>, <i>sliver</i> and <i>ligolo-ng</i>, among others.
+            <br><br>
+            The <b>--vnc</b> profile installs the XFCE graphical environment with TigerVNC on port 5901,
+            including Firefox, Burp Suite Community, Wireshark and CherryTree, configured as a systemd service
+            for automatic restart.
+         </p>
+
+         <p>
+            <b>Security CI/CD Stack (setup_ci.sh)</b>
+            <br>
+            <br> In topology 5, <b>setup_ci.sh</b> runs in place of the pentest arsenal. It sets up a complete
+            DevSecOps pipeline via Docker Compose with three main components:
+            <br><br>
+            <b>SonarQube Community</b> (SAST): static code analysis with a PostgreSQL 16 database. Accessible
+            only via SSH tunnel on port 9000, to avoid publicly exposing the interface.
+         <pre class="code-block">
+            <code># Access SonarQube via SSH tunnel
+ssh -N -L 9000:localhost:9000 -i ~/.ssh/oci_vps_key ubuntu@&lt;PUBLIC_IP&gt;</code>
+         </pre>
+         <pre class="code-block">
+            <code># Then, locally:
+# http://localhost:9000  (default credentials: admin/admin)</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>OWASP ZAP</b> (DAST): dynamic application testing via Docker, with automatically generated wrappers.
+         <pre class="code-block">
+            <code>zap-baseline https://target.example.com         # Baseline scan
+zap-api https://target.example.com/openapi.json  # OpenAPI spec-based scan</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>OWASP Dependency-Check</b> (SCA): software composition analysis to identify vulnerabilities in
+            dependencies. The script pre-populates the NVD cache (~2 GB) during installation to eliminate the
+            initial ~1 hour wait on first run. It also installs multiarch support via QEMU, allowing x86 images
+            to run on ARM64 hosts.
+         <pre class="code-block">
+            <code>dep-check --project "my-project" --scan ./src --failOnCVSS 7</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Resource Inventory (oci_inventory.sh)</b>
+            <br>
+            <br> <b>oci_inventory.sh</b> performs a recursive audit of all tenancy compartments, listing instances,
+            volumes, IPs and checking compliance with Always Free limits.
+         <pre class="code-block">
+            <code>./oci_inventory.sh</code>
+         </pre>
+         <pre class="code-block">
+            <code>INSTANCE     | STATUS  | PUBLIC IP     | RESOURCES       | CREATED    | AD
+ARM-Monster  | RUNNING | 152.xx.xx.xx  | 4 OCPU / 24GB   | 2026-03-20 | AD-1
+
+--- ALWAYS FREE COMPLIANCE SUMMARY ---
+Storage:   50GB / Limit 200GB   [OK]
+ARM OCPUs: 4 / Limit 4          [OK]
+ARM RAM:   24GB / Limit 24GB    [OK]</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Real-Time Dashboard (oci_dashboard.sh)</b>
+            <br>
+            <br> <b>oci_dashboard.sh</b> displays a panel updated every 15 seconds with the state of all instances,
+            color-coding states: green for RUNNING, yellow for transient states and red for STOPPED or TERMINATED.
+         <pre class="code-block">
+            <code>./oci_dashboard.sh</code>
+         </pre>
+         </p>
+
+         <p>
+            <b>Resource Teardown (oci_teardown.sh)</b>
+            <br>
+            <br> At the end of a session, <b>oci_teardown.sh</b> offers selective or bulk instance termination,
+            with explicit confirmation before any destructive operation. Boot volumes are automatically destroyed
+            along with instances, freeing storage.
+         <pre class="code-block">
+            <code>./oci_teardown.sh</code>
+         </pre>
+         <pre class="code-block">
+            <code>[1] Terminate specific instance
+[2] Terminate all instances + remove log
+[3] Exit without changes</code>
+         </pre>
+         </p>
+
+         <p>
+            The script monitors the instance state via API until TERMINATED status is confirmed, providing visual
+            feedback throughout the process.
+         </p>
+
+         <p>
+            <br>
+            <b>Repository</b>
+            <br><br>
+            OCI-SecOps is available at <a href="https://github.com/brennocm/oci-secops">https://github.com/brennocm/oci-secops</a>,
+            with installation documentation and prerequisites.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+</body>
+
+</html>
