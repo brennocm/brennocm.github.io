@@ -158,7 +158,7 @@ const dorkCategories = {
 // ============================================
 const i18n = {
     'pt-BR': {
-        home: 'Home',
+        home: 'Voltar',
         title: 'OSINT Dork Generator',
         subtitle: 'Gere queries avançadas do Google para descobrir informações expostas em domínios',
         targetLabel: 'Domínio ou Palavra-chave Alvo',
@@ -179,7 +179,7 @@ const i18n = {
         guideUseCase5: 'Encontrar painéis administrativos e páginas de login'
     },
     'en-US': {
-        home: 'Home',
+        home: 'Back',
         title: 'OSINT Dork Generator',
         subtitle: 'Generate advanced Google queries to discover exposed information on domains',
         targetLabel: 'Target Domain or Keyword',

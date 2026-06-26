@@ -345,7 +345,7 @@
         <div class="category" id="tools-category">
             <div class="category-header" onclick="toggleCategory('tools')">
                 <div class="category-title">
-                    <span>Ferramentas</span>
+                    <span>Ferramentas Online</span>
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <span class="category-count">5 itens</span>
                         <span class="category-arrow">▼</span>
@@ -411,6 +411,100 @@
             </div>
         </div>
 
+        <div class="category" id="projects-category">
+            <div class="category-header" onclick="toggleCategory('projects')">
+                <div class="category-title">
+                    <span>Projetos</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="category-count">8 itens</span>
+                        <span class="category-arrow">▼</span>
+                    </div>
+                </div>
+            </div>
+            <div class="category-content" id="projects-content">
+                <article class="post" onclick="openProject('https://github.com/brennocm/pwncortex', event)">
+                    <div>
+                        <h2>PwnCortex</h2>
+                        <p>Plataforma self-hosted de orquestração de pentest com inteligência artificial.</p>
+                        <div class="post-tags">
+                            <span class="tag">Pentest</span>
+                            <span class="tag">IA</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openProject('https://github.com/brennocm/aporte', event)">
+                    <div>
+                        <h2>Aporte</h2>
+                        <p>Plataforma open-source e self-hosted para rebalanceamento de carteira e backtesting.</p>
+                        <div class="post-tags">
+                            <span class="tag">Investimentos</span>
+                            <span class="tag">Self-hosted</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openProject('https://github.com/brennocm/wg-auto', event)">
+                    <div>
+                        <h2>WG-Auto</h2>
+                        <p>Automatiza a instalação e configuração da VPN WireGuard em servidores e clientes.</p>
+                        <div class="post-tags">
+                            <span class="tag">VPN</span>
+                            <span class="tag">Automação</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openProject('https://github.com/brennocm/oci-secops', event)">
+                    <div>
+                        <h2>OCI-SecOps</h2>
+                        <p>Provisionamento e hardening automatizados de instâncias Oracle Cloud Always Free para labs ofensivos e DevSecOps.</p>
+                        <div class="post-tags">
+                            <span class="tag">Cloud</span>
+                            <span class="tag">DevSecOps</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openProject('https://github.com/no-distraction/no-distraction.github.io', event)">
+                    <div>
+                        <h2>No-Distraction</h2>
+                        <p>App de produtividade para manter o foco e evitar telemetria.</p>
+                        <div class="post-tags">
+                            <span class="tag">Produtividade</span>
+                            <span class="tag">Foco</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openProject('https://github.com/brennocm/keyguardian', event)">
+                    <div>
+                        <h2>KeyGuardian</h2>
+                        <p>Cofre de senhas digital em Flutter e Firebase, com criptografia e chave mestra.</p>
+                        <div class="post-tags">
+                            <span class="tag">Senhas</span>
+                            <span class="tag">Criptografia</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openProject('https://github.com/brennocm/fast-enum', event)">
+                    <div>
+                        <h2>Fast-Enum</h2>
+                        <p>Automatiza a enumeração de subdomínios e web crawling para pentest e bug bounty.</p>
+                        <div class="post-tags">
+                            <span class="tag">Recon</span>
+                            <span class="tag">Automação</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="post" onclick="openProject('https://github.com/brennocm/basic-enum-tools', event)">
+                    <div>
+                        <h2>Basic-Enum-Tools</h2>
+                        <p>Automatiza a instalação e configuração de ferramentas populares de enumeração e reconhecimento.</p>
+                        <div class="post-tags">
+                            <span class="tag">Recon</span>
+                            <span class="tag">Automação</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
     </main>
 
     <footer>
@@ -440,6 +534,14 @@
                 event.stopPropagation();
             }
             window.location.href = url;
+        }
+
+        // Open external project in a new tab
+        function openProject(url, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            window.open(url, '_blank', 'noopener');
         }
 
         // Scroll to posts section

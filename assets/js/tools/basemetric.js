@@ -38,7 +38,7 @@ const CVSS31 = {
 // ============================================
 const i18n = {
     'pt-BR': {
-        home: 'Home',
+        home: 'Voltar',
         title: 'Calculadora CVSS',
         subtitle: 'Calcule scores de vulnerabilidades usando CVSS v3.1 com interface interativa',
         step_attack: 'Vetor de Ataque',
@@ -80,7 +80,7 @@ const i18n = {
         guide_errors_title: '5. Erros Comuns'
     },
     'en-US': {
-        home: 'Home',
+        home: 'Back',
         title: 'CVSS Calculator',
         subtitle: 'Calculate vulnerability scores using CVSS v3.1 with interactive interface',
         step_attack: 'Attack Vector',

@@ -7,7 +7,7 @@
 // Translations
 const translations = {
     'pt-BR': {
-        home: 'Home',
+        home: 'Voltar',
         title: 'SafeCheck',
         subtitle: 'Analise a força e entropia da sua senha com feedback técnico detalhado',
         privacyBadge: 'Sua senha nunca sai do seu navegador. O processamento é 100% local.',
@@ -52,7 +52,7 @@ const translations = {
         ]
     },
     'en-US': {
-        home: 'Home',
+        home: 'Back',
         title: 'SafeCheck',
         subtitle: 'Analyze your password strength and entropy with detailed technical feedback',
         privacyBadge: 'Your password never leaves your browser. Processing is 100% local.',
