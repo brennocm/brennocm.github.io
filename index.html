@@ -7,509 +7,497 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="icon" type="image/x-icon" href="/img/home/icon.png" />
+    <link rel="icon" type="image/png" href="/img/home/favicon.png" />
     <title>home.</title>
 </head>
 
-<body>
-    <header class="hero-section">
-        <!-- About Me Link -->
-        <a href="about-me.html" class="about-me-link">/sobre-mim</a>
-        <!-- Language Toggle -->
-        <div class="language-toggle">
-            <a href="index.html" class="active" title="Português (Brasil)">
-                <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Green background -->
-                    <rect width="72" height="48" fill="#009c3b" />
-                    <!-- Yellow diamond -->
-                    <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
-                    <!-- Blue circle -->
-                    <circle cx="36" cy="24" r="12" fill="#002776" />
-                    <!-- White curved band -->
-                    <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
-                    <!-- Stars (simplified representation) -->
-                    <circle cx="30" cy="28" r="0.6" fill="#fff" />
-                    <circle cx="33" cy="30" r="0.5" fill="#fff" />
-                    <circle cx="36" cy="31" r="0.6" fill="#fff" />
-                    <circle cx="39" cy="30" r="0.5" fill="#fff" />
-                    <circle cx="42" cy="28" r="0.6" fill="#fff" />
-                    <circle cx="31" cy="26" r="0.4" fill="#fff" />
-                    <circle cx="35" cy="27" r="0.4" fill="#fff" />
-                    <circle cx="37" cy="27" r="0.4" fill="#fff" />
-                    <circle cx="41" cy="26" r="0.4" fill="#fff" />
-                    <circle cx="34" cy="18" r="0.5" fill="#fff" />
-                </svg>
-            </a>
-            <a href="index-en.html" title="English (US)">
-                <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="36" height="24" fill="#fff" />
-                    <rect width="36" height="1.85" y="0" fill="#b22234" />
-                    <rect width="36" height="1.85" y="3.7" fill="#b22234" />
-                    <rect width="36" height="1.85" y="7.4" fill="#b22234" />
-                    <rect width="36" height="1.85" y="11.1" fill="#b22234" />
-                    <rect width="36" height="1.85" y="14.8" fill="#b22234" />
-                    <rect width="36" height="1.85" y="18.5" fill="#b22234" />
-                    <rect width="36" height="1.85" y="22.2" fill="#b22234" />
-                    <rect width="14.4" height="12.95" fill="#3c3b6e" />
-                </svg>
-            </a>
-        </div>
-        <div class="hero-container">
-            <div class="hero-text">
-                <h1>Brenno M.</h1>
-                <p class="hero-description">
-                    Sou especialista em segurança ofensiva, focado em pentest e operações de Red Team (emulação e
-                    simulação de adversário).
-                </p>
-            </div>
-
-            <div class="hero-image">
-                <a href="https://www.youtube.com/watch?v=OtUgra5BtwI">
-                    <img src="img/home/new-logo.png" alt="Brenno M. Avatar">
+<body class="home">
+    <div class="home-shell">
+        <!-- Top bar: about me + language flags, centered -->
+        <nav class="top-bar">
+            <a href="about-me.html" class="about-me-link">/sobre-mim</a>
+            <div class="language-toggle">
+                <a href="index.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Green background -->
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <!-- Yellow diamond -->
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <!-- Blue circle -->
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <!-- White curved band -->
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <!-- Stars (simplified representation) -->
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="31" cy="26" r="0.4" fill="#fff" />
+                        <circle cx="35" cy="27" r="0.4" fill="#fff" />
+                        <circle cx="37" cy="27" r="0.4" fill="#fff" />
+                        <circle cx="41" cy="26" r="0.4" fill="#fff" />
+                        <circle cx="34" cy="18" r="0.5" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="index-en.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
                 </a>
             </div>
-        </div>
-        <div class="icons">
-            <a href="https://www.linkedin.com/in/brennocm/" title="LinkedIn">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
-                </svg>
-            </a>
-            <a href="http://github.com/brennocm" title="GitHub">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
-                </svg>
-            </a>
-            <a href="https://app.hackthebox.com/public/users/1394828" title="HackTheBox" class="htb-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.8 3.4L12 11l-6.8-3.42L12 4.18zM4 8.62l7 3.5v7.78l-7-3.5V8.62zm9 11.28v-7.78l7-3.5v7.78l-7 3.5z" />
-                </svg>
-            </a>
-            <a href="https://tryhackme.com/p/brennocm" title="TryHackMe" class="thm-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Cloud shape -->
-                    <path
-                        d="M38.5 18.5c0-0.5-0.1-1-0.2-1.5C37.5 11.5 32.5 7 26.5 7c-4.5 0-8.5 2.5-10.5 6.2C15 13.1 14 13 13 13c-5.5 0-10 4.5-10 10s4.5 10 10 10h2"
-                        stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round" />
-                    <path d="M42 23c0-3.3-2.7-6-6-6h-1" stroke="currentColor" stroke-width="3.5" fill="none"
-                        stroke-linecap="round" />
-                    <!-- Binary rain numbers -->
-                    <text x="20" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
-                        fill="currentColor">10</text>
-                    <text x="32" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
-                        fill="currentColor">10</text>
-                    <text x="22" y="39" font-family="Arial, sans-serif" font-size="7" font-weight="bold"
-                        fill="currentColor">1110</text>
-                    <text x="18" y="45" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
-                        fill="currentColor">01</text>
-                    <text x="27" y="46" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
-                        fill="currentColor">01</text>
-                    <text x="36" y="44" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
-                        fill="currentColor">10</text>
-                </svg>
-            </a>
+        </nav>
 
-        </div>
-        <div class="scroll-indicator" onclick="scrollToPosts()">
-            <span>Ver posts</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
-        </div>
-    </header>
+        <div class="split-layout">
+            <!-- Left side: identity -->
+            <header class="hero-section">
+                <h1><a href="https://youtu.be/OtUgra5BtwI?si=fY86QZqPCy_Cxb6B&amp;t=0" class="hero-name" target="_blank" rel="noopener">Brenno M.</a></h1>
+                <p class="hero-description">
+                    Sou apaixonado por segurança ofensiva, focado em pentest e operações de Red Team (emulação e
+                    simulação de adversário).
+                </p>
+                <div class="icons">
+                    <a href="https://www.linkedin.com/in/brennocm/" title="LinkedIn">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                        </svg>
+                    </a>
+                    <a href="http://github.com/brennocm" title="GitHub">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
+                        </svg>
+                    </a>
+                    <a href="https://app.hackthebox.com/public/users/1394828" title="HackTheBox" class="htb-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.8 3.4L12 11l-6.8-3.42L12 4.18zM4 8.62l7 3.5v7.78l-7-3.5V8.62zm9 11.28v-7.78l7-3.5v7.78l-7 3.5z" />
+                        </svg>
+                    </a>
+                    <a href="https://tryhackme.com/p/brennocm" title="TryHackMe" class="thm-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Cloud shape -->
+                            <path
+                                d="M38.5 18.5c0-0.5-0.1-1-0.2-1.5C37.5 11.5 32.5 7 26.5 7c-4.5 0-8.5 2.5-10.5 6.2C15 13.1 14 13 13 13c-5.5 0-10 4.5-10 10s4.5 10 10 10h2"
+                                stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                            <path d="M42 23c0-3.3-2.7-6-6-6h-1" stroke="currentColor" stroke-width="3.5" fill="none"
+                                stroke-linecap="round" />
+                            <!-- Binary rain numbers -->
+                            <text x="20" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                                fill="currentColor">10</text>
+                            <text x="32" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                                fill="currentColor">10</text>
+                            <text x="22" y="39" font-family="Arial, sans-serif" font-size="7" font-weight="bold"
+                                fill="currentColor">1110</text>
+                            <text x="18" y="45" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
+                                fill="currentColor">01</text>
+                            <text x="27" y="46" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
+                                fill="currentColor">01</text>
+                            <text x="36" y="44" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
+                                fill="currentColor">10</text>
+                        </svg>
+                    </a>
+                </div>
 
-    <div class="container-title" id="posts-section">
-        <div class="section-title">
+                <div class="scroll-indicator" onclick="scrollToPosts()">
+                    <span>Ver posts</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </header>
 
+            <!-- Right side: posts -->
+            <main class="main-content" id="posts-section">
+                <div class="category" id="technical-category">
+                    <div class="category-header" onclick="toggleCategory('technical')">
+                        <div class="category-title">
+                            <span>Tutoriais Técnicos</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="category-count">5 itens</span>
+                                <span class="category-arrow">▼</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-content" id="technical-content">
+                        <article class="post" onclick="openArticle('articles/pt-br/oci-secops.html', event)">
+                            <div>
+                                <h2>OCI-SecOps: Infraestrutura de Segurança Automatizada</h2>
+                                <p>Toolkit de orquestração de infraestrutura para pentest e CI/CD de segurança no OCI Always Free.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 20 mar 2026</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Pentest</span>
+                                    <span class="tag">Cloud</span>
+                                    <span class="tag">DevSecOps</span>
+                                    <span class="tag">Tools</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/own-vpn.html', event)">
+                            <div>
+                                <h2>Criação de VPN Própria</h2>
+                                <p>Criação e configuração de uma VPN confeccionada a partir de um servidor próprio.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 10 jan 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">OPSEC</span>
+                                    <span class="tag">Privacy</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/proxychains-use.html', event)">
+                            <div>
+                                <h2>Utilização do Proxychains</h2>
+                                <p>Ferramenta que redireciona o tráfego de programas para um ou mais proxies.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 30 dez 2024</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Privacy</span>
+                                    <span class="tag">OPSEC</span>
+                                    <span class="tag">Tools</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/opsec-environment.html', event)">
+                            <div>
+                                <h2>Configuração de Ambiente OPSEC</h2>
+                                <p>Configuração de um ambiente Windows voltado à privacidade por meio do Whonix.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 18 dez 2024</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">OPSEC</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/creating-tor-website.html', event)">
+                            <div>
+                                <h2>Criação de Sites na Rede Tor</h2>
+                                <p>Configuração de um website estático na rede Tor.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 05 dez 2024</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Tor</span>
+                                    <span class="tag">Hidden Services</span>
+                                    <span class="tag">Deep Web</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="category" id="reviews-category">
+                    <div class="category-header" onclick="toggleCategory('reviews')">
+                        <div class="category-title">
+                            <span>Reviews de Certificações</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="category-count">5 itens</span>
+                                <span class="category-arrow">▼</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-content" id="reviews-content">
+                        <article class="post" onclick="openArticle('articles/pt-br/ejpt-review.html', event)">
+                            <div>
+                                <h2>Junior Penetration Tester (eJPT) Review</h2>
+                                <p>Referência de estudo para a eJPT, da INE Security.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 29 mar 2026</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Pentest</span>
+                                    <span class="tag">Hacking</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/cbp-review.html', event)">
+                            <div>
+                                <h2>Certified Blockchain Practitioner (CBP) Review</h2>
+                                <p>Referência de estudo para a CBP, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 11 abr 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Blockchain</span>
+                                    <span class="tag">Web3</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/ccsp-aws-review.html', event)">
+                            <div>
+                                <h2>Certified Cloud Security Practitioner – AWS Review</h2>
+                                <p>Referência de estudo para a CCSP-AWS, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 07 abr 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">AWS</span>
+                                    <span class="tag">Cloud Security</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/cnsp-review.html', event)">
+                            <div>
+                                <h2>Certified Network Security Practitioner Review</h2>
+                                <p>Referência de estudo para a CNSP, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 31 mar 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Network Security</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/cap-review.html', event)">
+                            <div>
+                                <h2>Certified AppSec Practitioner (CAP) Review</h2>
+                                <p>Referência de estudo para a CAP, da The SecOps Group.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 21 jan 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Web Security</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="category" id="career-category">
+                    <div class="category-header" onclick="toggleCategory('career')">
+                        <div class="category-title">
+                            <span>Dicas de Carreira</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="category-count">3 itens</span>
+                                <span class="category-arrow">▼</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-content" id="career-content">
+                        <article class="post" onclick="openArticle('articles/pt-br/tips/suggested-courses.html', event)">
+                            <div>
+                                <h2>Sugestões de Conteúdo</h2>
+                                <p>Curadoria de cursos, certificações e materiais de estudo de instituições reconhecidas.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 14 out 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Estudos</span>
+                                    <span class="tag">Carreira</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/tips/privacy.html', event)">
+                            <div>
+                                <h2>Guia de Privacidade</h2>
+                                <p>Ferramentas e práticas para proteger sua privacidade online e adotar um estilo de vida
+                                    digital seguro.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 20 jan 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Privacy</span>
+                                    <span class="tag">Carreira</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('articles/pt-br/tips/hacking.html', event)">
+                            <div>
+                                <h2>Roadmap Hacking</h2>
+                                <p>Guia completo para construir fundamentos sólidos e se especializar em segurança ofensiva.</p>
+                                <div class="meta">
+                                    <span class="meta-date">📅 10 jan 2025</span>
+                                </div>
+                                <div class="post-tags">
+                                    <span class="tag">Hacking</span>
+                                    <span class="tag">Roadmap</span>
+                                    <span class="tag">Carreira</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="category" id="tools-category">
+                    <div class="category-header" onclick="toggleCategory('tools')">
+                        <div class="category-title">
+                            <span>Ferramentas Online</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="category-count">5 itens</span>
+                                <span class="category-arrow">▼</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-content" id="tools-content">
+                        <article class="post" onclick="openArticle('tools/intelquery.html', event)">
+                            <div>
+                                <h2>IntelQuery: Gerador de Dorks</h2>
+                                <p>Gerador de Google Dorks para reconhecimento e pesquisa OSINT.</p>
+                                <div class="post-tags">
+                                    <span class="tag">OSINT</span>
+                                    <span class="tag">Recon</span>
+                                    <span class="tag">Google Dorks</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('tools/basemetric.html', event)">
+                            <div>
+                                <h2>BaseMetric: Calculadora CVSS</h2>
+                                <p>Calculadora interativa de CVSS v3.1.</p>
+                                <div class="post-tags">
+                                    <span class="tag">CVSS</span>
+                                    <span class="tag">Vulnerabilidades</span>
+                                    <span class="tag">Pentest</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('tools/safecheck.html', event)">
+                            <div>
+                                <h2>SafeCheck: Analisador de Senhas</h2>
+                                <p>Analise força, entropia e tempo de quebra de senhas com feedback educativo.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Segurança</span>
+                                    <span class="tag">Senhas</span>
+                                    <span class="tag">Entropia</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('tools/jwt-sentinel.html', event)">
+                            <div>
+                                <h2>JWT Sentinel: Decodificador JWT</h2>
+                                <p>Decodifique e analise tokens JWT com segurança.</p>
+                                <div class="post-tags">
+                                    <span class="tag">JWT</span>
+                                    <span class="tag">Tokens</span>
+                                    <span class="tag">Segurança</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openArticle('tools/picinfo.html', event)">
+                            <div>
+                                <h2>PicInfo: Extrator de Metadados</h2>
+                                <p>Extraia e analise metadados EXIF de imagens.</p>
+                                <div class="post-tags">
+                                    <span class="tag">EXIF</span>
+                                    <span class="tag">Metadados</span>
+                                    <span class="tag">Privacidade</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="category" id="projects-category">
+                    <div class="category-header" onclick="toggleCategory('projects')">
+                        <div class="category-title">
+                            <span>Projetos</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="category-count">8 itens</span>
+                                <span class="category-arrow">▼</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-content" id="projects-content">
+                        <article class="post" onclick="openProject('https://github.com/brennocm/pwncortex', event)">
+                            <div>
+                                <h2>PwnCortex</h2>
+                                <p>Plataforma self-hosted de orquestração de pentest com inteligência artificial.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Pentest</span>
+                                    <span class="tag">IA</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openProject('https://github.com/brennocm/aporte', event)">
+                            <div>
+                                <h2>Aporte</h2>
+                                <p>Plataforma open-source e self-hosted para rebalanceamento de carteira e backtesting.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Investimentos</span>
+                                    <span class="tag">Self-hosted</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openProject('https://github.com/brennocm/wg-auto', event)">
+                            <div>
+                                <h2>WG-Auto</h2>
+                                <p>Automatiza a instalação e configuração da VPN WireGuard em servidores e clientes.</p>
+                                <div class="post-tags">
+                                    <span class="tag">VPN</span>
+                                    <span class="tag">Automação</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openProject('https://github.com/brennocm/oci-secops', event)">
+                            <div>
+                                <h2>OCI-SecOps</h2>
+                                <p>Provisionamento e hardening automatizados de instâncias Oracle Cloud Always Free para labs ofensivos e DevSecOps.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Cloud</span>
+                                    <span class="tag">DevSecOps</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openProject('https://github.com/no-distraction/no-distraction.github.io', event)">
+                            <div>
+                                <h2>No-Distraction</h2>
+                                <p>App de produtividade para manter o foco e evitar telemetria.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Produtividade</span>
+                                    <span class="tag">Foco</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openProject('https://github.com/brennocm/keyguardian', event)">
+                            <div>
+                                <h2>KeyGuardian</h2>
+                                <p>Cofre de senhas digital em Flutter e Firebase, com criptografia e chave mestra.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Senhas</span>
+                                    <span class="tag">Criptografia</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openProject('https://github.com/brennocm/fast-enum', event)">
+                            <div>
+                                <h2>Fast-Enum</h2>
+                                <p>Automatiza a enumeração de subdomínios e web crawling para pentest e bug bounty.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Recon</span>
+                                    <span class="tag">Automação</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="post" onclick="openProject('https://github.com/brennocm/basic-enum-tools', event)">
+                            <div>
+                                <h2>Basic-Enum-Tools</h2>
+                                <p>Automatiza a instalação e configuração de ferramentas populares de enumeração e reconhecimento.</p>
+                                <div class="post-tags">
+                                    <span class="tag">Recon</span>
+                                    <span class="tag">Automação</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+            </main>
         </div>
     </div>
-
-    <main class="main-content">
-        <div class="category" id="technical-category">
-            <div class="category-header" onclick="toggleCategory('technical')">
-                <div class="category-title">
-                    <span>Tutoriais Técnicos</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="category-count">5 itens</span>
-                        <span class="category-arrow">▼</span>
-                    </div>
-                </div>
-            </div>
-            <div class="category-content" id="technical-content">
-                <article class="post" onclick="openArticle('articles/pt-br/oci-secops.html', event)">
-                    <div>
-                        <h2>OCI-SecOps: Infraestrutura de Segurança Automatizada</h2>
-                        <p>Toolkit de orquestração de infraestrutura para pentest e CI/CD de segurança no OCI Always Free.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 20 mar 2026</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Pentest</span>
-                            <span class="tag">Cloud</span>
-                            <span class="tag">DevSecOps</span>
-                            <span class="tag">Tools</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/own-vpn.html', event)">
-                    <div>
-                        <h2>Criação de VPN Própria</h2>
-                        <p>Criação e configuração de uma VPN confeccionada a partir de um servidor próprio.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 10 jan 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">OPSEC</span>
-                            <span class="tag">Privacy</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/proxychains-use.html', event)">
-                    <div>
-                        <h2>Utilização do Proxychains</h2>
-                        <p>Ferramenta que redireciona o tráfego de programas para um ou mais proxies.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 30 dez 2024</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Privacy</span>
-                            <span class="tag">OPSEC</span>
-                            <span class="tag">Tools</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/opsec-environment.html', event)">
-                    <div>
-                        <h2>Configuração de Ambiente OPSEC</h2>
-                        <p>Configuração de um ambiente Windows voltado à privacidade por meio do Whonix.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 18 dez 2024</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">OPSEC</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/creating-tor-website.html', event)">
-                    <div>
-                        <h2>Criação de Sites na Rede Tor</h2>
-                        <p>Configuração de um website estático na rede Tor.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 05 dez 2024</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Tor</span>
-                            <span class="tag">Hidden Services</span>
-                            <span class="tag">Deep Web</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-        <div class="category" id="reviews-category">
-            <div class="category-header" onclick="toggleCategory('reviews')">
-                <div class="category-title">
-                    <span>Reviews de Certificações</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="category-count">5 itens</span>
-                        <span class="category-arrow">▼</span>
-                    </div>
-                </div>
-            </div>
-            <div class="category-content" id="reviews-content">
-                <article class="post" onclick="openArticle('articles/pt-br/ejpt-review.html', event)">
-                    <div>
-                        <h2>Junior Penetration Tester (eJPT) Review</h2>
-                        <p>Referência de estudo para a eJPT, da INE Security.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 29 mar 2026</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Pentest</span>
-                            <span class="tag">Hacking</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/cbp-review.html', event)">
-                    <div>
-                        <h2>Certified Blockchain Practitioner (CBP) Review</h2>
-                        <p>Referência de estudo para a CBP, da The SecOps Group.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 11 abr 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Blockchain</span>
-                            <span class="tag">Web3</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/ccsp-aws-review.html', event)">
-                    <div>
-                        <h2>Certified Cloud Security Practitioner – AWS Review</h2>
-                        <p>Referência de estudo para a CCSP-AWS, da The SecOps Group.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 07 abr 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">AWS</span>
-                            <span class="tag">Cloud Security</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/cnsp-review.html', event)">
-                    <div>
-                        <h2>Certified Network Security Practitioner Review</h2>
-                        <p>Referência de estudo para a CNSP, da The SecOps Group.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 31 mar 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Network Security</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/cap-review.html', event)">
-                    <div>
-                        <h2>Certified AppSec Practitioner (CAP) Review</h2>
-                        <p>Referência de estudo para a CAP, da The SecOps Group.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 21 jan 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Web Security</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-
-        <div class="category" id="career-category">
-            <div class="category-header" onclick="toggleCategory('career')">
-                <div class="category-title">
-                    <span>Dicas de Carreira</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="category-count">3 itens</span>
-                        <span class="category-arrow">▼</span>
-                    </div>
-                </div>
-            </div>
-            <div class="category-content" id="career-content">
-                <article class="post" onclick="openArticle('articles/pt-br/tips/suggested-courses.html', event)">
-                    <div>
-                        <h2>Sugestões de Conteúdo</h2>
-                        <p>Curadoria de cursos, certificações e materiais de estudo de instituições reconhecidas.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 14 out 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Estudos</span>
-                            <span class="tag">Carreira</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/tips/privacy.html', event)">
-                    <div>
-                        <h2>Guia de Privacidade</h2>
-                        <p>Ferramentas e práticas para proteger sua privacidade online e adotar um estilo de vida
-                            digital seguro.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 20 jan 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Privacy</span>
-                            <span class="tag">Carreira</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('articles/pt-br/tips/hacking.html', event)">
-                    <div>
-                        <h2>Roadmap Hacking</h2>
-                        <p>Guia completo para construir fundamentos sólidos e se especializar em segurança ofensiva.</p>
-                        <div class="meta">
-                            <span class="meta-date">📅 10 jan 2025</span>
-                        </div>
-                        <div class="post-tags">
-                            <span class="tag">Hacking</span>
-                            <span class="tag">Roadmap</span>
-                            <span class="tag">Carreira</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-
-        <div class="category" id="tools-category">
-            <div class="category-header" onclick="toggleCategory('tools')">
-                <div class="category-title">
-                    <span>Ferramentas Online</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="category-count">5 itens</span>
-                        <span class="category-arrow">▼</span>
-                    </div>
-                </div>
-            </div>
-            <div class="category-content" id="tools-content">
-                <article class="post" onclick="openArticle('tools/intelquery.html', event)">
-                    <div>
-                        <h2>IntelQuery: Gerador de Dorks</h2>
-                        <p>Gerador de Google Dorks para reconhecimento e pesquisa OSINT.</p>
-                        <div class="post-tags">
-                            <span class="tag">OSINT</span>
-                            <span class="tag">Recon</span>
-                            <span class="tag">Google Dorks</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('tools/basemetric.html', event)">
-                    <div>
-                        <h2>BaseMetric: Calculadora CVSS</h2>
-                        <p>Calculadora interativa de CVSS v3.1.</p>
-                        <div class="post-tags">
-                            <span class="tag">CVSS</span>
-                            <span class="tag">Vulnerabilidades</span>
-                            <span class="tag">Pentest</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('tools/safecheck.html', event)">
-                    <div>
-                        <h2>SafeCheck: Analisador de Senhas</h2>
-                        <p>Analise força, entropia e tempo de quebra de senhas com feedback educativo.</p>
-                        <div class="post-tags">
-                            <span class="tag">Segurança</span>
-                            <span class="tag">Senhas</span>
-                            <span class="tag">Entropia</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('tools/jwt-sentinel.html', event)">
-                    <div>
-                        <h2>JWT Sentinel: Decodificador JWT</h2>
-                        <p>Decodifique e analise tokens JWT com segurança.</p>
-                        <div class="post-tags">
-                            <span class="tag">JWT</span>
-                            <span class="tag">Tokens</span>
-                            <span class="tag">Segurança</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openArticle('tools/picinfo.html', event)">
-                    <div>
-                        <h2>PicInfo: Extrator de Metadados</h2>
-                        <p>Extraia e analise metadados EXIF de imagens.</p>
-                        <div class="post-tags">
-                            <span class="tag">EXIF</span>
-                            <span class="tag">Metadados</span>
-                            <span class="tag">Privacidade</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-
-        <div class="category" id="projects-category">
-            <div class="category-header" onclick="toggleCategory('projects')">
-                <div class="category-title">
-                    <span>Projetos</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="category-count">8 itens</span>
-                        <span class="category-arrow">▼</span>
-                    </div>
-                </div>
-            </div>
-            <div class="category-content" id="projects-content">
-                <article class="post" onclick="openProject('https://github.com/brennocm/pwncortex', event)">
-                    <div>
-                        <h2>PwnCortex</h2>
-                        <p>Plataforma self-hosted de orquestração de pentest com inteligência artificial.</p>
-                        <div class="post-tags">
-                            <span class="tag">Pentest</span>
-                            <span class="tag">IA</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openProject('https://github.com/brennocm/aporte', event)">
-                    <div>
-                        <h2>Aporte</h2>
-                        <p>Plataforma open-source e self-hosted para rebalanceamento de carteira e backtesting.</p>
-                        <div class="post-tags">
-                            <span class="tag">Investimentos</span>
-                            <span class="tag">Self-hosted</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openProject('https://github.com/brennocm/wg-auto', event)">
-                    <div>
-                        <h2>WG-Auto</h2>
-                        <p>Automatiza a instalação e configuração da VPN WireGuard em servidores e clientes.</p>
-                        <div class="post-tags">
-                            <span class="tag">VPN</span>
-                            <span class="tag">Automação</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openProject('https://github.com/brennocm/oci-secops', event)">
-                    <div>
-                        <h2>OCI-SecOps</h2>
-                        <p>Provisionamento e hardening automatizados de instâncias Oracle Cloud Always Free para labs ofensivos e DevSecOps.</p>
-                        <div class="post-tags">
-                            <span class="tag">Cloud</span>
-                            <span class="tag">DevSecOps</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openProject('https://github.com/no-distraction/no-distraction.github.io', event)">
-                    <div>
-                        <h2>No-Distraction</h2>
-                        <p>App de produtividade para manter o foco e evitar telemetria.</p>
-                        <div class="post-tags">
-                            <span class="tag">Produtividade</span>
-                            <span class="tag">Foco</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openProject('https://github.com/brennocm/keyguardian', event)">
-                    <div>
-                        <h2>KeyGuardian</h2>
-                        <p>Cofre de senhas digital em Flutter e Firebase, com criptografia e chave mestra.</p>
-                        <div class="post-tags">
-                            <span class="tag">Senhas</span>
-                            <span class="tag">Criptografia</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openProject('https://github.com/brennocm/fast-enum', event)">
-                    <div>
-                        <h2>Fast-Enum</h2>
-                        <p>Automatiza a enumeração de subdomínios e web crawling para pentest e bug bounty.</p>
-                        <div class="post-tags">
-                            <span class="tag">Recon</span>
-                            <span class="tag">Automação</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="post" onclick="openProject('https://github.com/brennocm/basic-enum-tools', event)">
-                    <div>
-                        <h2>Basic-Enum-Tools</h2>
-                        <p>Automatiza a instalação e configuração de ferramentas populares de enumeração e reconhecimento.</p>
-                        <div class="post-tags">
-                            <span class="tag">Recon</span>
-                            <span class="tag">Automação</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-
-    </main>
-
-    <footer>
-        <p>&copy; 20∞</p>
-    </footer>
 
     <script>
         // Toggle category expansion
