@@ -218,17 +218,13 @@
             <br>
             <br> O OCI CLI é a interface de linha de comando oficial da Oracle para interagir com a API do OCI. Para
             instalá-lo em sistemas baseados em Linux/macOS, execute o instalador oficial:
-         <pre class="code-block">
-            <code>bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)"</code>
-         </pre>
+         <pre class="code-block"><code>bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)"</code></pre>
          </p>
 
          <p>
             Após a instalação, configure o CLI com suas credenciais OCI. O comando abaixo inicia um assistente
             interativo que solicita o Tenancy OCID, User OCID, região e gera automaticamente um par de chaves API.
-         <pre class="code-block">
-            <code>oci setup config</code>
-         </pre>
+         <pre class="code-block"><code>oci setup config</code></pre>
          </p>
 
          <p>
@@ -242,51 +238,37 @@
             <b>Meu Perfil</b>. Na seção <b>Recursos</b> do menu lateral, clique em <b>Chaves de API</b> e, em
             seguida, em <b>Adicionar chave de API</b>. Selecione a opção <b>Colar chave pública</b> e cole o
             conteúdo do arquivo <b>oci_api_key_public.pem</b>.
-         <pre class="code-block">
-            <code>cat ~/.oci/oci_api_key_public.pem</code>
-         </pre>
+         <pre class="code-block"><code>cat ~/.oci/oci_api_key_public.pem</code></pre>
          </p>
 
          <p>
             Após adicionar a chave, o Console exibirá um trecho de configuração. Verifique se ele corresponde ao
             conteúdo do seu arquivo <b>~/.oci/config</b>. Para validar que o CLI está autenticado corretamente:
-         <pre class="code-block">
-            <code>oci iam region list</code>
-         </pre>
+         <pre class="code-block"><code>oci iam region list</code></pre>
          </p>
 
          <p>
             <b>Pré-requisitos</b>
             <br>
             <br> Com o OCI CLI configurado, clone o repositório e garanta que as demais dependências estão presentes.
-         <pre class="code-block">
-            <code>git clone https://github.com/brennocm/oci-secops && cd oci-secops</code>
-         </pre>
-         <pre class="code-block">
-            <code># Dependências necessárias: oci-cli, jq, ssh, scp
-oci --version && jq --version</code>
-         </pre>
+         <pre class="code-block"><code>git clone https://github.com/brennocm/oci-secops && cd oci-secops</code></pre>
+         <pre class="code-block"><code># Dependências necessárias: oci-cli, jq, ssh, scp
+oci --version && jq --version</code></pre>
          </p>
 
          <p>
             Em seguida, gere o par de chaves SSH que será utilizado pelas instâncias.
-         <pre class="code-block">
-            <code>ssh-keygen -t ed25519 -f ~/.ssh/oci_vps_key -N ""</code>
-         </pre>
+         <pre class="code-block"><code>ssh-keygen -t ed25519 -f ~/.ssh/oci_vps_key -N ""</code></pre>
          </p>
 
          <p>
             Configure o arquivo <b>.env</b> a partir do exemplo fornecido, preenchendo as variáveis de ambiente
             necessárias.
-         <pre class="code-block">
-            <code>cp .env.example .env && vim .env</code>
-         </pre>
-         <pre class="code-block">
-            <code>OCI_SSH_KEY_PATH=~/.ssh/oci_vps_key
+         <pre class="code-block"><code>cp .env.example .env && vim .env</code></pre>
+         <pre class="code-block"><code>OCI_SSH_KEY_PATH=~/.ssh/oci_vps_key
 VNC_PASSWORD=sua_senha_vnc
 SONAR_DB_PASSWORD=sua_senha_sonar
-NVD_API_KEY=sua_chave_nvd  # Opcional, para Dependency-Check</code>
-         </pre>
+NVD_API_KEY=sua_chave_nvd  # Opcional, para Dependency-Check</code></pre>
          </p>
 
          <p>
@@ -295,46 +277,38 @@ NVD_API_KEY=sua_chave_nvd  # Opcional, para Dependency-Check</code>
             <br> O script <b>oci_provision.sh</b> é o ponto central da toolkit. Ao ser executado, ele consulta
             automaticamente a API do OCI para descobrir o Tenancy ID, Availability Domain, Subnet e a imagem Ubuntu
             24.04 mais recente, eliminando a necessidade de configuração manual desses parâmetros.
-         <pre class="code-block">
-            <code>chmod +x oci_provision.sh && ./oci_provision.sh</code>
-         </pre>
+         <pre class="code-block"><code>chmod +x oci_provision.sh && ./oci_provision.sh</code></pre>
          </p>
 
          <p>
             Ao executar, o script apresenta cinco topologias de implantação para escolha:
-         <pre class="code-block">
-            <code>[1] Single Powerhouse  — 4 OCPU / 24GB RAM  (automação pesada, brute force)
+         <pre class="code-block"><code>[1] Single Powerhouse  — 4 OCPU / 24GB RAM  (automação pesada, brute force)
 [2] Balanced Duo       — 2x 2 OCPU / 12GB  (scanning paralelo)
 [3] Recon Cluster      — 4x 1 OCPU / 6GB   (rotação de IPs, exploração distribuída)
 [4] Quick Single       — 1 OCPU / 6GB      (testes rápidos)
-[5] CI Security Stack  — 4 OCPU / 24GB     (SonarQube, OWASP ZAP, Dependency-Check)</code>
-         </pre>
+[5] CI Security Stack  — 4 OCPU / 24GB     (SonarQube, OWASP ZAP, Dependency-Check)</code></pre>
          </p>
 
          <p>
             Antes de provisionar, o script valida automaticamente as cotas do Always Free, impedindo que o
             provisionamento ultrapasse os limites gratuitos de OCPUs, RAM e armazenamento.
-         <pre class="code-block">
-            <code>[*] Verificando conformidade com Always Free...
+         <pre class="code-block"><code>[*] Verificando conformidade com Always Free...
     Armazenamento: 100GB / Limite 200GB  [OK]
     ARM OCPUs: 0 / Limite 4             [OK]
-    ARM RAM: 0GB / Limite 24GB          [OK]</code>
-         </pre>
+    ARM RAM: 0GB / Limite 24GB          [OK]</code></pre>
          </p>
 
          <p>
             Após a validação, a instância é criada com o script de hardening injetado via cloud-init. O
             <i>oci_provision.sh</i> aguarda o boot, conecta via SSH e transmite em tempo real os logs do processo de
             hardening.
-         <pre class="code-block">
-            <code>[*] Aguardando disponibilidade SSH...
+         <pre class="code-block"><code>[*] Aguardando disponibilidade SSH...
 [*] Transmitindo logs de hardening via cloud-init:
     [cloud-init] Atualizando sistema...
     [cloud-init] Aplicando configurações sysctl...
     [cloud-init] Configurando UFW e Fail2Ban...
     [cloud-init] Hardening concluído.
-[+] Instância pronta: ARM-Monster | IP: 152.xx.xx.xx</code>
-         </pre>
+[+] Instância pronta: ARM-Monster | IP: 152.xx.xx.xx</code></pre>
          </p>
 
          <p>
@@ -343,8 +317,7 @@ NVD_API_KEY=sua_chave_nvd  # Opcional, para Dependency-Check</code>
             <br> O <b>harden.sh</b> é injetado via cloud-init nas topologias 1 a 4. Ele aplica hardening em múltiplas
             camadas sem comprometer a compatibilidade com ferramentas ofensivas. As principais configurações de kernel
             aplicadas incluem:
-         <pre class="code-block">
-            <code># Proteções de rede
+         <pre class="code-block"><code># Proteções de rede
 net.ipv4.conf.all.accept_redirects = 0   # Bloqueia ICMP redirects
 net.ipv4.conf.all.rp_filter = 1          # Previne IP spoofing
 net.ipv4.tcp_syncookies = 1              # Mitiga SYN flood
@@ -355,8 +328,7 @@ kernel.kptr_restrict = 2                 # Oculta ponteiros de kernel
 
 # Tuning para pentest de alta performance
 fs.file-max = 2097152                    # Limite de file descriptors
-net.ipv4.ip_local_port_range = 1024 65535</code>
-         </pre>
+net.ipv4.ip_local_port_range = 1024 65535</code></pre>
          </p>
 
          <p>
@@ -371,9 +343,7 @@ net.ipv4.ip_local_port_range = 1024 65535</code>
             <br> O <b>harden_ci.sh</b> é utilizado na topologia 5. Além das medidas de hardening padrão, ele instala o
             Docker Engine e aplica configurações específicas para o SonarQube, que internamente utiliza Elasticsearch e
             requer ajuste de memória virtual do kernel.
-         <pre class="code-block">
-            <code>vm.max_map_count = 524288  # Requisito do Elasticsearch (SonarQube)</code>
-         </pre>
+         <pre class="code-block"><code>vm.max_map_count = 524288  # Requisito do Elasticsearch (SonarQube)</code></pre>
          </p>
 
          <p>
@@ -381,12 +351,10 @@ net.ipv4.ip_local_port_range = 1024 65535</code>
             <br>
             <br> Após o hardening, o <b>pentest_arsenal.sh</b> é transferido via SCP e executado automaticamente. Ele
             suporta perfis de instalação modulares para otimizar o tempo de deploy.
-         <pre class="code-block">
-            <code>./pentest_arsenal.sh --full   # Arsenal completo (web + infra + VNC)
+         <pre class="code-block"><code>./pentest_arsenal.sh --full   # Arsenal completo (web + infra + VNC)
 ./pentest_arsenal.sh --web    # Apenas ferramentas web
 ./pentest_arsenal.sh --infra  # Apenas ferramentas de infraestrutura
-./pentest_arsenal.sh --vnc    # Adiciona XFCE + TigerVNC</code>
-         </pre>
+./pentest_arsenal.sh --vnc    # Adiciona XFCE + TigerVNC</code></pre>
          </p>
 
          <p>
@@ -409,22 +377,16 @@ net.ipv4.ip_local_port_range = 1024 65535</code>
             <br><br>
             <b>SonarQube Community</b> (SAST): análise estática de código com banco PostgreSQL 16. Acessível apenas via
             túnel SSH na porta 9000, para não expor a interface publicamente.
-         <pre class="code-block">
-            <code># Acesso ao SonarQube via túnel SSH
-ssh -N -L 9000:localhost:9000 -i ~/.ssh/oci_vps_key ubuntu@&lt;IP_PUBLICO&gt;</code>
-         </pre>
-         <pre class="code-block">
-            <code># Então, localmente:
-# http://localhost:9000  (credenciais padrão: admin/admin)</code>
-         </pre>
+         <pre class="code-block"><code># Acesso ao SonarQube via túnel SSH
+ssh -N -L 9000:localhost:9000 -i ~/.ssh/oci_vps_key ubuntu@&lt;IP_PUBLICO&gt;</code></pre>
+         <pre class="code-block"><code># Então, localmente:
+# http://localhost:9000  (credenciais padrão: admin/admin)</code></pre>
          </p>
 
          <p>
             <b>OWASP ZAP</b> (DAST): testes dinâmicos de aplicação via Docker, com wrappers gerados automaticamente.
-         <pre class="code-block">
-            <code>zap-baseline https://alvo.exemplo.com    # Varredura baseline
-zap-api https://alvo.exemplo.com/openapi.json  # Varredura via spec OpenAPI</code>
-         </pre>
+         <pre class="code-block"><code>zap-baseline https://alvo.exemplo.com    # Varredura baseline
+zap-api https://alvo.exemplo.com/openapi.json  # Varredura via spec OpenAPI</code></pre>
          </p>
 
          <p>
@@ -432,9 +394,7 @@ zap-api https://alvo.exemplo.com/openapi.json  # Varredura via spec OpenAPI</cod
             em dependências. O script pré-popula o cache do NVD (~2 GB) durante a instalação para eliminar a espera
             inicial de ~1 hora na primeira execução. O script também instala suporte multiarch via QEMU, permitindo
             que imagens x86 rodem em hosts ARM64.
-         <pre class="code-block">
-            <code>dep-check --project "meu-projeto" --scan ./src --failOnCVSS 7</code>
-         </pre>
+         <pre class="code-block"><code>dep-check --project "meu-projeto" --scan ./src --failOnCVSS 7</code></pre>
          </p>
 
          <p>
@@ -442,18 +402,14 @@ zap-api https://alvo.exemplo.com/openapi.json  # Varredura via spec OpenAPI</cod
             <br>
             <br> O <b>oci_inventory.sh</b> realiza uma auditoria recursiva de todos os compartimentos do tenancy,
             listando instâncias, volumes, IPs e verificando a conformidade com os limites do Always Free.
-         <pre class="code-block">
-            <code>./oci_inventory.sh</code>
-         </pre>
-         <pre class="code-block">
-            <code>MÁQUINA      | STATUS  | IP PÚBLICO    | RECURSOS        | CRIAÇÃO    | AD
+         <pre class="code-block"><code>./oci_inventory.sh</code></pre>
+         <pre class="code-block"><code>MÁQUINA      | STATUS  | IP PÚBLICO    | RECURSOS        | CRIAÇÃO    | AD
 ARM-Monster  | RUNNING | 152.xx.xx.xx  | 4 OCPU / 24GB   | 2026-03-20 | AD-1
 
 --- RESUMO DE CONFORMIDADE ALWAYS FREE ---
 Armazenamento: 50GB / Limite 200GB   [OK]
 ARM OCPUs:     4 / Limite 4          [OK]
-ARM RAM:       24GB / Limite 24GB    [OK]</code>
-         </pre>
+ARM RAM:       24GB / Limite 24GB    [OK]</code></pre>
          </p>
 
          <p>
@@ -462,9 +418,7 @@ ARM RAM:       24GB / Limite 24GB    [OK]</code>
             <br> O <b>oci_dashboard.sh</b> exibe um painel atualizado a cada 15 segundos com o estado de todas as
             instâncias, codificando os estados por cor: verde para RUNNING, amarelo para estados transientes e
             vermelho para STOPPED ou TERMINATED.
-         <pre class="code-block">
-            <code>./oci_dashboard.sh</code>
-         </pre>
+         <pre class="code-block"><code>./oci_dashboard.sh</code></pre>
          </p>
 
          <p>
@@ -473,14 +427,10 @@ ARM RAM:       24GB / Limite 24GB    [OK]</code>
             <br> Ao final de uma sessão, o <b>oci_teardown.sh</b> oferece destruição seletiva ou em massa das instâncias,
             com confirmação explícita antes de qualquer operação destrutiva. Os volumes de boot são automaticamente
             destruídos junto às instâncias, liberando o armazenamento.
-         <pre class="code-block">
-            <code>./oci_teardown.sh</code>
-         </pre>
-         <pre class="code-block">
-            <code>[1] Destruir instância específica
+         <pre class="code-block"><code>./oci_teardown.sh</code></pre>
+         <pre class="code-block"><code>[1] Destruir instância específica
 [2] Destruir todas as instâncias + remover log
-[3] Sair sem alterações</code>
-         </pre>
+[3] Sair sem alterações</code></pre>
          </p>
 
          <p>
@@ -501,6 +451,7 @@ ARM RAM:       24GB / Limite 24GB    [OK]</code>
    <footer>
       <p>&copy; 20∞</p>
    </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
 </body>
 
 </html>

@@ -353,20 +353,55 @@ body.home {
     padding: 18px 20px;
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
     border: 1px solid #333;
     position: relative;
-    margin-bottom: 0;
+    transition:
+        background 320ms ease,
+        border-color 320ms ease,
+        box-shadow 320ms ease,
+        transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Régua que corre sob o header quando a seção abre */
+.category-header::after {
+    content: '';
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #9fef00, rgba(159, 239, 0, 0));
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition:
+        transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 220ms ease;
+}
+
+.category.expanded .category-header::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* a seção aberta é mais específica, então precisa aparecer aqui para o hover valer nela também */
+.category-header:hover,
+.category.expanded .category-header:hover {
+    background: linear-gradient(135deg, #2c2c2c, #1b1b1b);
+    border-color: rgba(159, 239, 0, 0.28);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.category-header:active {
+    transform: translateY(0) scale(0.995);
+    transition-duration: 90ms;
 }
 
 .category.expanded .category-header {
-    margin-bottom: 10px;
-}
-
-.category-header:hover {
-    background: linear-gradient(135deg, #333, #222);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #272727, #151515);
+    border-color: rgba(159, 239, 0, 0.22);
 }
 
 .category-title {
@@ -384,26 +419,117 @@ body.home {
     background: #333;
     padding: 5px 10px;
     border-radius: 15px;
+    transition: color 300ms ease, background 300ms ease;
+}
+
+.category.expanded .category-count {
+    color: #9fef00;
+    background: rgba(159, 239, 0, 0.12);
 }
 
 .category-arrow {
     font-size: 20px;
-    transition: transform 0.3s ease;
+    line-height: 1;
+    display: inline-block;
     color: #888;
+    /* leve overshoot na virada, como uma mola */
+    transition:
+        transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        color 300ms ease;
+}
+
+.category-header:hover .category-arrow {
+    color: #ccc;
 }
 
 .category.expanded .category-arrow {
-    transform: rotate(180deg);
+    transform: rotate(-180deg);
+    color: #9fef00;
 }
 
+/* Trocar 0fr por 1fr anima até a altura real do conteúdo: a curva de easing
+   nunca é gasta em espaço vazio (era o problema do max-height: 3000px fixo) e a
+   mesma duração serve para uma categoria de 3 ou de 8 itens. */
 .category-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    /* fechar é um pouco mais rápido que abrir */
+    transition:
+        grid-template-rows 340ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 200ms ease;
 }
 
 .category.expanded .category-content {
-    max-height: 3000px;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition:
+        grid-template-rows 540ms cubic-bezier(0.33, 1, 0.68, 1),
+        opacity 300ms ease 60ms;
+}
+
+/* O recorte tem que ficar na linha do grid, não no .category-content */
+.category-inner {
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Respiro entre o header e o primeiro card. Vai na margem do card, não no
+   padding do .category-inner: com box-sizing: border-box o padding não é
+   comprimido junto com a linha e sobraria uma faixa em toda seção fechada. */
+.category-inner > .post:first-child {
+    margin-top: 12px;
+}
+
+/* Cada post entra em cascata enquanto o painel cresce */
+@keyframes post-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+        filter: blur(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+.category.expanded .category-content .post {
+    animation: post-reveal 520ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.category.expanded .category-content .post:nth-child(1) {
+    animation-delay: 50ms;
+}
+
+.category.expanded .category-content .post:nth-child(2) {
+    animation-delay: 95ms;
+}
+
+.category.expanded .category-content .post:nth-child(3) {
+    animation-delay: 140ms;
+}
+
+.category.expanded .category-content .post:nth-child(4) {
+    animation-delay: 185ms;
+}
+
+.category.expanded .category-content .post:nth-child(5) {
+    animation-delay: 230ms;
+}
+
+.category.expanded .category-content .post:nth-child(6) {
+    animation-delay: 275ms;
+}
+
+.category.expanded .category-content .post:nth-child(7) {
+    animation-delay: 320ms;
+}
+
+.category.expanded .category-content .post:nth-child(n+8) {
+    animation-delay: 365ms;
 }
 
 /* Articles styling */
@@ -414,7 +540,11 @@ body.home {
     padding: 25px;
     margin-bottom: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition:
+        transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+        background 300ms ease,
+        border-color 300ms ease,
+        box-shadow 380ms ease;
     position: relative;
     overflow: hidden;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
@@ -424,11 +554,13 @@ body.home {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
+    left: 0;
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-    transition: left 0.5s ease;
+    /* transform em vez de left: roda na GPU, sem relayout a cada frame */
+    transform: translateX(-100%);
+    transition: transform 650ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .post:hover {
@@ -439,7 +571,7 @@ body.home {
 }
 
 .post:hover::before {
-    left: 100%;
+    transform: translateX(100%);
 }
 
 .post:active {
@@ -659,5 +791,30 @@ footer {
 
     .post:hover {
         transform: translateX(5px);
+    }
+}
+
+/* Acessibilidade: abre e fecha na hora para quem pede menos movimento */
+@media (prefers-reduced-motion: reduce) {
+
+    .category,
+    .category.expanded,
+    .category-content,
+    .category.expanded .category-content,
+    .category-header,
+    .category-header::after,
+    .category-arrow,
+    .post,
+    .post::before {
+        transition-duration: 1ms !important;
+        transition-delay: 0ms !important;
+    }
+
+    .category.expanded .category-content .post {
+        animation: none;
+    }
+
+    .scroll-indicator svg {
+        animation: none;
     }
 }

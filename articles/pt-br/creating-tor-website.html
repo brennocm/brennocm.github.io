@@ -86,66 +86,44 @@
             </ul>
             <h2>Instalação do Tor Browser</h2>
             <p>A princípio, é preciso instalar o Tor Browser, o navegador que possibilita o acesso aos serviços provenientes da rede Onion vinculado ao Tor Project. Em <a  href="https://www.torproject.org/download/">https://www.torproject.org/download/</a>, baixe o Tor Browser. Em seguida, descompacte o arquvivo para sua utilização futura:</p>
-            <pre class="code-block">
-                <code>tar -xvf tor-browser-linux-x86_64-14.0.3.tar.xz</code>
-            </pre>
+            <pre class="code-block"><code>tar -xvf tor-browser-linux-x86_64-14.0.3.tar.xz</code></pre>
             <h2>Instalação do Tor:</h2>
             <p>
                 Em seguida, deve-se instalar o Tor. Portanto, com permissões administrativas, utilize o comando abaixo:
             </p>
-            <pre class="code-block">
-                <code>sudo apt install tor -y</code>
-            </pre>
+            <pre class="code-block"><code>sudo apt install tor -y</code></pre>
             <p>
                 Após a instalação, verifique se o serviço está ativo: 
             </p>
-            <pre class="code-block">
-                <code>systemctl status tor</code>
-            </pre>
+            <pre class="code-block"><code>systemctl status tor</code></pre>
             <h2>Configurando o Serviço Oculto:</h2>
             <p>
                 O próximo passo seria configurar o software Tor, permitindo o acesso ao website. Para isso, vá no arquivo de configurações e edite-o:
             </p>
-            <pre class="code-block">
-                <code>sudo vim /etc/tor/torrc</code>
-            </pre>
+            <pre class="code-block"><code>sudo vim /etc/tor/torrc</code></pre>
             <p>
                 Em seguida, encontre as linhas a seguir e descomente-as:
             </p>
-            <pre class="code-block">
-                <code>HiddenServiceDir /var/lib/tor/hidden_service/</code>
-            </pre>
-            <pre class="code-block">
-                <code>HiddenServicePort 80 127.0.0.1:8080</code>
-            </pre>
+            <pre class="code-block"><code>HiddenServiceDir /var/lib/tor/hidden_service/</code></pre>
+            <pre class="code-block"><code>HiddenServicePort 80 127.0.0.1:8080</code></pre>
             <p>
                 Por fim, com o intuito de aplicar as mudanças, reinicie o serviço Tor:
             </p>
-            <pre class="code-block">
-                <code>sudo systemctl restart tor</code>
-            </pre>
+            <pre class="code-block"><code>sudo systemctl restart tor</code></pre>
             <p>
                 Após o reiniciamento, o endereço onion referente ao site criado estará em "/var/lib/tor/hidden_service/hostname". Portanto, é possível vê-lo a partir de:
             </p>
-            <pre class="code-block">
-                <code>cat /var/lib/tor/hidden_service/hostname</code>
-            </pre>
+            <pre class="code-block"><code>cat /var/lib/tor/hidden_service/hostname</code></pre>
             <h2>Configurando o servidor Web:</h2>
             <p>
                 Por último, necessita-se a configuração do servidor web. A fins de exemplo, o Apache foi o escolhido.
             </p>
-            <pre class="code-block">
-                <code>sudo apt install apache2</code>
-            </pre>
+            <pre class="code-block"><code>sudo apt install apache2</code></pre>
             <p>
                Em <b>/var/www/html</b>, insira o site estático
             </p>
-            <pre class="code-block">
-                <code>cd /var/www/html</code>
-            </pre>
-            <pre class="code-block">
-                <code>vim index.html</code>
-            </pre>
+            <pre class="code-block"><code>cd /var/www/html</code></pre>
+            <pre class="code-block"><code>vim index.html</code></pre>
             <p>
                 Com isso, ao colocar a URL obtda em <b>var/lib/tor/hidden_service/hostname</b> no tor browser, o site estático inserido anteriormente carregará. Concluindo assim, o processo de criação de site estático no Tor.
             </p>
@@ -159,6 +137,7 @@
     <footer>
         <p>&copy; 20∞</p>
     </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
 </body>
 </html>
 

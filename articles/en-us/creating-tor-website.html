@@ -98,68 +98,46 @@
                 network linked to the Tor Project. At <a
                     href="https://www.torproject.org/download/">https://www.torproject.org/download/</a>, download the
                 Tor Browser. Then, extract the file for future use:</p>
-            <pre class="code-block">
-                <code>tar -xvf tor-browser-linux-x86_64-14.0.3.tar.xz</code>
-            </pre>
+            <pre class="code-block"><code>tar -xvf tor-browser-linux-x86_64-14.0.3.tar.xz</code></pre>
             <h2>Installing Tor:</h2>
             <p>
                 Next, you need to install Tor. Therefore, with administrative permissions, use the command below:
             </p>
-            <pre class="code-block">
-                <code>sudo apt install tor -y</code>
-            </pre>
+            <pre class="code-block"><code>sudo apt install tor -y</code></pre>
             <p>
                 After installation, verify if the service is active:
             </p>
-            <pre class="code-block">
-                <code>systemctl status tor</code>
-            </pre>
+            <pre class="code-block"><code>systemctl status tor</code></pre>
             <h2>Configuring the Hidden Service:</h2>
             <p>
                 The next step would be to configure the Tor software, allowing access to the website. To do this, go to
                 the configuration file and edit it:
             </p>
-            <pre class="code-block">
-                <code>sudo vim /etc/tor/torrc</code>
-            </pre>
+            <pre class="code-block"><code>sudo vim /etc/tor/torrc</code></pre>
             <p>
                 Then, find the following lines and uncomment them:
             </p>
-            <pre class="code-block">
-                <code>HiddenServiceDir /var/lib/tor/hidden_service/</code>
-            </pre>
-            <pre class="code-block">
-                <code>HiddenServicePort 80 127.0.0.1:8080</code>
-            </pre>
+            <pre class="code-block"><code>HiddenServiceDir /var/lib/tor/hidden_service/</code></pre>
+            <pre class="code-block"><code>HiddenServicePort 80 127.0.0.1:8080</code></pre>
             <p>
                 Finally, to apply the changes, restart the Tor service:
             </p>
-            <pre class="code-block">
-                <code>sudo systemctl restart tor</code>
-            </pre>
+            <pre class="code-block"><code>sudo systemctl restart tor</code></pre>
             <p>
                 After restarting, the onion address for the created site will be in
                 "/var/lib/tor/hidden_service/hostname". Therefore, you can view it using:
             </p>
-            <pre class="code-block">
-                <code>cat /var/lib/tor/hidden_service/hostname</code>
-            </pre>
+            <pre class="code-block"><code>cat /var/lib/tor/hidden_service/hostname</code></pre>
             <h2>Configuring the Web Server:</h2>
             <p>
                 Lastly, you need to configure the web server. For demonstration purposes, Apache was chosen.
             </p>
-            <pre class="code-block">
-                <code>sudo apt install apache2</code>
-            </pre>
+            <pre class="code-block"><code>sudo apt install apache2</code></pre>
             <p>
                 In <b>/var/www/html</b>, insert the static site
             </p>
-            <pre class="code-block">
-                <code>cd /var/www/html</code>
-            </pre>
-            <pre class="code-block">
-                <code>vim index.html</code>
-            </pre>
+            <pre class="code-block"><code>cd /var/www/html</code></pre>
+            <pre class="code-block"><code>vim index.html</code></pre>
             <p>
                 With this, when entering the URL obtained from <b>var/lib/tor/hidden_service/hostname</b> in the Tor
                 browser, the previously inserted static site will load. Thus completing the process of creating a static
@@ -176,6 +154,7 @@
     <footer>
         <p>&copy; 20∞</p>
     </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
 </body>
 
 </html>

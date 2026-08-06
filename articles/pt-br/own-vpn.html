@@ -201,95 +201,66 @@
             <br>
             <br> Após escolher um provedor de VPS, como Digital Ocean, Vultr ou Linode, e criar sua instância na mesma,
             além de acessa-la, atualize o sistema operacional.
-         <pre class="code-block">
-                    <code>apt update && apt upgrade -y</code>
-                </pre>
+         <pre class="code-block"><code>apt update && apt upgrade -y</code></pre>
          </p>
          <p>
             Em seguida, instale o <b>WireGuard</b> e suas dependência.
-         <pre class="code-block">
-                <code>apt install wireguard wireguard-tools -y</code>
-            </pre>
+         <pre class="code-block"><code>apt install wireguard wireguard-tools -y</code></pre>
          </p>
          <p>
             Perante a configuração da VPN, primeiramente, necessita-se habilitar o encaminhamento IP, para que o
             servidor encaminhe o tráfego entre a interface do WireGuard e a internet.
-         <pre class="code-block">
-                <code>vim /etc/sysctl.conf</code>
-            </pre>
-         <pre class="code-block">
-               <code>Descomente a linha "#net.ipv4.ip_forward=1"</code>
-           </pre>
+         <pre class="code-block"><code>vim /etc/sysctl.conf</code></pre>
+         <pre class="code-block"><code>Descomente a linha "#net.ipv4.ip_forward=1"</code></pre>
          <p>
             Em seguida, aplique a alteração
-         <pre class="code-block">
-            <code>sudo sysctl -p</code>
-            </pre>
+         <pre class="code-block"><code>sudo sysctl -p</code></pre>
          </p>
          <p>
             Agora, certifique-se que o módulo do kernel WireGuard está carregado:
-         <pre class="code-block">
-                <code>lsmod | grep wireguard</code>
-            </pre>
+         <pre class="code-block"><code>lsmod | grep wireguard</code></pre>
          </p>
          <p>
             Caso o comando não obter retorno, carregue o módulo.
-         <pre class="code-block">
-                <code>sudo modprobe wireguard</code>
-            </pre>
+         <pre class="code-block"><code>sudo modprobe wireguard</code></pre>
          </p>
          <br>
          <p>
             <b>Configurando o WireGuard no Servidor</b>
             <br><br>
             Na pasta do WireGuard, na qual correspondê-se a <b>/etc/wireguard</b>, gere as chaves pública e privada.
-         <pre class="code-block">
-                    <code>wg genkey | tee privatekey | wg pubkey > publickey </code>
-                </pre>
+         <pre class="code-block"><code>wg genkey | tee privatekey | wg pubkey > publickey </code></pre>
          </p>
          <p>
             Em seguida, crie a interface Wireguard, ao definir o arquivo wg0.conf.
-         <pre class="code-block">
-                    <code>sudo vim /etc/wireguard/wg0.conf</code>
-                </pre>
-         <pre class="code-block">
-                    <code>[Interface]
+         <pre class="code-block"><code>sudo vim /etc/wireguard/wg0.conf</code></pre>
+         <pre class="code-block"><code>[Interface]
                      PrivateKey =  "conteúdo do arquivo privatekey"
                      Address = 10.10.10.1/24 # Endereço IP interno do servidor na rede VPN
                      ListenPort = 51820 # Porta padrão do WireGuard
                      # SaveConfig = true # Opcional: para salvar mudanças de configuração
                      PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o "interface_de_rede_principal" -j MASQUERADE
-                     PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o "interface_de_rede_principal" -j MASQUERADE </code>
-                </pre>
+                     PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o "interface_de_rede_principal" -j MASQUERADE </code></pre>
          </p>
          <p>
             Em seguida, habilite o WireGuard.
-         <pre class="code-block">
-                    <code>sudo systemctl enable wg-quick@wg0 </code>
-                </pre>
-         <pre class="code-block">
-                  <code>sudo systemctl start wg-quick@wg0 </code>
-              </pre>
+         <pre class="code-block"><code>sudo systemctl enable wg-quick@wg0 </code></pre>
+         <pre class="code-block"><code>sudo systemctl start wg-quick@wg0 </code></pre>
          </p>
          <p>
             Por fim, verifique o status. Caso a interface wg0 apareça ativa, o processo foi feito com sucesso.
-         <pre class="code-block">
-                    <code>sudo wg show wg0 </code>
-                </pre>
+         <pre class="code-block"><code>sudo wg show wg0 </code></pre>
          </p>
          <p>
             <br>
             <b>Configurando o Cliente WireGuard</b>
             <br><br>
             No dispositvo na qual será o <b>cliente</b> da VPN, abra o terminal, e gere as chaves do cliente.
-         <pre class="code-block">
-                  <code>wg genkey | tee privatekey | wg pubkey > publickey </code>
-              </pre>
+         <pre class="code-block"><code>wg genkey | tee privatekey | wg pubkey > publickey </code></pre>
          </p>
          <p>
             Em seguida, ainda no dispositivo <b>cliente</b>, crie um arquivo "cliente.conf" e adicione o conteúdo:
-         <pre class="code-block">
-                  <code>[Interface]
+         <pre class="code-block"><code>[Interface]
                      PrivateKey = "conteúdo do arquivo privatekey do cliente"
                      Address = 10.10.10.2/24  # IP único para cada cliente
                      DNS = 8.8.8.8, 8.8.4.4 # Opcional: Servidores DNS
@@ -297,26 +268,19 @@
                      PublicKey = "conteúdo do arquivo publickey do servidor"
                      AllowedIPs = 0.0.0.0/0 # Rota tudo pelo VPN
                      Endpoint = "ip_publico_do_servidor":"porta_do_servidor" # IP e porta do servidor
-                     PersistentKeepalive = 25 # Envia um pacote a cada 25 segundos </code>
-              </pre>
+                     PersistentKeepalive = 25 # Envia um pacote a cada 25 segundos </code></pre>
          </p>
          <p>
             De volta ao <b>servidor</b>, edite novamente o arquivo da interface WireGuard, visando adicionar a seção
             [peer] para o novo cliente.
-         <pre class="code-block">
-                  <code>vim /etc/wireguard/wg0.conf </code>
-              </pre>
-         <pre class="code-block">
-               <code>[Peer]
+         <pre class="code-block"><code>vim /etc/wireguard/wg0.conf </code></pre>
+         <pre class="code-block"><code>[Peer]
                   PublicKey = "conteúdo do arquivo publickey do cliente"
-                  AllowedIPs = 10.10.10.2/32 # IP individual do cliente </code>
-           </pre>
+                  AllowedIPs = 10.10.10.2/32 # IP individual do cliente </code></pre>
          </p>
          <p>
             Por fim, a fim de aplicar a nova atualização da interface WireGuard, reinicie o serviço WireGuard.
-         <pre class="code-block">
-                  <code>sudo systemctl restart wg-quick@wg0</code>
-              </pre>
+         <pre class="code-block"><code>sudo systemctl restart wg-quick@wg0</code></pre>
          </p>
          <p>
             <br>
@@ -362,6 +326,7 @@
    <footer>
       <p>&copy; 20∞</p>
    </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
 </body>
 
 </html>

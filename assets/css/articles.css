@@ -124,49 +124,66 @@ body {
     }
 }
 
-/* Main Content */
+/* ==========================================================================
+   Layout do artigo
+
+   Todo artigo tem a mesma estrutura: cabeçalho em cima, índice fixo à
+   esquerda acompanhando a leitura e o texto numa coluna estreita. Nos
+   artigos comuns o índice é montado pelo article-toc.js a partir dos h2.
+   ========================================================================== */
+
 .content {
-    padding: 20px;
-    max-width: 80%;
+    max-width: min(94%, 1200px);
     margin: 32px auto 60px;
+    padding: 32px 40px 48px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-areas:
+        "cabecalho cabecalho"
+        "indice    corpo";
+    column-gap: 56px;
     background-color: #111;
-    border-radius: 30px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    border: 1px solid #1f1f1f;
 }
 
-/* Article Header */
+/* --- Cabeçalho do artigo --- */
+.article-header {
+    grid-area: cabecalho;
+    margin-bottom: 8px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #242424;
+}
+
 .article-header h1 {
-    font-size: 32px;
+    margin: 0 0 14px;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -1px;
     color: #fff;
-    margin-bottom: 10px;
 }
 
 .article-header .meta {
+    margin: 0;
     font-size: 14px;
-    color: #bbb;
-
+    color: #8a8a8a;
 }
 
 .article-header .meta a {
-    color: #b3ff00;
+    color: #9fef00;
     text-decoration: none;
+}
 
+.article-header .meta a:hover {
+    text-decoration: underline;
 }
 
 .article-header .meta .read-time {
     float: right;
     color: #777;
-
 }
 
-/* Article Body */
-.article-body h2 {
-    font-size: 24px;
-    margin-top: 40px;
-    color: #fff;
-}
-
-/* Índice navegável */
+/* --- Índice fixo --- */
 html {
     scroll-behavior: smooth;
 }
@@ -178,85 +195,217 @@ html {
 }
 
 .toc {
-    margin: 20px 0 35px;
-    padding: 20px 24px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid #333;
-    border-left: 3px solid #9fef00;
-    border-radius: 10px;
+    grid-area: indice;
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    counter-reset: indice;
+    /* índices longos (o roadmap tem 26 itens) rolam por dentro em vez de
+       serem cortados pela tela */
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin: 0;
+    padding: 0 0 0 1px;
+    scrollbar-width: thin;
+    scrollbar-color: #262626 transparent;
+}
+
+.toc::-webkit-scrollbar {
+    width: 6px;
+}
+
+.toc::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.toc::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 3px;
+}
+
+.toc:hover::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+}
+
+.toc::-webkit-scrollbar-thumb:hover {
+    background: rgba(159, 239, 0, 0.45);
 }
 
 .toc h2 {
-    margin: 0 0 12px;
-    font-size: 18px;
+    margin: 0 0 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6f6f6f;
 }
 
 .toc ul {
     margin: 0;
-    padding-left: 20px;
+    padding: 0;
+    list-style: none;
 }
 
-.toc li {
-    margin-bottom: 6px;
-    color: #999;
+.toc > ul > li {
+    counter-increment: indice;
+    margin: 0;
 }
 
-.toc ul ul {
-    margin: 8px 0 12px;
-}
-
-.article-body .toc a {
-    color: #ccc;
+/* o trilho contínuo à esquerda é o que dá a noção de percurso */
+.toc a {
+    display: block;
+    padding: 7px 0 7px 16px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #8a8a8a;
+    text-decoration: none;
     border-bottom: none;
+    border-left: 2px solid #2b2b2b;
+    transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.article-body .toc a:hover {
+.toc > ul > li > a::before {
+    content: counter(indice, decimal-leading-zero) '  ';
+    font-family: 'Ubuntu Mono', ui-monospace, monospace;
+    font-size: 0.9em;
+    color: #5f5f5f;
+    transition: color 0.2s ease;
+}
+
+.toc a:hover {
+    color: #ddd;
+    border-left-color: #555;
+}
+
+/* seção em leitura */
+.toc a.active {
+    color: #9fef00;
+    border-left-color: #9fef00;
+}
+
+.toc a.active::before {
     color: #9fef00;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
+/* grupo que contém a subseção em leitura */
+.toc a.active-group {
+    color: #e4e4e4;
+    border-left-color: #5c7a12;
+}
+
+.toc ul ul {
+    margin: 0 0 6px;
+}
+
+.toc ul ul a {
+    padding-left: 28px;
+    font-size: 13px;
+    color: #757575;
+}
+
+/* --- Corpo --- */
+.article-body {
+    grid-area: corpo;
+    max-width: 74ch;
+    counter-reset: secao;
+    font-size: 17px;
+    line-height: 1.75;
+}
+
+/* Seções: régua e número, sem caixa */
+.article-body h2 {
+    margin: 76px 0 26px;
+    padding-top: 30px;
+    font-size: clamp(24px, 2.4vw, 30px);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.6px;
+    color: #fff;
+    border-top: 1px solid #2b2b2b;
+}
+
+.article-body h2[id] {
+    counter-increment: secao;
+}
+
+/* o mesmo número que aparece no índice, acima do título */
+.article-body h2[id]::before {
+    content: counter(secao, decimal-leading-zero);
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Ubuntu Mono', ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #9fef00;
+}
+
+.article-body h2:first-child,
+.article-body > h2:first-of-type {
+    margin-top: 40px;
 }
 
 .article-body h3 {
-    font-size: 18px;
-    margin-top: 28px;
-    margin-bottom: 8px;
-    color: #e4e4e4;
+    margin: 36px 0 10px;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    color: #fff;
 }
 
 .article-body h4 {
-    font-size: 16px;
-    margin-top: 22px;
-    margin-bottom: 6px;
-    color: #b0b0b0;
+    margin: 26px 0 8px;
+    font-size: 17px;
+    color: #d8d8d8;
+    letter-spacing: 0.2px;
 }
 
 .article-body p {
-    font-size: 16px;
-    color: #ccc;
-    margin-bottom: 15px;
+    margin: 0 0 22px;
+    color: #c8c8c8;
 }
 
-.article-body ul {
-    margin: 0 0 15px;
-    padding-left: 22px;
+.article-body ul,
+.article-body ol {
+    margin: 0 0 22px;
+    padding-left: 24px;
 }
 
 .article-body li {
-    font-size: 16px;
-    color: #ccc;
-    line-height: 1.6;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    color: #c8c8c8;
 }
 
-.article-body ul ul {
-    margin: 6px 0 10px;
+.article-body ul ul,
+.article-body ol ol {
+    margin: 8px 0 10px;
 }
 
-/* Links dentro do texto ganham o verde do site */
+.article-body li::marker {
+    color: #6f6f6f;
+}
+
+/* Muitos artigos usam <b> no começo de um parágrafo como subtítulo. O :has()
+   separa esse caso (negrito seguido de quebra de linha) do negrito inline no
+   meio da frase, que continua igual. */
+.article-body p > b:first-child:has(+ br),
+.article-body p > br + b:has(+ br) {
+    font-size: 1.14em;
+    line-height: 2.2;
+    letter-spacing: -0.2px;
+    color: #fff;
+}
+
+.article-body strong {
+    color: #e8e8e8;
+}
+
+.article-body i {
+    color: #d0d0d0;
+}
+
+/* Links no texto ganham o verde do site */
 .article-body a {
     color: #9fef00;
     /* URLs longas quebram em vez de estourar a largura da tela */
@@ -272,48 +421,59 @@ html {
 
 .article-body img {
     display: block;
-    margin: 40px auto 30px;
-    max-width: 60%;
+    margin: 32px 0;
+    max-width: 100%;
     height: auto;
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid #262626;
 }
 
 a {
     color: #fff;
 }
 
-/* Code Block - Ajuste final para dispositivos móveis */
+/* --- Código --- */
 .code-block {
-    background-color: #1e1e1e;
+    margin: 22px 0;
+    padding: 16px 18px;
+    background-color: #0c0c0c;
     color: #b3ff00;
-    padding: 10px 15px;
-    border-radius: 4px;
+    border: 1px solid #242424;
+    border-radius: 10px;
     font-family: 'Ubuntu Mono', 'Courier New', Courier, monospace;
-    font-size: 14px;
-    margin: 10px 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.6;
     width: 100%;
     box-sizing: border-box;
     text-align: left;
+    /* mantém o formato original e rola na horizontal quando passa da largura */
     white-space: pre;
-    /* Mantém o formato original sem quebras */
     overflow-x: auto;
-    /* Adiciona rolagem horizontal para conteúdo longo */
     word-wrap: normal;
-    /* Evita quebras automáticas de palavras */
 }
 
-/* Ajuste para o conteúdo do bloco de código */
 .code-block code {
     display: block;
     white-space: pre;
-    /* Mantém formatação original */
     overflow-wrap: normal;
-    /* Garante que palavras não sejam quebradas */
     word-wrap: normal;
-    /* Compatibilidade adicional */
+}
+
+.code-block::-webkit-scrollbar {
+    height: 8px;
+}
+
+.code-block::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+    background: #2f2f2f;
+    border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb:hover {
+    background: rgba(159, 239, 0, 0.4);
 }
 
 footer {
@@ -324,94 +484,119 @@ footer {
     font-size: 15px;
 }
 
-/* Responsiveness */
-@media (max-width: 1024px) {
+/* ==========================================================================
+   Páginas-guia (dicas de carreira): body.guide
+   Só o que é específico das guias; o resto vem do layout comum acima.
+   ========================================================================== */
+
+/* nas guias o h3 é uma entrada de catálogo (curso, ferramenta), não uma
+   subseção de texto: aparece dezenas de vezes e pede menos peso */
+.guide .article-body h3 {
+    font-size: 19px;
+}
+
+/* o rótulo "Link:" vira redundante ao lado do próprio link */
+.guide .link-label {
+    display: none;
+}
+
+.guide .article-body .link-list {
+    margin: 8px 0 22px;
+    padding: 0;
+    list-style: none;
+}
+
+.guide .article-body .link-list li {
+    margin: 0 0 4px;
+}
+
+.guide .article-body .link-list a {
+    font-size: 14px;
+    color: #9fef00;
+    border-bottom: 1px solid rgba(159, 239, 0, 0.25);
+}
+
+.guide .article-body .link-list a::after {
+    content: ' ↗';
+    opacity: 0.6;
+}
+
+.guide .article-body .link-list a:hover {
+    border-bottom-color: #9fef00;
+}
+
+/* ==========================================================================
+   Responsivo
+   ========================================================================== */
+
+/* Abaixo de 1100px não sobra largura para a coluna lateral: o índice volta
+   para o topo, em fluxo normal. */
+@media (max-width: 1100px) {
     .content {
-        max-width: 90%;
+        display: block;
+        max-width: min(92%, 860px);
     }
 
-    .article-header h1 {
-        font-size: 28px;
+    .article-body {
+        max-width: none;
     }
 
-    .article-header .meta {
-        font-size: 12px;
-    }
-
-    .article-body h2 {
-        font-size: 22px;
-    }
-
-    .article-body img {
-        max-width: 80%;
-    }
-
-    .code-block {
-        font-size: 13px;
-        /* Tamanho do texto reduzido */
-        padding: 8px 12px;
-        /* Reduz espaçamento */
+    .toc {
+        position: static;
+        max-height: none;
+        margin: 24px 0 40px;
+        padding: 20px 0 4px;
+        border-top: 1px solid #2b2b2b;
+        border-bottom: 1px solid #2b2b2b;
     }
 }
 
 @media (max-width: 768px) {
     .content {
-        padding: 20px 18px;
         margin: 20px auto 40px;
+        padding: 24px 20px 32px;
+        border-radius: 16px;
     }
 
-    .article-header h1 {
-        font-size: 26px;
+    .article-body {
+        font-size: 16px;
     }
 
     .article-body h2 {
-        font-size: 20px;
+        margin-top: 52px;
+        padding-top: 24px;
     }
 
     .article-body h3 {
-        font-size: 17px;
-    }
-
-    .article-body h4 {
-        font-size: 15px;
-    }
-
-    .article-body p,
-    .article-body li {
-        font-size: 15px;
-    }
-
-    .article-body ul {
-        padding-left: 18px;
-    }
-
-    .toc {
-        padding: 16px 18px;
+        font-size: 19px;
     }
 
     .code-block {
         font-size: 13px;
-        padding: 8px 12px;
+        padding: 12px 14px;
     }
 }
 
 @media (max-width: 480px) {
     .content {
         max-width: 100%;
-        padding: 18px 16px;
-        border-radius: 20px;
-    }
-
-    .article-header h1 {
-        font-size: 23px;
-    }
-
-    .article-body img {
-        max-width: 90%;
+        padding: 20px 16px 28px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
     }
 
     .code-block {
-        font-size: 12px;
-        padding: 6px 10px;
+        font-size: 12.5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .toc a {
+        transition: none;
     }
 }

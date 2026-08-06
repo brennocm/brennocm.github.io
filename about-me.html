@@ -301,6 +301,16 @@
                 font-size: 0.95rem;
             }
 
+            /* no celular cada cargo fica em sua própria linha, sem o separador */
+            .about-header .role {
+                display: block;
+                line-height: 1.5;
+            }
+
+            .about-header .role-sep {
+                display: none;
+            }
+
             .profile-section {
                 flex-direction: column;
                 align-items: center;
@@ -432,7 +442,8 @@
         <div class="about-container">
             <div class="about-header">
                 <h1>Brenno M.</h1>
-                <span class="subtitle">// Offensive Security Analyst | Information Security Researcher</span>
+                <span class="subtitle"><span class="role">// Offensive Security Analyst</span><span
+                        class="role-sep"> | </span><span class="role">Information Security Researcher</span></span>
             </div>
 
             <!-- Profile Section -->
