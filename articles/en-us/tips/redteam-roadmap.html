@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Red Team roadmap with 38 layers in dependency order — from hardware to threat emulation. Track your progress right in the browser.">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Ubuntu+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/articles.css">
+    <link rel="stylesheet" href="../../../assets/css/tips/redteam-roadmap.css">
+    <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+    <title>red team roadmap.</title>
+</head>
+
+<body class="roadmap">
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../pt-br/tips/redteam-roadmap.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../en-us/tips/redteam-roadmap.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="rt-main">
+        <div class="rt-intro">
+            <h1>Red Team Roadmap</h1>
+        </div>
+
+        <div class="rt-toolbar">
+            <div class="rt-search">
+                <input type="text" id="rt-search-input" placeholder="Search topic" autocomplete="off">
+            </div>
+            <div class="rt-prog">
+                <div class="rt-prog-wrap"><div class="rt-prog-fill" id="rt-prog-fill"></div></div>
+                <span class="rt-prog-num" id="rt-prog-num">0%</span>
+            </div>
+        </div>
+
+        <div class="rt-summary">
+            <div class="rt-stat">
+                <div class="rt-sv" id="rt-s-total">0</div>
+                <div class="rt-sl" id="rt-s-total-label">Topics</div>
+            </div>
+            <div class="rt-stat">
+                <div class="rt-sv accent" id="rt-s-done">0</div>
+                <div class="rt-sl" id="rt-s-done-label">Completed</div>
+            </div>
+        </div>
+
+        <div class="rt-ctrl">
+            <div class="rt-filters">
+                <button class="rt-fbtn on" id="rt-f-all" onclick="rtSetFilter(this,'all')">All</button>
+                <button class="rt-fbtn" onclick="rtSetFilter(this,'f')">Entry</button>
+                <button class="rt-fbtn" onclick="rtSetFilter(this,'i')">Mid</button>
+                <button class="rt-fbtn" onclick="rtSetFilter(this,'a')">Senior</button>
+                <button class="rt-fbtn" onclick="rtSetFilter(this,'e')">Expert</button>
+            </div>
+            <div class="rt-actions">
+                <button class="rt-link" id="rt-expand" onclick="rtExpandAll()">Expand</button>
+                <button class="rt-link" id="rt-collapse" onclick="rtCollapseAll()">Collapse</button>
+                <button class="rt-link" id="rt-reset" onclick="rtClearProg()">Reset</button>
+            </div>
+        </div>
+
+        <div id="rt-container"></div>
+    </main>
+
+    <div class="rt-toast" id="rt-toast"></div>
+
+    <footer>
+        <p>&copy; 20&infin;</p>
+    </footer>
+
+    <script src="../../../assets/js/tips/redteam-roadmap.en-us.js"></script>
+    <script src="../../../assets/js/tips/redteam-roadmap.js"></script>
+</body>
+
+</html>
