@@ -318,10 +318,16 @@ body.home {
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
-    /* centered in the panel, but pinned to the top once it overflows */
+    /* Centralizado no painel, mas preso ao topo quando transborda.
+       O centro vem de margens auto no primeiro/último bloco, e não de
+       justify-content: safe center: com o `safe`, o alinhamento virava de
+       centro para topo de uma vez só no frame em que o conteúdo passava a
+       transbordar — no meio da abertura de uma seção isso aparecia como um
+       tranco. Com margem auto o deslocamento vai a zero de forma contínua,
+       acompanhando o painel que cresce. */
     display: flex;
     flex-direction: column;
-    justify-content: safe center;
+    justify-content: flex-start;
     gap: 14px;
 }
 
@@ -346,6 +352,14 @@ body.home {
 .category {
     margin: 0;
     flex-shrink: 0;
+}
+
+.main-content > .category:first-child {
+    margin-top: auto;
+}
+
+.main-content > .category:last-child {
+    margin-bottom: auto;
 }
 
 .category-header {
@@ -376,8 +390,8 @@ body.home {
     transform: scaleX(0);
     transform-origin: left center;
     transition:
-        transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 220ms ease;
+        transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 200ms ease;
 }
 
 .category.expanded .category-header::after {
@@ -411,6 +425,18 @@ body.home {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+}
+
+/* Em tela estreita o nome da seção é que deve quebrar. Sem isto, o flex
+   espremia a contagem e a seta junto com ele e o "5 itens" saía cortado. */
+.category-title > span {
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.category-title > div {
+    flex-shrink: 0;
 }
 
 .category-count {
@@ -419,6 +445,7 @@ body.home {
     background: #333;
     padding: 5px 10px;
     border-radius: 15px;
+    white-space: nowrap;
     transition: color 300ms ease, background 300ms ease;
 }
 
@@ -434,8 +461,8 @@ body.home {
     color: #888;
     /* leve overshoot na virada, como uma mola */
     transition:
-        transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
-        color 300ms ease;
+        transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        color 260ms ease;
 }
 
 .category-header:hover .category-arrow {
@@ -453,19 +480,23 @@ body.home {
 .category-content {
     display: grid;
     grid-template-rows: 0fr;
-    opacity: 0;
-    /* fechar é um pouco mais rápido que abrir */
-    transition:
-        grid-template-rows 340ms cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 200ms ease;
+    /* o painel cresce dentro de uma coluna rolável e o scroll anchoring do
+       navegador brigava com a animação */
+    overflow-anchor: none;
+    /* Sem opacity no painel inteiro: com os cards já animando a própria
+       opacidade, a opacidade do pai forçava o navegador a compor a seção
+       toda em um buffer separado a cada frame. Fechado, a linha de 0fr com
+       overflow:hidden no .category-inner já esconde tudo.
+
+       Fechar é só um pouco mais rápido que abrir — quando uma seção fecha
+       enquanto outra abre, durações muito diferentes fazem o conteúdo
+       "pular" no meio do caminho. */
+    transition: grid-template-rows 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .category.expanded .category-content {
     grid-template-rows: 1fr;
-    opacity: 1;
-    transition:
-        grid-template-rows 540ms cubic-bezier(0.33, 1, 0.68, 1),
-        opacity 300ms ease 60ms;
+    transition: grid-template-rows 380ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 /* O recorte tem que ficar na linha do grid, não no .category-content */
@@ -481,55 +512,56 @@ body.home {
     margin-top: 12px;
 }
 
-/* Cada post entra em cascata enquanto o painel cresce */
+/* Cada post entra em cascata enquanto o painel cresce.
+   Só opacity e transform: blur() e scale() obrigavam o navegador a repintar
+   (e a re-rasterizar o texto de) cada card a cada frame, justamente enquanto
+   a linha do grid ainda estava crescendo — era daí que vinha o engasgo. */
 @keyframes post-reveal {
     from {
         opacity: 0;
-        transform: translateY(20px) scale(0.98);
-        filter: blur(6px);
+        transform: translate3d(0, 14px, 0);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0);
+        transform: translate3d(0, 0, 0);
     }
 }
 
 .category.expanded .category-content .post {
-    animation: post-reveal 520ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation: post-reveal 300ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .category.expanded .category-content .post:nth-child(1) {
-    animation-delay: 50ms;
+    animation-delay: 30ms;
 }
 
 .category.expanded .category-content .post:nth-child(2) {
-    animation-delay: 95ms;
+    animation-delay: 65ms;
 }
 
 .category.expanded .category-content .post:nth-child(3) {
-    animation-delay: 140ms;
+    animation-delay: 100ms;
 }
 
 .category.expanded .category-content .post:nth-child(4) {
-    animation-delay: 185ms;
+    animation-delay: 135ms;
 }
 
 .category.expanded .category-content .post:nth-child(5) {
-    animation-delay: 230ms;
+    animation-delay: 170ms;
 }
 
 .category.expanded .category-content .post:nth-child(6) {
-    animation-delay: 275ms;
+    animation-delay: 200ms;
 }
 
 .category.expanded .category-content .post:nth-child(7) {
-    animation-delay: 320ms;
+    animation-delay: 225ms;
 }
 
 .category.expanded .category-content .post:nth-child(n+8) {
-    animation-delay: 365ms;
+    animation-delay: 245ms;
 }
 
 /* Articles styling */
@@ -585,6 +617,7 @@ body.home {
     color: #fff;
     font-size: 1.4rem;
     font-weight: 600;
+    overflow-wrap: break-word;
     transition: color 0.3s ease;
 }
 
@@ -597,6 +630,7 @@ body.home {
     color: #999;
     margin: 0 0 15px;
     line-height: 1.6;
+    overflow-wrap: break-word;
 }
 
 .meta {

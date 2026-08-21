@@ -37,6 +37,30 @@
     color: inherit;
 }
 
+/* articles.css não tem reset de box-sizing (só styles.css tem). Sem isto, o
+   input de busca com width:100% soma padding e borda por fora e fica 30px
+   mais largo que a coluna — vazava pela direita e parecia desalinhado. */
+.roadmap .rt-search,
+.roadmap .rt-search input,
+.roadmap .rt-prog-wrap {
+    box-sizing: border-box;
+}
+
+/* Vários tópicos são um token só e comprido — "VirtualAllocEx+WriteProcess-
+   Memory+CreateRemoteThread", "msDS-AllowedToActOnBehalfOfOtherIdentity". Sem
+   ponto de quebra eles estouravam a coluna e o overflow:hidden do .layer
+   cortava o fim da frase no celular. `anywhere` só quebra quando não couber e,
+   diferente de break-word, também reduz o min-content — o que importa aqui,
+   já que esses textos vivem dentro de flex/grid. */
+.ltitle,
+.ldesc,
+.titext,
+.section-hdr,
+.dep-tag,
+.rt-intro h1 {
+    overflow-wrap: anywhere;
+}
+
 /* ---------- layout ---------- */
 .rt-main {
     max-width: 1180px;
@@ -508,28 +532,172 @@
 }
 
 /* ---------- responsivo ---------- */
+
+/* No celular a barra vira uma coluna: a busca ocupa a linha inteira e fica
+   centralizada, com o progresso logo abaixo — em vez de a barra de progresso
+   quebrar sozinha e encostar na margem esquerda. */
 @media (max-width: 820px) {
+    .rt-main {
+        padding: 24px 18px 64px;
+    }
+
+    .rt-intro {
+        margin-bottom: 22px;
+        padding-bottom: 18px;
+    }
+
     .rt-toolbar {
-        gap: 12px;
+        flex-direction: column;
+        /* centraliza os blocos sem depender de margin auto em flex item */
+        align-items: center;
+        justify-content: flex-start;
+        gap: 14px;
+        margin-bottom: 22px;
     }
 
     .rt-search {
-        max-width: none;
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 420px;
+        min-width: 0;
+        margin: 0;
+        align-self: center;
+    }
+
+    .rt-search input {
+        padding: 11px 14px;
+        text-align: center;
     }
 
     .rt-prog {
+        width: 100%;
         margin-left: 0;
+        justify-content: center;
     }
 
-    .topic-grid {
-        grid-template-columns: 1fr;
+    .rt-prog-wrap {
+        width: min(220px, 50vw);
+    }
+
+    .rt-prog-num {
+        min-width: 0;
+        text-align: left;
+    }
+
+    .rt-summary {
+        justify-content: center;
+        gap: 40px;
+        margin-bottom: 22px;
+    }
+
+    .rt-ctrl {
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 22px;
+    }
+
+    .rt-filters {
+        justify-content: center;
+    }
+
+    /* alvos de toque um pouco maiores */
+    .rt-fbtn {
+        padding: 7px 14px;
+    }
+
+    .rt-actions {
+        margin-left: 0;
+        gap: 22px;
+    }
+
+    .rt-link {
+        padding-bottom: 2px;
+    }
+
+    .layer {
+        margin-bottom: 10px;
+    }
+
+    .layer-hdr {
+        gap: 10px;
+        padding: 13px 14px 13px 18px;
     }
 
     .ldesc {
         display: none;
     }
 
+    .topic-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* em coluna única a borda direita vira um risco solto */
+    .ti {
+        gap: 11px;
+        padding: 12px 14px 12px 18px;
+        border-right: none;
+    }
+
+    .section-hdr {
+        padding: 9px 18px;
+    }
+
+    .dep-row {
+        padding: 12px 18px;
+    }
+
+    .dep-tag {
+        padding: 4px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rt-main {
+        padding: 20px 14px 56px;
+    }
+
+    .rt-search {
+        max-width: none;
+    }
+
     .rt-summary {
-        gap: 24px;
+        gap: 32px;
+    }
+
+    .rt-actions {
+        gap: 16px;
+    }
+
+    .layer-hdr {
+        padding: 12px 12px 12px 16px;
+    }
+
+    .ti {
+        padding: 11px 12px 11px 16px;
+    }
+
+    .diff {
+        font-size: 10.5px;
+        padding: 1px 5px;
+    }
+
+    .section-hdr {
+        padding: 8px 16px;
+    }
+
+    .dep-row {
+        padding: 11px 16px;
+    }
+
+    .rt-toast {
+        left: 16px;
+        right: 16px;
+        max-width: none;
+        transform: translate(0, 8px);
+    }
+
+    .rt-toast.show {
+        transform: translate(0, 0);
     }
 }
