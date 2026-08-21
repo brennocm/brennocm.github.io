@@ -121,7 +121,8 @@ window.RT_LAYERS = [
    {id:"3-9",t:"LDAP: protocol, advanced queries, what can be queried unauthenticated",d:"i"},
    {id:"3-10",t:"RPC: endpoints, WMI/SCM/Task Scheduler lateral movement over RPC",d:"i"},
    {id:"3-11",t:"WinRM/WSMan: protocol, authentication, PowerShell remoting internals",d:"i"},
-   {id:"3-12",t:"ICMP: types and codes, ICMP tunneling as C2",d:"i"}
+   {id:"3-12",t:"ICMP: types and codes, ICMP tunneling as C2",d:"i"},
+   {id:"3-23",t:"IPv6 Transition Mechanisms: WPAD abuse over IPv6 (mitm6) for MitM in internal networks",d:"a"}
   ]},
   {t:"Traffic Analysis",items:[
    {id:"3-13",t:"Wireshark in depth: display vs capture filters, stream analysis, custom dissectors",d:"i"},
@@ -339,12 +340,29 @@ window.RT_LAYERS = [
    {id:"10-9",t:"HTTP request smuggling: CL.TE, TE.CL, TE.TE — parsing differences as vulnerability",d:"a"},
    {id:"10-10",t:"GraphQL: introspection, batching for rate-limit bypass, nested query DoS",d:"i"},
    {id:"10-11",t:"Race conditions: single-packet attack (Turbo Intruder), exploiting timing windows",d:"a"},
-   {id:"10-12",t:"Cache poisoning vs cache deception: unkeyed headers, identification and exploitation",d:"a"}
+   {id:"10-12",t:"Cache poisoning vs cache deception: unkeyed headers, identification and exploitation",d:"a"},
+   {id:"10-16",t:"NoSQL Injection: $where, $regex, $ne, $or operators in MongoDB/Elasticsearch; timeout-based blind",d:"i"},
+   {id:"10-17",t:"Advanced File Uploads & Polyglots: files that are simultaneously a valid image and code (PHP/JS) for MIME and ImageMagick bypass",d:"a"}
   ]},
   {t:"Authentication & Sessions",items:[
    {id:"10-13",t:"Cookies: HttpOnly, Secure, SameSite flags, session fixation, cookie tossing",d:"i"},
    {id:"10-14",t:"MFA bypass: OTP leakage, backup codes, evilginx-style adversary-in-the-middle",d:"i"},
    {id:"10-15",t:"Subdomain takeover: identifying CNAMEs pointing to abandoned services",d:"i"}
+  ]},
+  {t:"Modern Architectures & APIs",items:[
+   {id:"10-18",t:"Service Meshes (Istio, Linkerd): mTLS abuse, header injection, authorization policy bypass via misconfigured sidecar, Envoy filters exploitation",d:"a"},
+   {id:"10-19",t:"API Gateways (Kong, AWS API Gateway, Apigee): rate limiting bypass, routing configuration exploitation, upstream headers injection",d:"a"}
+  ]},
+  {t:"WAF, CDN & Proxies Bypass",items:[
+   {id:"10-20",t:"WAF Bypass (Cloudflare, AWS WAF, ModSecurity): fragmented payloads, multiple encoding, non-standard verbs, custom multipart boundary",d:"a"},
+   {id:"10-21",t:"Origin IP exposure: discovering real IP behind CDN via DNS history, certificates, third-party services",d:"i"},
+   {id:"10-22",t:"Reverse Proxy misconfig: path traversal via encoded '..', method restrictions bypass, Host header manipulation for unauthorized backend access",d:"a"}
+  ]},
+  {t:"Web Tools & Automation",items:[
+   {id:"10-23",t:"Burp Suite Extensions: Autorize (BFLA/BOLA), Turbo Intruder, HTTP Request Smuggler, JSON Web Tokens (JWT attacks)",d:"i"},
+   {id:"10-24",t:"Nuclei + Templates: rapid CVE enumeration in web applications, template customization for specific targets",d:"i"},
+   {id:"10-25",t:"Parameter discovery: Arjun, Param Miner, FFUF with custom wordlists",d:"i"},
+   {id:"10-26",t:"OpenAPI / Swagger Enumeration: endpoint extraction from swagger.json, /api-docs, /v3/api-docs",d:"i"}
   ]}
  ]},
 {n:12,title:"Cloud Security",extra:false,deps:[3,9,11],
@@ -378,7 +396,8 @@ window.RT_LAYERS = [
   ]},
   {t:"Cross-Cloud Concepts",items:[
    {id:"11-13",t:"Misconfiguration as primary vector: different from on-premises where exploits dominate",d:"f"},
-   {id:"11-14",t:"Cloud data exfiltration: S3 exfil, snapshot sharing, via managed services",d:"i"}
+   {id:"11-14",t:"Cloud data exfiltration: S3 exfil, snapshot sharing, via managed services",d:"i"},
+   {id:"11-21",t:"Infrastructure as Code (IaC) Exploitation: exploiting Terraform/Pulumi pipelines, altering state file to create persistent backdoors (shadow roles)",d:"a"}
   ]}
  ]},
 {n:13,title:"Mobile Security",extra:false,deps:[2,4,6],
@@ -440,7 +459,7 @@ window.RT_LAYERS = [
    {id:"14-12",t:"Cialdini principles: reciprocity, authority, urgency — psychological foundation of SE",d:"f"}
   ]},
   {t:"Malware Delivery & Initial Access",items:[
-   {id:"14-13",t:"HTML Smuggling: payload delivery via JavaScript blobs and Data URIs evadindo proxies",d:"i"},
+   {id:"14-13",t:"HTML Smuggling: payload delivery via JavaScript blobs and Data URIs evading proxies",d:"i"},
    {id:"14-14",t:"MOTW (Mark-of-the-Web) bypass: ISO, IMG, LNK, VHD (classic and mitigated techniques)",d:"i"},
    {id:"14-15",t:"Malicious Documents: VBA Macros, XLM 4.0, remote template injection",d:"i"},
    {id:"14-16",t:"Scripting payloads in email: HTA, JS, VBS, WSF, JSE",d:"i"},
@@ -1017,6 +1036,62 @@ window.RT_LAYERS = [
   ]},
   {t:"Internal Network Services",items:[
    {id:"41-7",t:"Legacy services on perimeter or flat networks: RDP (BlueKeep), SMB (EternalBlue), authentication coercion (PetitPotam)",d:"i"}
+  ]}
+ ]},
+{n:42,title:"Web3, Smart Contracts & DeFi",extra:true,deps:[4,6,11],
+ desc:"The code is public, immutable and deals with money. Vulnerabilities here don't cause RCE, they cause millions to be drained in seconds.",
+ sections:[
+  {t:"Smart Contracts (Solidity/Vyper)",items:[
+   {id:"42-1",t:"Reentrancy: the classic vulnerability (e.g., DAO hack), checks-effects-interactions pattern",d:"i"},
+   {id:"42-2",t:"Oracle Manipulation and Flash Loans: exploiting spot price dependency in decentralized exchanges (DEX)",d:"a"},
+   {id:"42-3",t:"Access Control & Logic Flaws: unprotected initialization functions, tx.origin vs msg.sender",d:"i"},
+   {id:"42-4",t:"Integer Overflow/Underflow: relevance in Solidity < 0.8.0 and how to bypass modern protections",d:"i"},
+   {id:"42-5",t:"Front-running & MEV (Miner Extractable Value): exploiting transactions in the mempool before they are mined",d:"a"}
+  ]},
+  {t:"dApps & Wallets (Client-Side)",items:[
+   {id:"42-6",t:"Malicious Signatures (EIP-712 / EIP-191): tricking the user into blind signing transactions",d:"i"},
+   {id:"42-7",t:"Wallet Hijacking: seed phrase extraction from memory or browser extension storage (MetaMask)",d:"a"},
+   {id:"42-8",t:"Ice Phishing: tricking into token approval (ERC20 approve) for a malicious contract",d:"i"}
+  ]},
+  {t:"Web3 Infrastructure",items:[
+   {id:"42-9",t:"Bridge Vulnerabilities: how cross-chain bridges are exploited (merkle proof validation)",d:"e"},
+   {id:"42-10",t:"RPC Nodes Abuse: attacks against the infrastructure connecting the dApp to the blockchain",d:"i"}
+  ]}
+ ]},
+{n:43,title:"Advanced Web & Modern Client-Side",extra:true,deps:[11,20],
+ desc:"Modern applications (React, Next.js, Vue) changed the attack surface. Classic XSS decreased, but new classes emerged.",
+ sections:[
+  {t:"JavaScript Ecosystem & Client-Side",items:[
+   {id:"43-1",t:"Prototype Pollution: prototype pollution in JS leading to XSS, RCE (in Node.js) or logic bypass",d:"a"},
+   {id:"43-2",t:"DOM Clobbering: overwriting global JS variables by manipulating ID/Name attributes in HTML",d:"a"},
+   {id:"43-3",t:"WebAssembly (Wasm) Reversing: reverse engineering Wasm modules in the browser for license bypass or secrets extraction",d:"a"},
+   {id:"43-4",t:"Modern CSP (Content Security Policy) Bypass: JSONP endpoints, angular/vue template injection, gadgets in allowed libraries",d:"i"},
+   {id:"43-5",t:"Electron Apps: XSS-to-RCE via nodeIntegration, webPreferences abuse (contextIsolation, preload scripts), CORS bypass in Electron",d:"a"},
+   {id:"43-6",t:"PWA (Progressive Web Apps): service workers abuse, persistent cache poisoning, man-in-the-middle via registered worker",d:"i"},
+   {id:"43-7",t:"SPA (Single Page Application) Auth Bypass: manipulating Vuex/Redux state, client-side role guards bypass",d:"i"}
+  ]},
+  {t:"Cross-Origin & Leaks",items:[
+   {id:"43-8",t:"CORS Misconfigurations: null origin, flawed regex in origin reflection, authenticated data theft",d:"i"},
+   {id:"43-9",t:"XS-Leaks (Cross-Site Leaks): inferring user data via side-channels (timing, frame counting, cache probing)",d:"a"},
+   {id:"43-10",t:"PostMessage Vulnerabilities: token theft or XSS via insecure communication between iframes/windows",d:"i"}
+  ]},
+  {t:"Server-Side Rendering (SSR) & Modern Stacks",items:[
+   {id:"43-11",t:"Next.js / Nuxt.js Data Exposure: sensitive data leakage in props embedded in HTML (e.g., __NEXT_DATA__)",d:"i"},
+   {id:"43-12",t:"SSR SSRF: forged requests originating from server-side rendering of modern components",d:"a"}
+  ]}
+ ]},
+{n:44,title:"macOS Enterprise & Mobile Device Management (MDM)",extra:true,deps:[2,12,27],
+ desc:"In modern enterprises, AD has been replaced by Jamf or Kandji. Compromising the MDM means compromising the entire fleet.",
+ sections:[
+  {t:"MDM & Fleet Management",items:[
+   {id:"44-1",t:"Jamf Pro / Kandji / InTune: architecture, policies, and configuration profiles",d:"i"},
+   {id:"44-2",t:"Self Service Abuse: credential extraction or malicious bash scripts running as root",d:"a"},
+   {id:"44-3",t:"MDM Tokens Theft: extracting identity certificates (SCEP) from keychain to impersonate devices",d:"a"}
+  ]},
+  {t:"macOS Lateral Movement & Post-Exploitation",items:[
+   {id:"44-4",t:"Apple Remote Desktop (ARD) / VNC: graphical pivoting in corporate networks with reused credentials",d:"i"},
+   {id:"44-5",t:"Munki / Chef / Puppet Abuse: poisoning internal software catalogs for malware deployment (Internal Supply Chain)",d:"a"},
+   {id:"44-6",t:"System Plists (Property Lists): persistence via LaunchDaemons injected through legitimate management tools",d:"i"}
   ]}
  ]}
 ];

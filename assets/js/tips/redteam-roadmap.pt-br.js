@@ -122,7 +122,8 @@ window.RT_LAYERS = [
    {id:"3-9",t:"LDAP: protocolo, queries avançadas, o que dá para consultar sem autenticação",d:"i"},
    {id:"3-10",t:"RPC: endpoints, lateral movement por RPC via WMI/SCM/Task Scheduler",d:"i"},
    {id:"3-11",t:"WinRM/WSMan: protocolo, autenticação, internals do PowerShell remoting",d:"i"},
-   {id:"3-12",t:"ICMP: types e codes, ICMP tunneling como C2",d:"i"}
+   {id:"3-12",t:"ICMP: types e codes, ICMP tunneling como C2",d:"i"},
+   {id:"3-23",t:"IPv6 Transition Mechanisms: abuso de WPAD sobre IPv6 (mitm6) para MitM em redes internas",d:"a"}
   ]},
   {t:"Análise de Tráfego",items:[
    {id:"3-13",t:"Wireshark a fundo: display vs capture filters, análise de stream, dissectors customizados",d:"i"},
@@ -340,12 +341,29 @@ window.RT_LAYERS = [
    {id:"10-9",t:"HTTP request smuggling: CL.TE, TE.CL, TE.TE — diferença de parsing como vulnerabilidade",d:"a"},
    {id:"10-10",t:"GraphQL: introspection, batching para bypass de rate-limit, DoS por nested query",d:"i"},
    {id:"10-11",t:"Race conditions: single-packet attack (Turbo Intruder), explorar janelas de timing",d:"a"},
-   {id:"10-12",t:"Cache poisoning vs cache deception: unkeyed headers, identificação e exploração",d:"a"}
+   {id:"10-12",t:"Cache poisoning vs cache deception: unkeyed headers, identificação e exploração",d:"a"},
+   {id:"10-16",t:"NoSQL Injection: operadores $where, $regex, $ne, $or em MongoDB/Elasticsearch; timeout-based blind",d:"i"},
+   {id:"10-17",t:"Advanced File Uploads & Polyglots: arquivos que são simultaneamente imagem válida e código (PHP/JS) para bypass de MIME e ImageMagick",d:"a"}
   ]},
   {t:"Autenticação & Sessões",items:[
    {id:"10-13",t:"Cookies: flags HttpOnly, Secure, SameSite, session fixation, cookie tossing",d:"i"},
    {id:"10-14",t:"Bypass de MFA: leakage de OTP, backup codes, adversary-in-the-middle estilo evilginx",d:"i"},
    {id:"10-15",t:"Subdomain takeover: identificar CNAMEs apontando para serviços abandonados",d:"i"}
+  ]},
+  {t:"Arquiteturas Modernas & APIs",items:[
+   {id:"10-18",t:"Service Meshes (Istio, Linkerd): abuso de mTLS, injeção de headers, bypass de políticas de autorização via sidecar mal configurado, exploração de Envoy filters",d:"a"},
+   {id:"10-19",t:"API Gateways (Kong, AWS API Gateway, Apigee): bypass de rate limiting, exploração de configuração de roteamento, injeção em upstream headers",d:"a"}
+  ]},
+  {t:"Bypass de WAF, CDN & Proxies",items:[
+   {id:"10-20",t:"Bypass de WAF (Cloudflare, AWS WAF, ModSecurity): payloads fragmentados, encoding múltiplo, verbos não padrão, multipart boundary customizado",d:"a"},
+   {id:"10-21",t:"Origin IP exposure: descobrir IP real atrás de CDN via DNS history, certificados, serviços de terceiros",d:"i"},
+   {id:"10-22",t:"Reverse Proxy misconfig: path traversal via '..' codificado, bypass de restrições de método, manipulação de Host header para acesso a backend não autorizado",d:"a"}
+  ]},
+  {t:"Ferramentas & Automação Web",items:[
+   {id:"10-23",t:"Burp Suite Extensions: Autorize (BFLA/BOLA), Turbo Intruder, HTTP Request Smuggler, JSON Web Tokens (ataque a JWT)",d:"i"},
+   {id:"10-24",t:"Nuclei + Templates: enumeração rápida de CVEs em aplicações web, customização de templates para alvos específicos",d:"i"},
+   {id:"10-25",t:"Descoberta de parâmetros: Arjun, Param Miner, FFUF com wordlists customizadas",d:"i"},
+   {id:"10-26",t:"OpenAPI / Swagger Enumeration: extração de endpoints a partir de swagger.json, /api-docs, /v3/api-docs",d:"i"}
   ]}
  ]},
 {n:12,title:"Segurança em Cloud",extra:false,deps:[3,9,11],
@@ -379,7 +397,8 @@ window.RT_LAYERS = [
   ]},
   {t:"Conceitos Cross-Cloud",items:[
    {id:"11-13",t:"Má configuração como vetor primário: diferente do on-premises, onde exploits dominam",d:"f"},
-   {id:"11-14",t:"Exfiltração de dados em cloud: exfil de S3, compartilhamento de snapshot, via serviços gerenciados",d:"i"}
+   {id:"11-14",t:"Exfiltração de dados em cloud: exfil de S3, compartilhamento de snapshot, via serviços gerenciados",d:"i"},
+   {id:"11-21",t:"Infrastructure as Code (IaC) Exploitation: explorar pipelines Terraform/Pulumi, alterar state file para criar backdoors persistentes (roles sombra)",d:"a"}
   ]}
  ]},
 {n:13,title:"Segurança Mobile",extra:false,deps:[2,4,6],
@@ -1018,6 +1037,62 @@ window.RT_LAYERS = [
   ]},
   {t:"Internal Network Services",items:[
    {id:"41-7",t:"Serviços legados no perímetro ou redes planas: RDP (BlueKeep), SMB (EternalBlue), coerção de autenticação (PetitPotam)",d:"i"}
+  ]}
+ ]},
+{n:42,title:"Web3, Smart Contracts & DeFi",extra:true,deps:[4,6,11],
+ desc:"O código é público, imutável e lida com dinheiro. Vulnerabilidades aqui não causam RCE, causam drenagem de milhões em segundos.",
+ sections:[
+  {t:"Smart Contracts (Solidity/Vyper)",items:[
+   {id:"42-1",t:"Reentrancy: a vulnerabilidade clássica (ex: DAO hack), checks-effects-interactions pattern",d:"i"},
+   {id:"42-2",t:"Manipulação de Oráculos e Flash Loans: explorar dependência de preço spot em exchanges descentralizadas (DEX)",d:"a"},
+   {id:"42-3",t:"Access Control & Logic Flaws: funções de inicialização sem proteção, tx.origin vs msg.sender",d:"i"},
+   {id:"42-4",t:"Integer Overflow/Underflow: relevância em Solidity < 0.8.0 e como contornar proteções modernas",d:"i"},
+   {id:"42-5",t:"Front-running & MEV (Miner Extractable Value): explorar transações no mempool antes de serem mineradas",d:"a"}
+  ]},
+  {t:"dApps & Carteiras (Client-Side)",items:[
+   {id:"42-6",t:"Malicious Signatures (EIP-712 / EIP-191): induzir o usuário a assinar transações cegas (blind signing)",d:"i"},
+   {id:"42-7",t:"Wallet Hijacking: extração de seed phrases de memória ou storage de extensões de navegador (MetaMask)",d:"a"},
+   {id:"42-8",t:"Ice Phishing: induzir a aprovação de tokens (ERC20 approve) para um contrato malicioso",d:"i"}
+  ]},
+  {t:"Infraestrutura Web3",items:[
+   {id:"42-9",t:"Vulnerabilidades em Bridges: como pontes cross-chain são exploradas (validação de merkle proofs)",d:"e"},
+   {id:"42-10",t:"Abuso de RPC Nodes: ataques contra a infraestrutura que conecta a dApp à blockchain",d:"i"}
+  ]}
+ ]},
+{n:43,title:"Web Avançado & Client-Side Moderno",extra:true,deps:[11,20],
+ desc:"Aplicações modernas (React, Next.js, Vue) mudaram a superfície de ataque. XSS clássico diminuiu, mas novas classes surgiram.",
+ sections:[
+  {t:"Ecossistema JavaScript & Client-Side",items:[
+   {id:"43-1",t:"Prototype Pollution: poluição de protótipo em JS levando a XSS, RCE (em Node.js) ou bypass de lógica",d:"a"},
+   {id:"43-2",t:"DOM Clobbering: sobrescrever variáveis globais do JS manipulando atributos ID/Name no HTML",d:"a"},
+   {id:"43-3",t:"WebAssembly (Wasm) Reversing: engenharia reversa de módulos Wasm no navegador para bypass de licenças ou extração de secrets",d:"a"},
+   {id:"43-4",t:"Bypass de CSP (Content Security Policy) Moderno: JSONP endpoints, angular/vue template injection, gadgets em bibliotecas permitidas",d:"i"},
+   {id:"43-5",t:"Electron Apps: XSS-to-RCE via nodeIntegration, abuso de webPreferences (contextIsolation, preload scripts), bypass de CORS no Electron",d:"a"},
+   {id:"43-6",t:"PWA (Progressive Web Apps): abuso de service workers, cache poisoning persistente, man-in-the-middle via worker registrado",d:"i"},
+   {id:"43-7",t:"SPA (Single Page Application) Auth Bypass: manipular state do Vuex/Redux, bypass de role guards via client-side",d:"i"}
+  ]},
+  {t:"Cross-Origin & Vazamentos",items:[
+   {id:"43-8",t:"CORS Misconfigurations: null origin, regex falho em origin reflection, roubo de dados autenticados",d:"i"},
+   {id:"43-9",t:"XS-Leaks (Cross-Site Leaks): inferir dados de usuários via side-channels (timing, frame counting, cache probing)",d:"a"},
+   {id:"43-10",t:"PostMessage Vulnerabilities: roubo de tokens ou XSS via comunicação insegura entre iframes/janelas",d:"i"}
+  ]},
+  {t:"Server-Side Rendering (SSR) & Modern Stacks",items:[
+   {id:"43-11",t:"Next.js / Nuxt.js Data Exposure: vazamento de dados sensíveis em props embutidas no HTML (ex: __NEXT_DATA__)",d:"i"},
+   {id:"43-12",t:"SSR SSRF: requisições falsificadas originadas pela renderização do lado do servidor de componentes modernos",d:"a"}
+  ]}
+ ]},
+{n:44,title:"macOS Enterprise & Mobile Device Management (MDM)",extra:true,deps:[2,12,27],
+ desc:"Em empresas modernas, o AD foi trocado pelo Jamf ou Kandji. Comprometer o MDM é comprometer a frota inteira.",
+ sections:[
+  {t:"MDM & Gestão de Frota",items:[
+   {id:"44-1",t:"Jamf Pro / Kandji / InTune: arquitetura, políticas, e perfis de configuração",d:"i"},
+   {id:"44-2",t:"Abuso de Self Service: extração de credenciais ou scripts bash maliciosos rodando como root",d:"a"},
+   {id:"44-3",t:"Roubo de MDM Tokens: extração de certificados de identidade (SCEP) da keychain para impersonar dispositivos",d:"a"}
+  ]},
+  {t:"macOS Lateral Movement & Post-Exploitation",items:[
+   {id:"44-4",t:"Apple Remote Desktop (ARD) / VNC: pivoting gráfico em redes corporativas com credenciais reutilizadas",d:"i"},
+   {id:"44-5",t:"Abuso de Munki / Chef / Puppet: envenenamento de catálogos de software internos para deploy de malware (Supply Chain interno)",d:"a"},
+   {id:"44-6",t:"Plists (Property Lists) de sistema: persistência via LaunchDaemons injetados via ferramentas de gestão legítimas",d:"i"}
   ]}
  ]}
 ];
