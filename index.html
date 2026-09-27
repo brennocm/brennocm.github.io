@@ -124,13 +124,25 @@
                         <div class="category-title">
                             <span>Tutoriais Técnicos</span>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">5 itens</span>
+                                <span class="category-count">6 itens</span>
                                 <span class="category-arrow">▼</span>
                             </div>
                         </div>
                     </div>
                     <div class="category-content" id="technical-content">
                         <div class="category-inner">
+                            <article class="post" onclick="openArticle('articles/pt-br/tor-bridge.html', event)">
+                                <div>
+                                    <h2>Criação de uma Bridge Tor</h2>
+                                    <p>Implantação de uma bridge obfs4 em Docker, com monitoramento, alertas e hardening de host.</p>
+                                    <div class="meta">
+                                        <span class="meta-date">📅 14 set 2026</span>
+                                    </div>
+                                    <div class="post-tags">
+                                        <span class="tag">Privacy</span>
+                                    </div>
+                                </div>
+                            </article>
                             <article class="post" onclick="openArticle('articles/pt-br/oci-secops.html', event)">
                                 <div>
                                     <h2>OCI-SecOps: Infraestrutura de Segurança Automatizada</h2>
@@ -202,6 +214,240 @@
                         </div>
                     </div>
                 </div>
+                <div class="category" id="writeups-category">
+                    <div class="category-header" onclick="toggleCategory('writeups')">
+                        <div class="category-title">
+                            <span>Write-ups</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="category-count">31 itens</span>
+                                <span class="category-arrow">▼</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-content" id="writeups-content">
+                        <div class="category-inner">
+                            <div class="wu-folder">
+                                <div class="wu-folder-header" onclick="toggleFolder(this, event)">
+                                    <span class="wu-folder-name">HackTheBox</span>
+                                    <span class="wu-folder-meta"><span class="wu-num">16</span><span class="wu-caret">▼</span></span>
+                                </div>
+                                <div class="wu-folder-body"><div class="wu-folder-inner">
+                                <div class="wu-folder wu-folder--nested">
+                                    <div class="wu-folder-header" onclick="toggleFolder(this, event)">
+                                        <span class="wu-folder-name">Machines</span>
+                                        <span class="wu-folder-meta"><span class="wu-num">2</span><span class="wu-caret">▼</span></span>
+                                    </div>
+                                    <div class="wu-folder-body"><div class="wu-folder-inner">
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/machines/kobold.html', event)">
+                                <div>
+                                    <h2>Kobold</h2>
+                                    <p>RCE não autenticada no MCPJam Inspector (CVE-2026-23744); root por fuga de container (grupo docker).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/machines/reactor.html', event)">
+                                <div>
+                                    <h2>Reactor</h2>
+                                    <p>RCE não autenticada no Next.js 15.0.3 (CVE-2025-55182); root via Node.js Inspector exposto (--inspect).</p>
+                                </div>
+                            </article>
+                                    </div></div>
+                                </div>
+                                <div class="wu-folder wu-folder--nested">
+                                    <div class="wu-folder-header" onclick="toggleFolder(this, event)">
+                                        <span class="wu-folder-name">Starting Point</span>
+                                        <span class="wu-folder-meta"><span class="wu-num">14</span><span class="wu-caret">▼</span></span>
+                                    </div>
+                                    <div class="wu-folder-body"><div class="wu-folder-inner">
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/meow.html', event)">
+                                <div>
+                                    <h2>Meow</h2>
+                                    <p>Serviço Telnet exposto com login root sem senha, dando acesso direto ao sistema.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/fawn.html', event)">
+                                <div>
+                                    <h2>Fawn</h2>
+                                    <p>FTP com login anônimo habilitado, expondo os arquivos para download.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/dancing.html', event)">
+                                <div>
+                                    <h2>Dancing</h2>
+                                    <p>Compartilhamento SMB (WorkShares) acessível sem autenticação.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/redeemer.html', event)">
+                                <div>
+                                    <h2>Redeemer</h2>
+                                    <p>Instância Redis sem autenticação na porta 6379, legível via redis-cli.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/explosion.html', event)">
+                                <div>
+                                    <h2>Explosion</h2>
+                                    <p>Área de trabalho remota (RDP) com Administrator e senha em branco.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/preignition.html', event)">
+                                <div>
+                                    <h2>Preignition</h2>
+                                    <p>Directory busting revela admin.php protegido por credenciais padrão (admin:admin).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/mongod.html', event)">
+                                <div>
+                                    <h2>Mongod</h2>
+                                    <p>MongoDB sem autenticação (27017); a coleção sensível guarda a flag.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/synced.html', event)">
+                                <div>
+                                    <h2>Synced</h2>
+                                    <p>Módulo rsync público (873) permitindo download anônimo de arquivos.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/appointment.html', event)">
+                                <div>
+                                    <h2>Appointment</h2>
+                                    <p>Bypass de autenticação por SQL Injection usando comentário (admin' #).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/sequel.html', event)">
+                                <div>
+                                    <h2>Sequel</h2>
+                                    <p>MariaDB/MySQL acessível como root sem senha; a flag está na tabela config.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/crocodile.html', event)">
+                                <div>
+                                    <h2>Crocodile</h2>
+                                    <p>Credenciais vazadas por FTP anônimo e reutilizadas no login web.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/responder.html', event)">
+                                <div>
+                                    <h2>Responder</h2>
+                                    <p>Inclusão de arquivo (LFI/RFI) força autenticação SMB, capturando um hash NTLMv2 quebrado para acesso via WinRM.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/three.html', event)">
+                                <div>
+                                    <h2>Three</h2>
+                                    <p>Bucket S3 (LocalStack) mal configurado usado para subir uma web shell PHP e obter RCE.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/hackthebox/starting-point/archetype.html', event)">
+                                <div>
+                                    <h2>Archetype</h2>
+                                    <p>SMB expõe credenciais MSSQL; xp_cmdshell e a senha no histórico do PowerShell levam a Administrator.</p>
+                                </div>
+                            </article>
+                                    </div></div>
+                                </div>
+                                </div></div>
+                            </div>
+                            <div class="wu-folder">
+                                <div class="wu-folder-header" onclick="toggleFolder(this, event)">
+                                    <span class="wu-folder-name">TryHackMe</span>
+                                    <span class="wu-folder-meta"><span class="wu-num">15</span><span class="wu-caret">▼</span></span>
+                                </div>
+                                <div class="wu-folder-body"><div class="wu-folder-inner">
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/relevant.html', event)">
+                                <div>
+                                    <h2>Relevant</h2>
+                                    <p>Share SMB gravável servido pelo IIS (web shell ASPX); SYSTEM via PrintSpoofer (SeImpersonate).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/olympus.html', event)">
+                                <div>
+                                    <h2>Olympus</h2>
+                                    <p>SQLi no Victor CMS e upload de shell em subdomínio; SUID e chave SSH escalam até root.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/blueprint.html', event)">
+                                <div>
+                                    <h2>Blueprint</h2>
+                                    <p>RCE no osCommerce 2.3.4 (EDB-44374) até SYSTEM; dump do SAM com secretsdump.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/team.html', event)">
+                                <div>
+                                    <h2>Team</h2>
+                                    <p>vHost e LFI expõem uma chave SSH; PrivEsc encadeada abusando de sudo sobre scripts.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/wgel.html', event)">
+                                <div>
+                                    <h2>Wgel CTF</h2>
+                                    <p>Chave SSH exposta em diretório oculto do site; PrivEsc por sudo wget (GTFOBins).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/startup.html', event)">
+                                <div>
+                                    <h2>Startup</h2>
+                                    <p>Upload por FTP vira web shell PHP; senha recuperada de um pcap e PrivEsc por script de cron do root.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/basic-pentesting.html', event)">
+                                <div>
+                                    <h2>Basic Pentesting</h2>
+                                    <p>Samba e brute de SSH; a quebra da passphrase de uma chave privada permite escalar.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/bounty-hacker.html', event)">
+                                <div>
+                                    <h2>Bounty Hacker</h2>
+                                    <p>FTP anônimo vaza uma wordlist; brute de SSH e PrivEsc por sudo tar (GTFOBins).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/blog.html', event)">
+                                <div>
+                                    <h2>Blog</h2>
+                                    <p>WordPress 5.0 via wp_crop_rce (CVE-2019-8943); PrivEsc por binário SUID que lê variável de ambiente.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/ignite.html', event)">
+                                <div>
+                                    <h2>Ignite</h2>
+                                    <p>RCE no Fuel CMS 1.4 (CVE-2018-16763); a senha do banco é reutilizada para virar root.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/cyberheroes.html', event)">
+                                <div>
+                                    <h2>CyberHeroes</h2>
+                                    <p>Bypass de autenticação lendo a lógica de login no JavaScript do cliente.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/brooklyn-nine-nine.html', event)">
+                                <div>
+                                    <h2>Brooklyn Nine Nine</h2>
+                                    <p>Esteganografia em imagem revela a senha SSH; PrivEsc por sudo nano (GTFOBins).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/agent-sudo.html', event)">
+                                <div>
+                                    <h2>Agent Sudo</h2>
+                                    <p>User-Agent, brute de FTP e esteganografia levam ao SSH; root via CVE-2019-14287 (sudo).</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/kenobi.html', event)">
+                                <div>
+                                    <h2>Kenobi</h2>
+                                    <p>ProFTPd mod_copy + NFS roubam a chave SSH; PrivEsc por sequestro de PATH em binário SUID.</p>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/pt-br/writeups/tryhackme/blue.html', event)">
+                                <div>
+                                    <h2>Blue</h2>
+                                    <p>Exploração do EternalBlue (MS17-010 / CVE-2017-0143) no SMBv1 até SYSTEM.</p>
+                                </div>
+                            </article>
+                                </div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="category" id="reviews-category">
                     <div class="category-header" onclick="toggleCategory('reviews')">
                         <div class="category-title">
@@ -222,8 +468,7 @@
                                         <span class="meta-date">📅 06 set 2026</span>
                                     </div>
                                     <div class="post-tags">
-                                        <span class="tag">Blue Team</span>
-                                        <span class="tag">GRC</span>
+                                        <span class="tag">Cybersecurity</span>
                                     </div>
                                 </div>
                             </article>
@@ -551,6 +796,18 @@
 
             // Toggle the clicked category
             category.classList.toggle('expanded');
+        }
+
+        // Toggle a write-up subfolder (scoped accordion, like the main categories)
+        function toggleFolder(header, event) {
+            if (event) event.stopPropagation();
+            const folder = header.parentElement;
+            Array.prototype.forEach.call(folder.parentElement.children, function (sib) {
+                if (sib !== folder && sib.classList && sib.classList.contains('wu-folder')) {
+                    sib.classList.remove('open');
+                }
+            });
+            folder.classList.toggle('open');
         }
 
         // Open article in same tab

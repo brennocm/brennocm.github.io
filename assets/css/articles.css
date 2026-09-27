@@ -600,3 +600,47 @@ footer {
         transition: none;
     }
 }
+
+/* Attack-flow diagram (write-ups) */
+.attack-flow {
+    margin: 26px 0 30px;
+    padding: 18px 18px 20px;
+    background: #111;
+    border: 1px solid #1f1f1f;
+    border-radius: 10px;
+}
+
+.attack-flow figcaption {
+    color: #9fef00;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 6px;
+}
+
+.attack-flow svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    font-family: 'Raleway', sans-serif;
+}
+
+/* Write-ups: tighter spacing between sections (many short sections) */
+.writeup-body h2 {
+    margin: 38px 0 16px;
+    padding-top: 18px;
+}
+
+.writeup-body h2:first-child,
+.writeup-body > h2:first-of-type {
+    margin-top: 22px;
+}
+
+.writeup-body h2[id]::before {
+    margin-bottom: 6px;
+}
+
+.writeup-body .code-block {
+    margin: 16px 0;
+}

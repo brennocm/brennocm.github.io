@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>tor bridge.</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../pt-br/tor-bridge.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../en-us/tor-bridge.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>Criação de uma Bridge Tor</h1>
+         <p class="meta">
+            <span>set 14, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Existe um tipo de contribuição técnica que quase ninguém enxerga, mas que sustenta o acesso à internet
+            livre de milhares de pessoas todos os dias: doar um pedaço de um servidor para rodar uma <b>bridge</b> da
+            rede Tor. Diferente de um relé comum, a bridge é um ponto de entrada não listado publicamente, existindo
+            especificamente para permitir que usuários sob censura alcancem a rede Tor sem que o provedor de internet
+            local perceba.
+            <br><br>
+            Este artigo documenta o processo completo: a fundamentação técnica do que é uma bridge e por que ela
+            importa, os critérios de escolha da VPS, a implantação da stack em Docker (bridge obfs4, monitoramento e
+            alertas) e o hardening do host. Ao final, também é discutido o principal ponto de falha encontrado na
+            prática, a interação entre Docker e UFW, que silenciosamente invalida boa parte das regras de firewall
+            de uma VPS.
+         </p>
+
+         <h2>Conceitos</h2>
+
+         <p>
+            <b>Tipos de nó na rede Tor</b>
+            <br>
+            <br> A rede Tor é sustentada por voluntários que operam três tipos de nó, com propósitos distintos. O
+            <b>relé intermediário</b> repassa tráfego já criptografado entre outros nós da rede, sendo público e
+            listado abertamente no consenso. O <b>relé de saída</b> é o último salto, no qual o tráfego deixa a rede
+            em direção à internet aberta usando o IP do operador, é o tipo mais necessário, porém o mais sujeito a
+            reclamações de abuso e a implicações jurídicas. A <b>bridge</b>, por sua vez, é um ponto de entrada
+            deliberadamente ausente do consenso público.
+            <br>
+            <br> A distinção é crucial: relés comuns constam de uma lista pública que qualquer governo pode baixar e
+            bloquear integralmente em uma única operação. A bridge não está nessa lista. Um censor não consegue
+            bloquear aquilo que não consegue enumerar, e é exatamente aí que reside sua função.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>obfs4 e Pluggable Transports</b>
+            <br>
+            <br> Não basta que o endereço da bridge seja secreto: o tráfego Tor possui uma assinatura reconhecível no
+            handshake TLS, o que permite que sistemas de <i>Deep Packet Inspection</i> (DPI) identifiquem e bloqueiem
+            a conexão mesmo sem conhecer o IP de destino. Os <i>Pluggable Transports</i> resolvem esse problema ao
+            encapsular o tráfego em uma camada de ofuscação.
+            <br>
+            <br> O <b>obfs4</b> é o transporte padrão para bridges. Ele aplica um handshake autenticado por uma chave
+            que só o cliente que possui a bridge line conhece, transformando todo o fluxo em ruído aparentemente
+            aleatório, sem cabeçalhos fixos, sem padrão de tamanho de pacote reconhecível e sem resposta a sondagens
+            de quem não possui a chave. Essa última propriedade é o que confere resistência ao <i>active probing</i>:
+            um censor que se conecte à porta obfs4 sem a chave correta não recebe nada que confirme tratar-se de uma
+            bridge Tor.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Distribuição e ciclo de vida de uma bridge</b>
+            <br>
+            <br> Uma bridge recém-criada não é entregue diretamente aos usuários. Ela é registrada junto à
+            <i>Bridge Authority</i> e passa a ser distribuída pelo <b>Rdsys</b>, o sistema de distribuição do Tor
+            Project, que a disponibiliza por canais controlados, o BridgeDB via HTTPS, e-mail e Telegram, ou
+            embarcada no Tor Browser. A distribuição é fragmentada de propósito: nenhum canal entrega o conjunto
+            completo de bridges, justamente para impedir que um censor enumere todas de uma vez.
+            <br>
+            <br> Bridges não são permanentes. Países com capacidade de <i>probing</i> ativo em larga escala conseguem
+            identificar e bloquear bridges ao longo do tempo, mesmo com ofuscação. Isso cria uma dinâmica de reposição
+            contínua: a rede depende de um fluxo constante de bridges novas, ainda ausentes das listas de bloqueio,
+            substituindo aquelas que vão sendo queimadas. O valor de uma bridge nova está precisamente nesse ponto.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Relevância operacional</b>
+            <br>
+            <br> Os números sustentam o argumento. Rússia e Irã são consistentemente os países com maior volume de
+            conexões via bridge, na casa de dezenas de milhares de usuários diários somados, com picos que se
+            multiplicam por dezenas de vezes durante períodos de repressão mais intensa. No Irã, conexões diretas ao
+            Tor estão bloqueadas há anos; para praticamente todo usuário iraniano, a bridge não é uma alternativa -
+            é o único caminho de entrada existente. A rede opera com algo entre 1.800 e 2.200 bridges ativas em um
+            dado momento, um número modesto frente à demanda.
+         </p>
+
+         <br>
+         <h2>Por que não rodar em rede doméstica</h2>
+
+         <p>
+            A tentação de economizar e rodar a bridge em um computador de casa existe, mas esbarra em limitações
+            técnicas que uma VPS elimina de imediato.
+            <br><br>
+
+            <b>CGNAT</b>
+            <br><br>
+            Boa parte das conexões residenciais, sobretudo móveis e parte das conexões via cabo, opera atrás de
+            <i>Carrier-Grade NAT</i>, o que significa que o assinante sequer possui um IP público próprio. Sem IP
+            público, não há como a Bridge Authority alcançar a ORPort para validar a alcançabilidade da bridge. Trata-se
+            de um impedimento arquitetural, não de configuração.
+            <br><br>
+
+            <b>IP dinâmico</b>
+            <br><br>
+            Mesmo sem CGNAT, provedores residenciais rotacionam o IP do assinante periodicamente. Cada troca rompe a
+            continuidade da bridge, que precisa reconstruir reputação do zero, e os mecanismos de distribuição do
+            Rdsys favorecem bridges com uptime estável e endereço consistente.
+            <br><br>
+
+            <b>Banda compartilhada</b>
+            <br><br>
+            A bridge disputa upload com todo o consumo doméstico: streaming, videochamadas, jogos. Em uma VPS, a banda
+            é dedicada e previsível.
+            <br><br>
+
+            <b>Termos de serviço</b>
+            <br><br>
+            Diversos provedores residenciais proíbem contratualmente a operação de servidores, ainda que não fiscalizem
+            de forma ativa.
+            <br><br>
+
+            <b>Exposição do IP residencial</b>
+            <br><br>
+            Embora a bridge não exponha o operador aos usuários finais, esse é justamente o propósito do desenho -
+            ela permanece exposta a qualquer sistema de varredura da internet, incluindo os de países que realizam
+            probing ativo. É preferível que esse endereço seja o de uma VPS descartável, e não o da residência do
+            operador.
+         </p>
+
+         <br>
+         <h2>Escolha da VPS</h2>
+
+         <p>
+            Os requisitos oficiais do Tor Project para uma bridge são modestos: banda mínima de 1 Mbit/s (com faixa
+            ideal entre 10 e 16 Mbit/s), tráfego mensal mínimo de 100 GB, recomendando-se 2 TB ou mais, e nenhuma
+            exigência relevante de CPU ou RAM. Isso viabiliza planos de entrada de baixo custo.
+            <br><br>
+
+            <b>Hetzner (CX22)</b>
+            <br><br>
+            2 vCPU, 4 GB de RAM, 40 GB NVMe e 20 TB de tráfego mensal, na faixa de R$ 23 a 27/mês. É a melhor relação
+            entre banda incluída e preço entre os provedores tradicionais.
+            <br><br>
+
+            <b>OVHcloud (linha de entrada)</b>
+            <br><br>
+            2 GB de RAM com banda não medida, na faixa de R$ 21 a 25/mês. A ausência de franquia de tráfego elimina
+            qualquer preocupação com crescimento de uso.
+            <br><br>
+
+            <b>Contabo (Cloud VPS)</b>
+            <br><br>
+            4 vCPU, 8 GB de RAM e 100 GB de SSD por aproximadamente R$ 27/mês em contratos promocionais de longo prazo.
+            Recursos generosos, com desempenho de rede historicamente mais irregular.
+            <br><br>
+
+            <b>BuyVM</b>
+            <br><br>
+            Banda não medida a 1 Gbps na faixa de R$ 18/mês. Provedor menor, porém tradicionalmente tolerante a
+            infraestrutura de privacidade.
+            <br><br>
+
+            O fator decisivo na escolha não é CPU nem RAM, e sim <b>banda alta ou não medida</b>. Uma bridge saudável
+            e bem distribuída tende a receber tráfego crescente conforme ganha reputação na rede, de modo que um plano
+            com franquia limitada tende a se tornar gargalo antes do que se imagina. Também é prudente verificar a
+            política do provedor quanto a nós Tor: bridges e relés intermediários são amplamente aceitos, enquanto
+            relés de saída costumam ser proibidos.
+         </p>
+
+         <br>
+         <h2>Consumo real de recursos</h2>
+
+         <p>
+            Após meses de operação, o consumo medido da stack completa, bridge obfs4, monitoramento via Uptime Kuma
+            e o script de resumo diário, ficou consideravelmente abaixo do que qualquer plano de entrada oferece:
+         <pre class="code-block"><code>RAM     150-400 MB no total, contra 4-8 GB disponíveis
+Disco   1-2 GB para a stack completa, com crescimento lento via logs
+CPU     média bem abaixo de um núcleo, com picos raros sob tráfego intenso</code></pre>
+         </p>
+
+         <p>
+            Na prática, mesmo o plano mais barato da lista anterior mantém folga expressiva de recursos, o que permite
+            que a mesma VPS acumule outras funções, ferramentas de bug bounty e reconhecimento contínuo, por exemplo -
+            sem conflito perceptível com a bridge.
+         </p>
+
+         <br>
+         <h2>Arquitetura da stack</h2>
+
+         <p>
+            A stack roda inteiramente em Docker e é composta por três serviços, sobre um host previamente endurecido:
+            <br>
+            <br>
+            <b>Camada de serviço</b>: <i>obfs4-bridge</i>, construída a partir da imagem oficial do Tor Project
+            <br>
+            <b>Camada de observabilidade</b>: <i>uptime-kuma</i>, monitorando a porta e alertando via Telegram
+            <br>
+            <b>Camada de relatório</b>: <i>tor-bridge-report.sh</i>, consultando a API Onionoo do Tor Metrics
+            <br>
+            <b>Camada de host</b>: UFW, ufw-docker, Fail2Ban, unattended-upgrades e hardening de kernel via sysctl
+         </p>
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <p>
+            <b>Preparação do host</b>
+            <br>
+            <br> Com a instância provisionada, atualize o sistema e instale as dependências básicas.
+         <pre class="code-block"><code>apt update && apt upgrade -y</code></pre>
+         <pre class="code-block"><code>apt install -y ufw fail2ban unattended-upgrades curl jq</code></pre>
+         </p>
+
+         <p>
+            Em seguida, instale o Docker Engine a partir do script oficial e habilite o serviço.
+         <pre class="code-block"><code>curl -fsSL https://get.docker.com | sh</code></pre>
+         <pre class="code-block"><code>systemctl enable --now docker</code></pre>
+         </p>
+
+         <p>
+            <b>Hardening de kernel</b>
+            <br>
+            <br> Antes de expor qualquer serviço, aplique as proteções de rede no nível do kernel. Crie o arquivo
+            <b>/etc/sysctl.d/99-hardening.conf</b> com o conteúdo abaixo.
+         <pre class="code-block"><code># Proteções de rede
+net.ipv4.conf.all.accept_redirects = 0   # Bloqueia ICMP redirects
+net.ipv4.conf.all.send_redirects = 0     # Não envia redirects
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.all.rp_filter = 1          # Previne IP spoofing
+net.ipv4.tcp_syncookies = 1              # Mitiga SYN flood
+net.ipv4.conf.all.log_martians = 1
+
+# Proteções de kernel
+kernel.kptr_restrict = 2                 # Oculta ponteiros de kernel
+kernel.dmesg_restrict = 1</code></pre>
+         <pre class="code-block"><code>sysctl --system</code></pre>
+         </p>
+
+         <p>
+            <b>Firewall e o problema do Docker</b>
+            <br>
+            <br> Configure o UFW com política restritiva, liberando apenas o SSH. As portas da bridge <b>não</b> devem
+            ser liberadas aqui, o motivo é explicado logo em seguida.
+         <pre class="code-block"><code>ufw default deny incoming
+ufw default allow outgoing
+ufw allow 22/tcp
+ufw --force enable</code></pre>
+         </p>
+
+         <p>
+            O ponto crítico: o <b>Docker ignora o UFW por padrão</b>. A razão é a ordem de avaliação do iptables:
+            o tráfego de uma porta publicada sofre <i>DNAT</i> na cadeia <b>PREROUTING</b> (tabela nat) e é entregue
+            ao contêiner atravessando a cadeia <b>FORWARD</b>, nunca a cadeia <b>INPUT</b>, que é justamente onde o
+            UFW aplica suas regras. Ao publicar uma porta em um <i>docker-compose.yml</i>, o Docker ainda insere suas
+            próprias regras na cadeia DOCKER, avaliada dentro do FORWARD antes de qualquer política do UFW. O
+            resultado é que um contêiner com porta publicada fica acessível externamente mesmo com o UFW configurado
+            para negar tudo, e, de forma inversa, tentativas de liberar a porta apenas pelo UFW não surtem o efeito
+            esperado. É uma divergência silenciosa entre o que o <i>ufw status</i> reporta e o que o kernel
+            efetivamente aplica.
+            <br><br>
+            A correção é o projeto comunitário <b>ufw-docker</b>, que reorganiza as cadeias de forma que o UFW volte a
+            governar o tráfego destinado aos contêineres.
+         <pre class="code-block"><code>wget -O /usr/local/bin/ufw-docker \
+  https://github.com/chaifeng/ufw-docker/raw/master/ufw-docker
+chmod +x /usr/local/bin/ufw-docker</code></pre>
+         <pre class="code-block"><code>ufw-docker install && systemctl restart ufw</code></pre>
+         </p>
+
+         <p>
+            A partir desse ponto, a liberação passa a ser feita <b>por contêiner</b>, e não por porta genérica. As
+            regras específicas da bridge são aplicadas após a subida dos serviços.
+            <br><br>
+            <i>* A validação precisa ser feita a partir de fora do host, com ferramentas independentes (nmap ou
+               verificadores de porta online). Confiar apenas no que roda localmente é exatamente o que mascara esse
+               tipo de falha.</i>
+         </p>
+
+         <p>
+            <b>Configuração da bridge obfs4</b>
+            <br>
+            <br> A imagem oficial do Tor Project encapsula o <i>tor</i> e o <i>obfs4proxy</i> já configurados como
+            bridge. Crie o diretório do projeto e o arquivo de variáveis de ambiente.
+         <pre class="code-block"><code>mkdir -p /opt/tor-bridge && cd /opt/tor-bridge</code></pre>
+         <pre class="code-block"><code># .env
+OR_PORT=443
+PT_PORT=8443
+EMAIL=seu-email@exemplo.com
+NICKNAME=SuaBridge</code></pre>
+         </p>
+
+         <p>
+            A escolha das portas não é arbitrária. A <b>ORPort</b> é usada para a comunicação com a rede Tor e para a
+            verificação de alcançabilidade pela Bridge Authority; a <b>PT_PORT</b> é a porta obfs4 à qual os clientes
+            censurados se conectam. Portas comuns como 443 tendem a atravessar firewalls restritivos com mais
+            facilidade do que portas altas arbitrárias. O <i>EMAIL</i> é usado pelo Tor Project para notificar o
+            operador sobre problemas com a bridge, e o <i>NICKNAME</i> é o identificador público do nó.
+         </p>
+
+         <p>
+            Em seguida, defina o <b>docker-compose.yml</b> com os três serviços da stack.
+         <pre class="code-block"><code>services:
+  obfs4-bridge:
+    image: thetorproject/obfs4-bridge:latest
+    container_name: obfs4-bridge
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "443:443"
+      - "8443:8443"
+    volumes:
+      - tor-data:/var/lib/tor
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - kuma-data:/app/data
+
+volumes:
+  tor-data:
+  kuma-data:</code></pre>
+         </p>
+
+         <p>
+            O volume <b>tor-data</b> é o elemento mais importante da configuração: é nele que residem as chaves de
+            identidade da bridge. Perder esse volume significa perder o fingerprint, toda a reputação acumulada na
+            rede e a continuidade da distribuição pelo Rdsys, a bridge volta a ser tratada como um nó novo. O
+            Uptime Kuma, por sua vez, é publicado apenas em <i>127.0.0.1</i>, deliberadamente inacessível de fora e
+            alcançável somente por túnel SSH.
+         </p>
+
+         <p>
+            Suba a stack e acompanhe a inicialização.
+         <pre class="code-block"><code>docker compose up -d</code></pre>
+         <pre class="code-block"><code>docker logs -f obfs4-bridge</code></pre>
+         </p>
+
+         <p>
+            Agora aplique as regras de firewall por contêiner. Sem esta etapa, a ORPort não é alcançável de fora e a
+            bridge nunca conclui a validação.
+         <pre class="code-block"><code>ufw-docker allow obfs4-bridge 443/tcp
+ufw-docker allow obfs4-bridge 8443/tcp</code></pre>
+         </p>
+
+         <p>
+            <b>Validação da bridge</b>
+            <br>
+            <br> A confirmação definitiva vem dos próprios logs do <i>tor</i>. A mensagem abaixo indica que a Bridge
+            Authority conseguiu alcançar a ORPort a partir da internet.
+         <pre class="code-block"><code>docker logs obfs4-bridge | grep -i "self-testing"</code></pre>
+         <pre class="code-block"><code>[notice] Self-testing indicates your ORPort 203.0.113.10:443 is reachable
+         from the outside. Excellent. Publishing server descriptor.</code></pre>
+         </p>
+
+         <p>
+            Com a bridge publicada, obtenha a bridge line, a string que um cliente censurado utiliza para se conectar
+            manualmente ao nó.
+         <pre class="code-block"><code>docker exec obfs4-bridge get-bridge-line</code></pre>
+         <pre class="code-block"><code>obfs4 203.0.113.10:8443 A1B2C3D4E5F60718293A4B5C6D7E8F9012345678 \
+  cert=Bvg/itxeL4TWKLP6N1MaQzSOC6tBjZmJ3EXAMPLEcert iat-mode=0</code></pre>
+         </p>
+
+         <p>
+            <i>* A bridge line não deve ser divulgada publicamente. A distribuição é responsabilidade do Rdsys, que a
+               entrega de forma fragmentada a usuários reais. Publicá-la em um repositório, fórum ou rede social é o
+               caminho mais rápido para que ela seja coletada e adicionada às listas de bloqueio.</i>
+         </p>
+
+         <p>
+            <b>Consulta ao Onionoo</b>
+            <br>
+            <br> A API pública <b>Onionoo</b> expõe os metadados de nós da rede mantidos pelo Tor Metrics. No caso de
+            bridges, a consulta não é feita pelo fingerprint direto, e sim pelo seu <i>hash</i> SHA-1, mais uma
+            camada de proteção contra enumeração. Extraia o fingerprint do volume e derive o hash.
+         <pre class="code-block"><code>docker exec obfs4-bridge cat /var/lib/tor/fingerprint</code></pre>
+         <pre class="code-block"><code>echo -n "&lt;FINGERPRINT&gt;" | xxd -r -p | sha1sum | cut -d' ' -f1 | tr 'a-z' 'A-Z'</code></pre>
+         </p>
+
+         <p>
+            Com o hash em mãos, consulte o estado da bridge.
+         <pre class="code-block"><code>curl -s "https://onionoo.torproject.org/details?lookup=&lt;HASHED_FINGERPRINT&gt;" | jq</code></pre>
+         </p>
+
+         <p>
+            <i>* Bridges recém-criadas levam algumas horas para aparecer no Onionoo e alguns dias até serem
+               efetivamente distribuídas pelo Rdsys. Ausência de retorno nas primeiras horas é comportamento
+               esperado, não sintoma de erro.</i>
+         </p>
+
+         <p>
+            <b>Monitoramento e alertas</b>
+            <br>
+            <br> Como o Uptime Kuma está publicado apenas em loopback, o acesso à interface se dá por túnel SSH,
+            evitando expor o painel à internet.
+         <pre class="code-block"><code>ssh -N -L 3001:localhost:3001 root@&lt;IP_PUBLICO&gt;</code></pre>
+         <pre class="code-block"><code># Então, localmente:
+# http://localhost:3001</code></pre>
+         </p>
+
+         <p>
+            No painel, configure um monitor do tipo <b>TCP Port</b> apontando para a PT_PORT (8443) e um segundo para a
+            ORPort (443), com intervalo de 60 segundos. Em seguida, adicione uma notificação do tipo <b>Telegram</b>,
+            informando o token do bot e o chat ID. A queda de qualquer uma das portas passa a gerar alerta imediato -
+            e, para uma bridge, downtime prolongado significa perda de posição na distribuição do Rdsys.
+         </p>
+
+         <p>
+            <b>Resumo diário automatizado</b>
+            <br>
+            <br> Complementando o alerta reativo do Uptime Kuma, um relatório diário fornece a visão de estado da
+            bridge na perspectiva da própria rede: flags atribuídas, banda observada e data do último descritor
+            publicado. Crie o script <b>/opt/tor-bridge/tor-bridge-report.sh</b>.
+         <pre class="code-block"><code>#!/usr/bin/env bash
+set -euo pipefail
+
+HASHED_FP="&lt;HASHED_FINGERPRINT&gt;"
+BOT_TOKEN="&lt;TELEGRAM_BOT_TOKEN&gt;"
+CHAT_ID="&lt;TELEGRAM_CHAT_ID&gt;"
+
+DATA=$(curl -s "https://onionoo.torproject.org/details?lookup=${HASHED_FP}")
+
+RUNNING=$(echo "$DATA" | jq -r '.bridges[0].running')
+NICKNAME=$(echo "$DATA" | jq -r '.bridges[0].nickname')
+FLAGS=$(echo "$DATA" | jq -r '.bridges[0].flags | join(", ")')
+SEEN=$(echo "$DATA" | jq -r '.bridges[0].last_seen')
+
+[ "$RUNNING" = "true" ] && STATUS="online" || STATUS="OFFLINE"
+
+MSG="Bridge ${NICKNAME}
+Status: ${STATUS}
+Flags: ${FLAGS}
+Último descritor: ${SEEN}"
+
+curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+  -d "chat_id=${CHAT_ID}" \
+  --data-urlencode "text=${MSG}" &gt; /dev/null</code></pre>
+         </p>
+
+         <p>
+            Torne o script executável e agende a execução diária via cron.
+         <pre class="code-block"><code>chmod +x /opt/tor-bridge/tor-bridge-report.sh</code></pre>
+         <pre class="code-block"><code># crontab -e
+0 9 * * * /opt/tor-bridge/tor-bridge-report.sh</code></pre>
+         </p>
+
+         <p>
+            <i>* O script contém credenciais do bot do Telegram. Restrinja as permissões com
+               <b>chmod 700</b> e mantenha-o fora de qualquer repositório versionado.</i>
+         </p>
+
+         <p>
+            <b>Fail2Ban e atualizações automáticas</b>
+            <br>
+            <br> Por fim, complete o hardening do host habilitando o Fail2Ban para o SSH e as atualizações automáticas
+            de segurança. Uma bridge é um serviço de longa duração e baixa manutenção, justamente o perfil de
+            máquina que tende a acumular pacotes desatualizados.
+         <pre class="code-block"><code>systemctl enable --now fail2ban</code></pre>
+         <pre class="code-block"><code>dpkg-reconfigure --priority=low unattended-upgrades</code></pre>
+         </p>
+
+         <br>
+         <h2>Considerações finais</h2>
+
+         <p>
+            O custo total de manutenção de uma bridge fica na faixa de <b>R$ 20 a 30 por mês</b>, e o conhecimento
+            técnico exigido não ultrapassa o de qualquer pessoa já familiarizada com Linux e Docker. Do ponto de vista
+            operacional, a única disciplina realmente necessária é preservar o volume de dados do contêiner e manter o
+            uptime estável.
+            <br><br>
+            A lição mais transferível do processo, contudo, extrapola o contexto do Tor: a divergência entre o que o
+            <i>ufw status</i> reporta e o que o kernel efetivamente aplica sob Docker afeta qualquer serviço
+            containerizado publicado em uma VPS. Validar a superfície de exposição a partir de fora do host, com
+            ferramentas independentes, deveria ser etapa padrão de qualquer implantação, e não apenas o desfecho de
+            uma sessão de depuração.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
