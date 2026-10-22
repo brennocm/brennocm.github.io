@@ -124,13 +124,42 @@
                         <div class="category-title">
                             <span>Technical Tutorials</span>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">6 items</span>
+                                <span class="category-count">8 items</span>
                                 <span class="category-arrow">▼</span>
                             </div>
                         </div>
                     </div>
                     <div class="category-content" id="technical-content">
                         <div class="category-inner">
+                            <article class="post" onclick="openArticle('articles/en-us/blindsight.html', event)">
+                                <div>
+                                    <h2>blindsight: Offline Verification of Safe Transactions</h2>
+                                    <p>Offline Rust verifier that recomputes the EIP-712 hashes of Safe transactions and detects payloads that can take over the multisig.</p>
+                                    <div class="meta">
+                                        <span class="meta-date">📅 Oct 22, 2026</span>
+                                    </div>
+                                    <div class="post-tags">
+                                        <span class="tag">Web3</span>
+                                        <span class="tag">Rust</span>
+                                        <span class="tag">Tools</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openArticle('articles/en-us/chainlink-security.html', event)">
+                                <div>
+                                    <h2>oraclint and oraclewatch: Chainlink Oracle Security</h2>
+                                    <p>Static linter for Chainlink nodes and a consumer-side Data Feed monitor, both written in Go.</p>
+                                    <div class="meta">
+                                        <span class="meta-date">📅 Oct 22, 2026</span>
+                                    </div>
+                                    <div class="post-tags">
+                                        <span class="tag">Web3</span>
+                                        <span class="tag">Go</span>
+                                        <span class="tag">DevSecOps</span>
+                                        <span class="tag">Tools</span>
+                                    </div>
+                                </div>
+                            </article>
                             <article class="post" onclick="openArticle('articles/en-us/tor-bridge.html', event)">
                                 <div>
                                     <h2>Creating a Tor Bridge</h2>
@@ -645,13 +674,43 @@
                         <div class="category-title">
                             <span>Projects</span>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">8 items</span>
+                                <span class="category-count">11 items</span>
                                 <span class="category-arrow">▼</span>
                             </div>
                         </div>
                     </div>
                     <div class="category-content" id="projects-content">
                         <div class="category-inner">
+                            <article class="post" onclick="openProject('https://github.com/brennocm/blindsight', event)">
+                                <div>
+                                    <h2>Blindsight</h2>
+                                    <p>Offline verifier for Safe multisig transactions: recomputes hardware wallet hashes and flags dangerous payloads.</p>
+                                    <div class="post-tags">
+                                        <span class="tag">Web3</span>
+                                        <span class="tag">Rust</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openProject('https://github.com/brennocm/oraclint', event)">
+                                <div>
+                                    <h2>Oraclint</h2>
+                                    <p>Static security linter for Chainlink node deployments (config, secrets, compose, Kubernetes).</p>
+                                    <div class="post-tags">
+                                        <span class="tag">Web3</span>
+                                        <span class="tag">Go</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="post" onclick="openProject('https://github.com/brennocm/oraclewatch', event)">
+                                <div>
+                                    <h2>Oraclewatch</h2>
+                                    <p>Consumer-side monitoring daemon for Chainlink Data Feeds, with alerting and Grafana.</p>
+                                    <div class="post-tags">
+                                        <span class="tag">Web3</span>
+                                        <span class="tag">Monitoring</span>
+                                    </div>
+                                </div>
+                            </article>
                             <article class="post" onclick="openProject('https://github.com/brennocm/pwncortex', event)">
                                 <div>
                                     <h2>PwnCortex</h2>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>blindsight.</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../pt-br/blindsight.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../en-us/blindsight.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>blindsight: verificação offline de transações Safe</h1>
+         <p class="meta">
+            <span>out 22, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Em 21 de fevereiro de 2025, a Bybit perdeu cerca de <b>US$ 1,5 bilhão</b> no maior roubo da história das
+            criptomoedas. Não houve falha no contrato da carteira multisig, nem chave privada vazada. Os três
+            responsáveis pela assinatura aprovaram, cada um no seu hardware wallet, uma transação diferente daquela
+            que a interface web mostrava. O dispositivo exibia apenas um hash de 32 bytes, e ninguém tinha como
+            saber que aquele hash correspondia a outra coisa.
+            <br><br>
+            Este artigo apresenta o <a href="https://github.com/brennocm/blindsight">blindsight</a>, uma ferramenta
+            open-source em Rust que desenvolvi para fechar exatamente essa lacuna: ela recalcula, offline, os
+            hashes que o hardware wallet mostra, decodifica o que está prestes a ser assinado e avisa quando a
+            transação é capaz de tomar o controle da carteira.
+         </p>
+
+         <h2>Conceitos</h2>
+
+         <p>
+            <b>Safe e assinaturas multisig</b>
+            <br>
+            <br> O <i>Safe</i> (antigo Gnosis Safe) é o contrato de carteira multisig mais usado do Ethereum. Ele tem
+            um conjunto de donos (<i>owners</i>) e um limiar (<i>threshold</i>): com 3 de 5, por exemplo, qualquer
+            transação precisa de três assinaturas. Cada dono não assina a transação em si, mas um hash dela
+            calculado conforme o padrão <b>EIP-712</b>, a partir de campos como <i>to</i>, <i>value</i>,
+            <i>data</i>, <i>operation</i> e <i>nonce</i>.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Os três hashes do EIP-712</b>
+            <br>
+            <br> O EIP-712 separa a assinatura em duas partes. O <b>domain hash</b> identifica onde a assinatura
+            vale: o endereço do Safe e, a partir da versão 1.3.0, o chain ID. O <b>message hash</b> resume os campos
+            da transação. Os dois são combinados no <b>safeTxHash</b>, que é o valor efetivamente assinado.
+            Dispositivos Ledger mostram o domain hash e o message hash; quando a assinatura usa <i>eth_sign</i>, o
+            dispositivo só consegue mostrar o safeTxHash, sem nenhum contexto.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Blind signing</b>
+            <br>
+            <br> Assinar um hash sem conseguir verificar o que ele representa é chamado de <i>blind signing</i>. Na
+            prática, o dono confia na interface web que preparou a transação para dizer o que ela faz. Se essa
+            interface for comprometida, ou a máquina onde ela roda, a assinatura vai para outra transação. O hash
+            no dispositivo é a única coisa que não passa pela interface, e só ajuda se alguém o recalcular de forma
+            independente.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>CALL e DELEGATECALL</b>
+            <br>
+            <br> Uma transação Safe tem um campo <i>operation</i>. Com <b>0 (CALL)</b>, o Safe chama outro contrato
+            normalmente. Com <b>1 (DELEGATECALL)</b>, o código do contrato alvo é executado <b>com o storage do
+            próprio Safe</b>. Esse código pode reescrever os donos, o limiar, os módulos e, principalmente, o
+            ponteiro de implementação guardado no slot 0. Depois disso, o atacante não precisa de mais nenhuma
+            assinatura. DELEGATECALL tem usos legítimos (o contrato oficial <i>MultiSend</i> agrupa chamadas dessa
+            forma), mas para qualquer alvo desconhecido é a operação mais perigosa que uma multisig pode assinar.
+         </p>
+
+         <br>
+         <h2>Os incidentes</h2>
+
+         <p>
+            <b>Bybit, fevereiro de 2025</b>
+            <br><br>
+            Segundo a investigação da Sygnia, JavaScript malicioso foi servido aos signatários a partir do bucket
+            S3 por trás da interface do Safe{Wallet}. O código se ativava apenas para endereços específicos, trocava
+            o conteúdo da transação por parâmetros fixos e foi removido cerca de dois minutos após a execução. O
+            FBI atribuiu o ataque à Coreia do Norte.
+            <br><br>
+            On-chain, a transação assinada fazia um <b>DELEGATECALL</b> para um contrato do atacante, por meio de
+            uma função cujo seletor corresponde a <i>transfer(address,uint256)</i>. Parecia uma transferência de
+            token. O código, na verdade, substituiu a implementação do Safe, e o atacante esvaziou a carteira em
+            seguida. Os três donos assinaram com <i>eth_sign</i>, então os dispositivos mostraram apenas o
+            safeTxHash.
+            <br><br>
+
+            <b>WazirX, julho de 2024</b>
+            <br><br>
+            Sete meses antes, a WazirX perdeu cerca de US$ 230 milhões com o mesmo padrão: um Safe 1.3.0 com limiar
+            4, três assinaturas <i>eth_sign</i>, DELEGATECALL para um contrato desconhecido e o slot 0 trocado da
+            implementação oficial para o endereço do atacante. As declarações da WazirX e da custodiante divergem
+            sobre a causa raiz, mas a transação assinada está na chain e não está em disputa.
+            <br><br>
+            Os dois casos estão no conjunto de testes de regressão do blindsight, com os hashes recalculados de
+            forma independente a partir de um nó de arquivo e do Safe Transaction Service.
+         </p>
+
+         <br>
+         <h2>Modelo de ameaça</h2>
+
+         <p>
+            O blindsight parte de uma premissa: <b>a máquina e a interface que prepararam a transação podem estar
+            comprometidas</b>. Ele roda em outro lugar, sem rede, e recalcula tudo a partir dos parâmetros brutos.
+            Algumas consequências dessa premissa guiaram o design:
+         </p>
+         <ol>
+            <li><b>Offline por construção.</b> Crates de rede e de async são banidas da árvore de dependências via
+               <i>cargo deny</i>, e a suíte de testes roda no CI dentro de um network namespace sem interfaces. Não
+               existe um modo online para ser ativado por engano.</li>
+            <li><b>Nenhum dado vem de um serviço.</b> Outras ferramentas consultam o Safe Transaction Service para
+               obter a transação ou os nomes decodificados. O blindsight usa apenas a entrada do usuário e decodifica
+               tudo localmente, sem confiar em rótulos de terceiros.</li>
+            <li><b>Sem panics com entrada.</b> <i>unsafe</i> é proibido, parsers e decodificadores passam por
+               fuzzing, e erros são sanitizados antes de serem impressos, para que dados hostis não injetem
+               sequências de controle no terminal.</li>
+         </ol>
+
+         <br>
+         <h2>Como funciona</h2>
+
+         <pre class="code-block"><code> flags / JSON do Transaction Service / calldata de execTransaction
+                          │
+                  parsing estrito da entrada ─────── erros sanitizados, limites de tamanho
+                          │
+         ┌────────────────┼──────────────────────────┐
+         ▼                ▼                          ▼
+   hashes EIP-712    decodificação em árvore    registro embarcado
+   (duas impl.       (MultiSend, Safe aninhado,  (contratos oficiais do Safe
+   independentes)    ABIs do usuário; nomes      por chain, tokens checados
+         │           verificados vs inferidos)   on-chain, Permit2)
+         │                │                          │
+         │                ▼                          │
+         │          20 detectores em cada nó ◄───────┘
+         ▼                ▼
+    relatório: veredito · checagem de hash · achados · hashes · chamadas
+               texto ou JSON · exit code 0/1/2/3</code></pre>
+
+         <p>
+            <b>Duas implementações de EIP-712</b>
+            <br><br>
+            O domain hash, o message hash e o safeTxHash são calculados por um encoder EIP-712 escrito à mão
+            <b>e</b> pelo da biblioteca <i>alloy</i>, em toda execução. Se os dois divergirem, nenhum hash é
+            impresso. Um hash errado mostrado com confiança é pior do que nenhum hash. Ambas as implementações
+            são testadas contra 30 transações reais de 8 chains e 5 versões do Safe, cada uma confirmada pelo
+            Transaction Service, por um evento on-chain ou recuperação de assinatura, e por uma implementação
+            independente em Python.
+            <br><br>
+
+            <b>Nomes verificados versus inferidos</b>
+            <br><br>
+            O calldata vira uma árvore: lotes <i>multiSend</i> e chamadas <i>execTransaction</i> para outros Safes
+            são decodificados recursivamente. Cada nome de função recebe um rótulo: <b>verified</b>, quando o alvo
+            é sabidamente um contrato que implementa aquela função com a operação certa, ou <b>inferred from the
+            selector</b>. Um seletor são só 4 bytes do hash da assinatura, e qualquer contrato pode ter uma função
+            com o mesmo seletor e fazer outra coisa. O payload da Bybit decodifica como <i>transfer</i>, marcado
+            como não verificado, porque o seletor não diz nada sobre o que o código faz.
+            <br><br>
+
+            <b>20 detectores</b>
+            <br><br>
+            Os detectores rodam em todos os nós da árvore, então embrulhar um payload em um lote não o esconde. Cada
+            um tem ID estável e severidade que depende do contexto. Os principais:
+         </p>
+         <ol>
+            <li><b>BS-DELEGATE-001 / 002:</b> DELEGATECALL para contrato não confiável, ou dentro de um lote.</li>
+            <li><b>BS-SEMANTICS-001:</b> o nome da função é um palpite; crítico quando combinado com
+               DELEGATECALL.</li>
+            <li><b>BS-OWNERS-001 / BS-THRESHOLD-001:</b> mudanças no conjunto de donos ou no limiar, críticas se o
+               novo limiar for 1.</li>
+            <li><b>BS-MODULE-001, BS-GUARD-001, BS-FALLBACK-001, BS-IMPL-001:</b> habilitar módulos, trocar guards,
+               fallback handler ou a implementação do Safe, todas formas de contornar as assinaturas futuras.</li>
+            <li><b>BS-APPROVAL-001 / 002:</b> approvals ilimitados, operadores de NFT e allowances do Permit2.</li>
+            <li><b>BS-REFUND-001:</b> reembolso de gas pago pelo Safe, uma forma de drenar a carteira por
+               campos que raramente são lidos.</li>
+            <li><b>BS-POISON-001:</b> endereço parecido com um do seu address book (<i>address poisoning</i>).</li>
+            <li><b>BS-REPLAY-001:</b> Safes anteriores à 1.3.0 não têm chain ID no domínio, então a assinatura vale
+               em qualquer chain.</li>
+         </ol>
+         <p>
+            Cada detector tem uma página própria de documentação, também disponível com
+            <i>blindsight detectors explain &lt;ID&gt;</i>.
+         </p>
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <p>
+            Os binários de release (Linux, macOS e Windows) acompanham checksums, SBOM e atestados de proveniência
+            do GitHub. Como a ferramenta deve rodar em uma máquina confiável, vale verificar o download antes de
+            usá-lo:
+         </p>
+         <pre class="code-block"><code>gh attestation verify blindsight-x86_64-unknown-linux-gnu.tar.xz --repo brennocm/blindsight
+sha256sum -c blindsight-x86_64-unknown-linux-gnu.tar.xz.sha256</code></pre>
+         <p>
+            Ou compilando a partir do código-fonte (Rust 1.90 ou superior):
+         </p>
+         <pre class="code-block"><code>cargo install --locked blindsight</code></pre>
+         <p>
+            A entrada pode vir de três formas. A partir dos parâmetros mostrados pela interface do Safe:
+         </p>
+         <pre class="code-block"><code>blindsight verify --chain-id 1 --safe 0xSeuSafe --safe-version 1.4.1 \
+  --to 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 \
+  --data 0xa9059cbb000000000000000000000000... --nonce 42 \
+  --expect-safe-tx-hash 0x...      # o hash que sua carteira mostra</code></pre>
+         <p>
+            A partir de um JSON do Safe Transaction Service, ou do calldata de uma transação já executada, copiado
+            de um block explorer:
+         </p>
+         <pre class="code-block"><code>blindsight verify --tx tx.json --chain-id 1 --safe-version 1.4.1
+blindsight verify --exec-calldata 0x6a761202… --chain-id 1 \
+  --safe 0xSeuSafe --safe-version 1.1.1 --nonce 71</code></pre>
+         <p>
+            Com um address book, os endereços ganham rótulos e endereços parecidos são sinalizados:
+         </p>
+         <pre class="code-block"><code>blindsight verify --tx tx.json --chain-id 1 --safe-version 1.4.1 \
+  --address-book book.json --current-nonce 42
+# book.json: { "Treasury": "0x…", "Ops multisig": "0x…" }</code></pre>
+
+         <p>
+            <b>A transação da Bybit</b>
+            <br><br>
+            O repositório inclui a transação do ataque exatamente como as carteiras dos signatários a receberam. A
+            saída real (resumida):
+         </p>
+         <pre class="code-block"><code>blindsight verify --tx bybit-tx.json --chain-id 1 --safe-version 1.1.1</code></pre>
+         <pre class="code-block"><code>CRITICAL: DO NOT SIGN without independent review
+Findings: 2 critical, 1 low, 1 info
+
+FINDINGS (4)
+  CRITICAL  BS-DELEGATE-001   root
+            Delegatecall to a contract that is not an official Safe helper
+            This call runs the code at
+            0x96221423681A6d52E184D440a8eFCEbB105C7242 with the storage of
+            0x1Db92e2EeBC8E0c075a02BeA49a2935BcD2dFCF4 (this Safe). That code
+            can replace the owners, threshold, modules, guard, fallback handler
+            and the implementation pointer in storage slot 0, after which the
+            attacker no longer needs any signature.
+  CRITICAL  BS-SEMANTICS-001  root
+            "transfer" is a guess from the selector, not a verified function
+  LOW       BS-REPLAY-001     root
+            Signature valid on every chain
+  INFO      BS-TARGET-001     root
+            Unknown target
+
+HASHES: compare with your hardware wallet
+  Safe            0x1Db92e2EeBC8E0c075a02BeA49a2935BcD2dFCF4 (this Safe)
+  Chain           1 (Ethereum Mainnet)
+  Safe version    1.1.1 (no chain id in the domain)
+  Domain hash     0xb3ded2bdbff5db1a87f6d551fa256e9f2bd6517a3bb84f4c2ea863fb3a559622
+    as on Ledger  0xB3DED2BDBFF5DB1A87F6D551FA256E9F2BD6517A3BB84F4C2EA863FB3A559622
+  Message hash    0xea68fc75e93bf7286b1257680ca8e2033bfadd8e1cb8a23f3ca18f1031ecf1e0
+    as on Ledger  0xEA68FC75E93BF7286B1257680CA8E2033BFADD8E1CB8A23F3CA18F1031ECF1E0
+  safeTxHash      0xb3476d061aeb8fc1d605a873c483a2402d88a68a9cdd1a8b47655dd55ba004f8
+
+CALLS
+  root  DELEGATECALL 0x96221423681A6d52E184D440a8eFCEbB105C7242
+      transfer(address,uint256)  [UNVERIFIED: name inferred from the selector only]
+        to               0xbDd077f651EBe7f7b3cE16fe5F2b025BE2969516
+        amount           0</code></pre>
+         <p>
+            O safeTxHash acima é exatamente o que os dispositivos dos signatários mostraram. Se qualquer um deles
+            tivesse colado os parâmetros recebidos no blindsight, em uma máquina separada, teria visto o hash
+            batendo com o dispositivo e, logo acima, dois achados críticos: um DELEGATECALL para um contrato
+            desconhecido e uma "transferência" de valor zero cujo nome é só um palpite.
+            <br><br>
+            Os hashes saem com os rótulos e a caixa usados por cada dispositivo (o Ledger mostra em maiúsculas).
+            Os códigos de saída permitem automatizar o fluxo: <b>0</b> sem achados acima de <i>--fail-on</i>
+            (padrão <i>high</i>), <b>1</b> com achados, <b>2</b> erro de entrada e <b>3</b> quando o hash esperado
+            não confere. Com <i>--format json</i>, o relatório é versionado e legível por máquina.
+         </p>
+
+         <br>
+         <h2>Fluxo recomendado</h2>
+
+         <ol>
+            <li>Obtenha os parâmetros da transação na interface e o hash mostrado pela sua carteira.</li>
+            <li>Rode o blindsight <b>em uma máquina diferente</b> da que preparou a transação, idealmente offline,
+               digitando ou copiando os parâmetros.</li>
+            <li>Passe o hash da tela com <i>--expect-safe-tx-hash</i> (ou <i>--expect-domain-hash</i> /
+               <i>--expect-message-hash</i>). Uma divergência gera exit code 3 e uma linha vermelha no topo.</li>
+            <li>Leia o veredito e cada achado. Não assine um achado crítico ou alto que você não consiga
+               explicar.</li>
+            <li>Simule a transação também (Tenderly, Foundry): o blindsight não executa nada.</li>
+         </ol>
+         <p>
+            Um hash que confere prova que você está assinando a transação que deu ao blindsight. Os achados dizem o
+            que essa transação faz. As duas verificações são necessárias.
+         </p>
+
+         <br>
+         <h2>Comparação com outras ferramentas</h2>
+
+         <p>
+            O blindsight se apoia em projetos que existem pelo mesmo motivo e merecem ser usados. O
+            <a href="https://github.com/pcaversaccio/safe-tx-hashes-util">safe-tx-hashes-util</a>, em Bash, é a
+            referência da comunidade indicada pela própria central de ajuda do Safe. O
+            <a href="https://github.com/Cyfrin/safe-hash-rs">safe-hash</a> o trouxe para Rust, e o
+            <a href="https://github.com/ethereum-optimism/op-txverify">op-txverify</a>, em Go, foi pioneiro no
+            fluxo air-gapped via QR codes.
+            <br><br>
+            As diferenças do blindsight são mais estreitas: nenhum código de rede no binário (garantido por
+            <i>cargo deny</i> e por um job de CI sem rede), decodificação local que nunca confia nos rótulos de um
+            serviço, marcação explícita de nomes não verificados, detecção de address poisoning e sanitização da
+            saída. Por outro lado, ele ainda não trata mensagens off-chain, que as outras ferramentas suportam.
+         </p>
+
+         <br>
+         <h2>Limitações</h2>
+
+         <p>
+            O blindsight não simula a transação nem lê o estado da chain, então não enxerga saldos, donos atuais ou o
+            que um código desconhecido faz. Ele sinaliza que um nome é palpite e que um alvo não é verificado, mas não
+            consegue afirmar que o código é malicioso. O registro embarcado pode ficar desatualizado: novas chains,
+            versões de contratos auxiliares e tokens aparecem como desconhecidos até a ferramenta ser atualizada.
+            São suportadas apenas as versões do Safe de 1.0.0 a 1.5.0 que foram oficialmente implantadas.
+            <br><br>
+            E, acima de tudo, ele só ajuda se você comparar. Um hash que confere não significa nada se não for
+            checado contra o dispositivo, caractere por caractere.
+         </p>
+
+         <br>
+         <h2>Considerações finais</h2>
+
+         <p>
+            Os ataques à Bybit e à WazirX não quebraram criptografia nem contratos. Eles exploraram o elo entre o
+            que uma pessoa vê e o que ela assina. Hardware wallets resolvem o problema da chave, mas não o da
+            intenção: um dispositivo que mostra apenas um hash transfere toda a confiança para quem calculou esse
+            hash.
+            <br><br>
+            O blindsight devolve essa verificação para o signatário, com uma ferramenta que pode rodar em uma
+            máquina isolada e que não depende de nenhum serviço que possa ter sido comprometido junto com a
+            interface. É uma camada de revisão entre outras, e não substitui simulação nem leitura do código, mas é
+            exatamente a camada que faltou em US$ 1,7 bilhão de perdas.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

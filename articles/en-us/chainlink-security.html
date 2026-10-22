@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>oraclint & oraclewatch.</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../pt-br/chainlink-security.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../en-us/chainlink-security.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>oraclint and oraclewatch: both sides of a Chainlink oracle</h1>
+         <p class="meta">
+            <span>Oct 22, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Smart contracts cannot see the world outside the blockchain. To know what one ETH is worth, a lending
+            protocol depends on an <b>oracle</b>, and the most widely used one in the ecosystem is Chainlink's
+            network of <i>Data Feeds</i>. That creates two very different points of trust: on one side, the
+            <b>node operators</b> who run the infrastructure that signs and publishes prices; on the other, the
+            <b>consuming protocols</b>, which wrote code assuming those prices are correct, fresh and within sane
+            bounds.
+            <br><br>
+            This article presents two open-source Go tools I built, one for each side.
+            <a href="https://github.com/brennocm/oraclint">oraclint</a> is a static security linter for Chainlink
+            node configuration that runs before deployment.
+            <a href="https://github.com/brennocm/oraclewatch">oraclewatch</a> is a monitoring daemon that reads
+            feeds straight from the chain and alerts when the consumer's assumptions stop holding. Neither is
+            affiliated with Chainlink Labs.
+         </p>
+
+         <h2>Concepts</h2>
+
+         <p>
+            <b>Data Feeds and the aggregator contract</b>
+            <br>
+            <br> A Data Feed is a pair of contracts: a <i>proxy</i>, the stable address the consumer calls, and an
+            <i>aggregator</i>, which receives node reports and stores the consolidated value. The consumer reads the
+            price with <i>latestRoundData()</i>, which returns the value (<i>answer</i>), the round identifier and
+            the start and update timestamps. A feed updates when the price moves more than a <i>deviation
+            threshold</i> or when the <b>heartbeat</b>, the maximum interval between updates, elapses.
+            <br>
+            <br> Aggregators also have bounds, <i>minAnswer</i> and <i>maxAnswer</i>. Reports outside that range are
+            rejected, not clamped to the bound: the feed simply freezes at the last accepted value. That detail,
+            confirmed in the source of the deployed aggregators, is at the center of one of the incidents described
+            later.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>L2 sequencers</b>
+            <br>
+            <br> On rollups such as Arbitrum, Base and OP Mainnet, a single <i>sequencer</i> orders transactions. If
+            it goes down, prices stop updating, and when it comes back, queued transactions run first, possibly
+            against stale prices. That is why Chainlink publishes <i>sequencer uptime feeds</i>, and why audits
+            usually require consumers to check the sequencer and respect a <i>grace period</i> after recovery.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>The Chainlink node</b>
+            <br>
+            <br> On the operator side, a node is a process that holds keys, signs transactions and reports, and
+            exposes an operator interface (port 6688) that manages jobs, keys and bridges. Its configuration lives in
+            a <i>config.toml</i> and a <i>secrets.toml</i>, usually alongside a docker-compose file, Kubernetes
+            manifests and <i>.env</i> files. Many node compromises are not exploits but configuration: an operator UI
+            published to the internet, a database reached without TLS, a short keystore password, an RPC key
+            committed to the repository.
+         </p>
+
+         <br>
+         <h2>oraclint: a configuration linter for nodes</h2>
+
+         <p>
+            Tools like <i>tfsec</i>, <i>checkov</i> and <i>kube-bench</i> do for Terraform and Kubernetes exactly what
+            was missing for Chainlink nodes: point out insecure settings before deployment, with an exact location
+            and a suggested fix. oraclint fills that gap. It reads the node's files and the infrastructure around
+            them, runs fully offline and never touches a running node.
+            <br><br>
+
+            <b>Rules verified against the node's code</b>
+            <br><br>
+            There are <b>35 rules</b> across node config, secrets, file permissions, docker-compose, Kubernetes and
+            dotenv. Each one was verified against the node's source code and documentation at version
+            <b>v2.69.0</b>: key name, default value and actual behavior. A rule whose behavior could not be
+            confirmed is marked experimental or does not exist at all. The README even lists the candidates that
+            were dropped and why, such as database password complexity (the node already refuses weak passwords at
+            startup) and <i>pprof</i> (always behind authentication in the node's router).
+            <br><br>
+
+            <b>Default-aware</b>
+            <br><br>
+            A missing key is not treated as "not configured": it is evaluated with the node's real default. When
+            there are several config files, they are merged with the node's own override semantics. This avoids
+            both false positives and false negatives, which is the main reason generic TOML linters do not work
+            here.
+            <br><br>
+
+            <b>Architecture</b>
+            <br><br>
+            oraclint is a linear pipeline of small packages:
+         </p>
+         <pre class="code-block"><code>cli → loader → model → engine ← rules (35)
+                         │
+                         ▼
+                 suppress → redact → filter/sort → report (text | JSON | SARIF)</code></pre>
+         <p>
+            The <i>loader</i> discovers and classifies files by name and content, and the <i>model</i> keeps every
+            value tied to its <i>file:line:column</i>. Each rule is a Go type with two methods and a pure function
+            of its target, in its own file. Before rendering, every message goes through <i>redact</i>: oraclint
+            <b>never prints a secret</b>, with two layers of redaction enforced by a fuzz test across every output
+            format. Hostile input is handled too: YAML alias bombs, deep nesting, binary files and symlinks that
+            escape the scan root (the walk uses <i>os.Root</i>).
+         </p>
+
+         <br>
+         <h2>oraclint in practice</h2>
+
+         <p>
+            It can be installed with Go, a release binary or Docker:
+         </p>
+         <pre class="code-block"><code>go install github.com/brennocm/oraclint/cmd/oraclint@latest</code></pre>
+         <pre class="code-block"><code>docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/src:ro" -w /src \
+  ghcr.io/brennocm/oraclint:latest scan .</code></pre>
+         <p>
+            The repository ships a deliberately insecure node in <i>examples/insecure-node</i>. An excerpt of the
+            output:
+         </p>
+         <pre class="code-block"><code>oraclint scan examples/insecure-node</code></pre>
+         <pre class="code-block"><code>examples/insecure-node/config.toml
+  2:1     HIGH     NS-KS-001    InsecureFastScrypt = true makes every keystore use weak scrypt
+                                parameters, so a leaked database can be brute-forced offline
+          fix: Remove InsecureFastScrypt (default false) and rotate keys created while it was enabled.
+  14:1    MEDIUM   NS-WEB-003   WebServer.AllowOrigins contains '*', which allows any website to
+                                make cross-origin requests to the node API
+          fix: Set WebServer.AllowOrigins to the exact URL(s) used to reach the operator UI.
+  54:1    HIGH     NS-RPC-001   EVM chain "1" node "mainnet-infura": HTTPURL uses unencrypted
+                                http:// to mainnet.example-rpc.com
+          fix: Use https:// and wss:// endpoints, or keep the RPC node on a private network.
+
+examples/insecure-node/docker-compose.yml
+  6:5     HIGH     NS-DKR-003   service "chainlink" runs privileged, which gives it full access to the host
+          fix: Remove privileged, network_mode: host, pid: host and the listed cap_add entries.
+  9:9     HIGH     NS-DKR-001   service "chainlink" publishes operator port 6688 on all host interfaces
+          fix: Publish the port on loopback only ("127.0.0.1:6688:6688") and use an SSH tunnel or VPN.
+  11:7    HIGH     NS-KS-002    CL_PASSWORD_KEYSTORE is shorter than 16 characters</code></pre>
+         <p>
+            Rule <b>NS-DKR-001</b> is worth highlighting, because it ties directly to the problem discussed in the
+            <a href="tor-bridge.html">Tor bridge</a> article: Docker publishes ports by inserting its own firewall
+            rules, so a published port is often reachable even with <i>ufw</i> configured to block it. The fix is to
+            publish the operator interface on loopback only and reach it through an SSH tunnel.
+            <br><br>
+
+            <b>Suppressions with a mandatory reason</b>
+            <br><br>
+            Every suppression requires a reason, either inline or in <i>.oraclint.yaml</i>. A directive without a
+            reason is not applied and becomes an informational finding. Suppressed findings stay visible in JSON and
+            SARIF, so the justification is kept on record:
+         </p>
+         <pre class="code-block"><code>[WebServer.TLS]
+# oraclint:ignore NS-WEB-001 reason="TLS is terminated at the load balancer"
+HTTPSPort = 0</code></pre>
+         <p>
+            When scanning untrusted content, such as pull requests from forks, the <i>--ignore-suppressions</i> flag
+            makes sure only your own policy applies, since the PR itself could carry an <i>.oraclint.yaml</i> that
+            silences everything.
+            <br><br>
+
+            <b>CI integration</b>
+            <br><br>
+            The repository is also a GitHub Action. With SARIF 2.1.0 output, findings show up in GitHub's
+            <i>code scanning</i> tab:
+         </p>
+         <pre class="code-block"><code>jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: brennocm/oraclint@v0.1.0   # pin to a commit SHA in production
+        with:
+          path: .
+          format: sarif
+          output: oraclint.sarif
+          fail-on: high
+      - uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: oraclint.sarif</code></pre>
+         <p>
+            Exit codes follow linter conventions: <b>0</b> with no findings above the threshold, <b>1</b> with
+            findings and <b>2</b> for usage errors. Files that cannot be parsed produce a high-severity
+            <i>parse-error</i> finding, so a broken file fails the build instead of passing silently. On the example
+            deployment (5 files, 35 rules), a full scan takes about 4 ms.
+         </p>
+
+         <br>
+         <h2>oraclewatch: consumer-side monitoring</h2>
+
+         <p>
+            Chainlink operates and monitors its Data Feeds. The risk of <i>using</i> a feed, though, sits with the
+            protocol that consumes it. oraclewatch continuously runs the same checks auditors ask for on-chain
+            (<i>updatedAt</i> freshness, <i>answer &gt; 0</i>, sequencer uptime and grace period), plus a few that
+            only make sense off-chain, and pages a human when something is off. Three real incidents shaped the
+            catalog:
+         </p>
+         <ol>
+            <li>
+               <b>LUNA/USD, May 2022.</b> The market price fell below the aggregator's <i>minAnswer</i>. Since
+               out-of-range reports are rejected, the feed froze at about US$0.107 while LUNA traded around US$0.01.
+               Attackers bought at market, deposited it as collateral at the oracle price and borrowed against it.
+               Venus and Blizz Finance lost about US$11M and US$8.3M. <i>FW-DEV-001</i> (≈970% deviation),
+               <i>FW-STALE-001</i> and <i>FW-CB-001</i> flag that condition.
+            </li>
+            <li>
+               <b>Moonwell wrsETH, November 2025.</b> An exchange-rate feed reported 1 wrsETH = 1.65 million ETH,
+               and the attack took 30 seconds. <i>FW-JUMP-001</i> flags the jump, and the case shows why a monitor
+               complements, and does not replace, on-chain sanity bounds.
+            </li>
+            <li>
+               <b>Arbitrum sequencer outage, December 2023.</b> About 78 minutes of downtime, covered by
+               <i>FW-SEQ-001</i>, <i>FW-SEQ-002</i> and <i>FW-CHAIN-001</i>.
+            </li>
+         </ol>
+
+         <p>
+            <b>The check catalog</b>
+            <br><br>
+            There are 16 checks with stable IDs, each documented with its exact logic, default parameters and known
+            false positives. Grouped by purpose:
+         </p>
+         <ol>
+            <li><b>Feed health:</b> feed stale beyond its heartbeat (<i>FW-STALE-001</i>), invalid round data
+               (<i>FW-INVALID-001</i>), answer close to the circuit-breaker bounds (<i>FW-CB-001</i>) and implausible
+               round-to-round jumps (<i>FW-JUMP-001</i>, experimental).</li>
+            <li><b>Market:</b> deviation from the median of several exchanges (<i>FW-DEV-001</i>), with an explicit
+               "untrusted reference" state when too few exchanges answer or they disagree (<i>FW-REF-001</i>), and
+               divergence of the same pair across networks (<i>FW-XCHAIN-001</i>).</li>
+            <li><b>Contract changes:</b> proxy pointing to a new aggregator (<i>FW-AGG-001</i>) and decimals or
+               description drift (<i>FW-META-001</i>).</li>
+            <li><b>Trust in the source:</b> RPCs returning different data for the same block (<i>FW-RPC-001</i>),
+               fork views (<i>FW-RPC-002</i>), wrong chain ID (<i>FW-RPC-003</i>) and stalled heads
+               (<i>FW-CHAIN-001</i>).</li>
+            <li><b>L2:</b> sequencer down (<i>FW-SEQ-001</i>) or still within its grace period
+               (<i>FW-SEQ-002</i>).</li>
+            <li><b>The monitor itself:</b> <i>FW-SELF-001</i> fires when there are no successful reads for N cycles.
+               Without data, oraclewatch reports itself blind instead of guessing.</li>
+         </ol>
+
+         <p>
+            <b>One pinned block per cycle</b>
+            <br><br>
+            The central design decision is that <b>every value a check compares comes from the same block</b>. There
+            is one goroutine per network, and each cycle starts by pinning a block: <i>min(head) - confirmations</i>
+            across all available endpoints. Endpoints whose head is lagging are excluded, the block hash is compared
+            across them (the majority wins), and then every feed is read on every endpoint at that exact block.
+            <br><br>
+            That is what makes <i>FW-RPC-001</i>'s "any difference is critical" rule sound: two honest RPCs queried
+            at the same block must return identical bytes. It also keeps staleness measured against the chain's own
+            clock rather than the clock of the machine running the monitor.
+            <br><br>
+            Checks are pure functions, with no I/O and no clock, using exact <i>math/big</i> arithmetic. Results feed
+            an alert state machine (OK → PENDING → FIRING → RESOLVING) with <i>for:</i>, hysteresis, cooldown and
+            storm grouping, delivered to Discord, Telegram or stdout, plus Prometheus metrics and a Grafana
+            dashboard.
+         </p>
+
+         <br>
+         <h2>oraclewatch in practice</h2>
+
+         <p>
+            The <i>check</i> mode runs a single cycle on every network and exits <b>0</b> (fine), <b>1</b> (a result
+            at or above <i>--fail-on</i>) or <b>2</b> (error), so it fits CI or cron. RPC URLs are referenced as
+            <i>${VAR}</i> and expanded from the environment only in secret fields:
+         </p>
+         <pre class="code-block"><code>cp .env.example .env     # two RPCs from different providers per network, notifiers
+make build && set -a && . ./.env && set +a
+./bin/oraclewatch check --config configs/example.yaml</code></pre>
+         <p>
+            A real run against ETH/USD on Ethereum and Arbitrum, using public RPCs (output trimmed):
+         </p>
+         <pre class="code-block"><code>STATUS  CHECK           NETWORK   FEED     SUMMARY
+ok      FW-CB-001       ethereum  ETH/USD  bounds are nominal
+ok      FW-DEV-001      arbitrum  ETH/USD  within 0.0495% of the market
+ok      FW-DEV-001      ethereum  ETH/USD  within 0.2728% of the market
+ok      FW-REF-001      ethereum  ETH/USD  reference trusted
+ok      FW-RPC-001      arbitrum  ETH/USD  2 endpoints agree
+ok      FW-RPC-002      ethereum           endpoints agree on block 26250692
+ok      FW-RPC-003      arbitrum           every endpoint serves the configured chain
+ok      FW-SEQ-001      arbitrum           sequencer up
+ok      FW-SEQ-002      arbitrum           up for 3720h50m50s
+ok      FW-STALE-001    arbitrum  ETH/USD  updated 3m10s ago
+ok      FW-STALE-001    ethereum  ETH/USD  updated 53m0s ago
+ok      FW-XCHAIN-001   *         ETH/USD  ETH/USD consistent across 2 networks</code></pre>
+         <p>
+            Note <i>FW-STALE-001</i>: the Ethereum feed was updated 53 minutes ago and is still healthy, because the
+            ETH/USD heartbeat on mainnet is one hour. That is why every feed carries its own parameters, copied from
+            the official data files, instead of a global threshold.
+            <br><br>
+            For the daemon with Prometheus, Grafana and TLS there is a ready-made compose file, and the docs cover a
+            deployment on an arm64 Oracle Cloud Always Free instance, the same base used in
+            <a href="oci-secops.html">OCI-SecOps</a>:
+         </p>
+         <pre class="code-block"><code>docker compose -f deploy/docker-compose.yml --env-file .env up -d</code></pre>
+         <p>
+            The example configuration monitors ETH/USD, BTC/USD and USDC/USD on Ethereum, Arbitrum, Base and OP
+            Mainnet, plus the sequencer uptime feeds of the three L2s. No address was typed by hand: all of them came
+            from the data files behind the official addresses page and were verified on-chain against two RPCs at
+            the same block, and a test keeps the example identical to the verified lists.
+         </p>
+
+         <br>
+         <h2>Securing the tools themselves</h2>
+
+         <p>
+            Security tools that run next to sensitive infrastructure need to be hard targets themselves. A few
+            principles are shared by both:
+         </p>
+         <ol>
+            <li><b>Minimal surface.</b> oraclint has no network access and three direct runtime dependencies (cobra,
+               go-toml, yaml). oraclewatch only uses <i>eth_chainId</i>, <i>eth_getBlockByNumber</i> and
+               <i>eth_call</i>; no private key exists in the program, and a test fails if the binary links any key
+               management or transaction-signing package.</li>
+            <li><b>Secrets never leave the process.</b> Redaction of strings, errors (including <i>*url.Error</i>,
+               which tends to leak the full RPC URL with its API key) and logs, verified by end-to-end tests.</li>
+            <li><b>Supply chain.</b> Actions pinned by SHA, Dependabot, GoReleaser releases with checksums signed
+               keylessly through cosign (Sigstore), SPDX SBOMs and SLSA provenance verifiable with
+               <i>gh attestation verify</i>.</li>
+            <li><b>Documented threats.</b> Each repository has a <i>THREAT_MODEL.md</i> and design decisions recorded
+               as ADRs.</li>
+         </ol>
+
+         <br>
+         <h2>Limitations</h2>
+
+         <p>
+            Both are deliberately honest about what they do not do. oraclint is static analysis: it sees files, not
+            the running node, and its rules hold for v2.69.0 and may be wrong for other versions. Helm charts must be
+            rendered with <i>helm template</i> first.
+            <br><br>
+            oraclewatch's detection latency is the poll interval (60 s by default) plus confirmations. An attacker
+            watching the same feed acts within a block; the monitor tells humans, it does not stop transactions. It
+            <b>does not replace on-chain validation</b> in the consumer contract, which is the first line of defense,
+            and it does not cover derived prices a protocol composes from several feeds.
+         </p>
+
+         <br>
+         <h2>Final thoughts</h2>
+
+         <p>
+            Oracles concentrate trust in two ways: in the infrastructure that produces the data, and in the
+            consumer's assumption that the data is still valid. oraclint acts before deployment, turning node
+            operation best practices into verifiable rules that run in CI. oraclewatch acts afterwards, continuously
+            checking whether the consumer's assumptions still hold.
+            <br><br>
+            The lesson both projects share is that a security tool is only as good as the accuracy of its
+            assumptions. That is why every rule was verified against the node's code, every check has a real
+            incident or documented research behind it, and both prefer to say "I don't know" (<i>parse-error</i>,
+            <i>FW-SELF-001</i>) rather than pass silently.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
