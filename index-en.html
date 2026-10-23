@@ -124,13 +124,28 @@
                         <div class="category-title">
                             <span>Technical Tutorials</span>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">8 items</span>
+                                <span class="category-count">9 items</span>
                                 <span class="category-arrow">▼</span>
                             </div>
                         </div>
                     </div>
                     <div class="category-content" id="technical-content">
                         <div class="category-inner">
+                            <article class="post" onclick="openArticle('articles/en-us/escalint.html', event)">
+                                <div>
+                                    <h2>escalint: AWS IAM Escalation Paths, Made Visual</h2>
+                                    <p>Go tool that evaluates IAM policies the way AWS does, builds a who-can-act-as-whom graph and shows every path to admin.</p>
+                                    <div class="meta">
+                                        <span class="meta-date">📅 Oct 23, 2026</span>
+                                    </div>
+                                    <div class="post-tags">
+                                        <span class="tag">AWS</span>
+                                        <span class="tag">IAM</span>
+                                        <span class="tag">Go</span>
+                                        <span class="tag">Tools</span>
+                                    </div>
+                                </div>
+                            </article>
                             <article class="post" onclick="openArticle('articles/en-us/chainlink-security.html', event)">
                                 <div>
                                     <h2>oraclint and oraclewatch: Chainlink Oracle Security</h2>
@@ -674,13 +689,23 @@
                         <div class="category-title">
                             <span>Projects</span>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">11 items</span>
+                                <span class="category-count">12 items</span>
                                 <span class="category-arrow">▼</span>
                             </div>
                         </div>
                     </div>
                     <div class="category-content" id="projects-content">
                         <div class="category-inner">
+                            <article class="post" onclick="openProject('https://github.com/brennocm/escalint', event)">
+                                <div>
+                                    <h2>Escalint</h2>
+                                    <p>Finds every privilege escalation path to admin in AWS accounts, explains each step and says what to cut, with an embedded visual UI.</p>
+                                    <div class="post-tags">
+                                        <span class="tag">AWS</span>
+                                        <span class="tag">Go</span>
+                                    </div>
+                                </div>
+                            </article>
                             <article class="post" onclick="openProject('https://github.com/brennocm/blindsight', event)">
                                 <div>
                                     <h2>Blindsight</h2>

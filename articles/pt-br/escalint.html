@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>escalint.</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../pt-br/escalint.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../en-us/escalint.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>escalint: caminhos de escalada de privilégio em IAM AWS, de forma visual</h1>
+         <p class="meta">
+            <span>out 23, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Quase nunca um principal IAM tem <i>AdministratorAccess</i> diretamente. Ele tem
+            <i>iam:PassRole</i> e <i>lambda:CreateFunction</i>. Ou <i>iam:CreatePolicyVersion</i> em uma política
+            anexada a ele mesmo. Ou consegue assumir uma role cuja trust policy ele pode reescrever. Nenhuma dessas
+            políticas, lida sozinha, parece perigosa. O perigo está na combinação, entre principais e entre contas.
+            <br><br>
+            Este artigo apresenta o <a href="https://github.com/brennocm/escalint">escalint</a>, uma ferramenta
+            open-source em Go que desenvolvi para encontrar essas combinações: ela lê um snapshot do IAM de uma ou
+            mais contas AWS, avalia as políticas do jeito que a AWS avalia, monta um grafo de quem pode agir como
+            quem e mostra, de forma visual e explicável, todos os caminhos que terminam em administrador, além do
+            menor conjunto de mudanças que encontra para cortá-los.
+            <br><br>
+            Há uma <a href="https://brennocm.github.io/escalint/">demo ao vivo</a> com dados sintéticos, que roda
+            inteiramente no navegador.
+         </p>
+
+         <h2>O cenário atual</h2>
+
+         <p>
+            <b>O lado ofensivo está muito bem servido</b>
+            <br><br>
+            Quem ataca AWS tem ferramentas modernas e mantidas. O <a href="https://github.com/RhinoSecurityLabs/pacu">Pacu</a>,
+            da Rhino Security Labs, é um framework de exploração com módulos que enumeram permissões e executam a
+            escalada. O <a href="https://github.com/BishopFox/cloudfox">CloudFox</a>, da Bishop Fox, mapeia a
+            superfície de ataque de uma conta a partir de credenciais comprometidas. O
+            <a href="https://github.com/DataDog/stratus-red-team">Stratus Red Team</a>, da Datadog, emula técnicas
+            de ataque em cloud mapeadas ao MITRE ATT&amp;CK. Esse ecossistema acompanha cada novo serviço e cada
+            nova técnica publicada.
+            <br><br>
+
+            <b>O lado defensivo, nem tanto</b>
+            <br><br>
+            Do lado de quem defende, o cenário de análise de acesso efetivo em IAM é bem mais fraco:
+         </p>
+         <ol>
+            <li><b><a href="https://github.com/prowler-cloud/prowler">Prowler</a>:</b> é o CSPM open source de
+               referência, e com razão. Mas é amplo por natureza: centenas de checagens de configuração em vários
+               provedores (S3 público, security groups abertos, criptografia, logging). As checagens de escalada
+               olham política por política, procurando combinações de ações perigosas. Ele não responde "este
+               principal, assumindo aquela role, consegue chegar a admin em dois passos?".</li>
+            <li><b><a href="https://github.com/nccgroup/PMapper">PMapper</a>:</b> o projeto da NCC Group mostrou que
+               IAM deve ser entendido como grafo e foi pioneiro nisso. Porém está sem atualização relevante há anos,
+               e o catálogo de técnicas e serviços parou no tempo.</li>
+            <li><b>CloudMapper e Cloudsplaining:</b> o CloudMapper, da Duo Labs, parou em 2022. O Cloudsplaining,
+               da Salesforce, gera bons relatórios de políticas excessivas, mas analisa cada política isoladamente
+               e tem futuro incerto.</li>
+         </ol>
+         <p>
+            Em dezembro de 2025, a Datadog publicou o <a href="https://pathfinding.cloud">pathfinding.cloud</a>, um
+            catálogo aberto de caminhos de escalada de privilégio em AWS. No lançamento, dos 65 caminhos
+            documentados, <b>27 (42%) não eram detectados por nenhuma ferramenta open source avaliada</b>. Hoje o
+            catálogo tem 92 caminhos. Ou seja: o atacante tem um framework que executa a técnica, e o defensor
+            frequentemente não tem nada que a aponte antes.
+         </p>
+
+         <br>
+         <h2>Por que ver caminhos de forma visual</h2>
+
+         <p>
+            Existe uma frase conhecida de John Lambert, da Microsoft: <i>"Defenders think in lists. Attackers think
+            in graphs. As long as this is true, attackers win."</i> O Active Directory passou exatamente por isso. O
+            BloodHound nasceu como ferramenta ofensiva e acabou adotado por times de defesa, porque um grafo de
+            caminhos de ataque mostra o que nenhuma lista de achados mostra.
+            <br><br>
+            IAM na AWS tem o mesmo formato. Uma lista diz "a role X tem <i>iam:PassRole</i> em <i>*</i>" (média
+            severidade, perdida entre outras duzentas). Um grafo diz "o usuário de CI pode criar uma instância EC2
+            com a role Y, que pode anexar uma política a si mesma, que vira admin da conta". O primeiro é um
+            achado; o segundo é um caminho, com começo, meio e fim, e com um lugar óbvio para cortar.
+            <br><br>
+            Ver o caminho também muda a correção. Quando dez caminhos passam pela mesma aresta, essa aresta é um
+            <b>choke point</b>: removê-la resolve dez problemas de uma vez. Em uma lista, os dez aparecem como dez
+            itens independentes.
+         </p>
+         <img id="main" src="../../img/articles/escalint/trace-dark.png"
+            alt="Visão Trace do escalint: um caminho de dois passos até admin, com as ações exigidas, o ID do pathfinding.cloud e a visibilidade no CloudTrail de cada passo">
+
+         <br>
+         <h2>Como funciona</h2>
+
+         <pre class="code-block"><code> escalint collect (só leitura)  ou  aws iam get-account-authorization-details
+                          │
+                parsing estrito do snapshot ─────── dados não confiáveis, limites de tamanho
+                          │
+                avaliador de políticas IAM ──────── deny explícito, SCP, RCP, boundary,
+                          │                          trust policy, cross-account; trace por decisão
+                          ▼
+               grafo "pode agir como" ◄──────────── 39 regras adicionam arestas de escalada
+                          │
+     ┌──────────┬─────────┼──────────┬──────────────┐
+     ▼          ▼         ▼          ▼              ▼
+  k caminhos  tiers   blast radius  choke points  plano de correção
+  até Tier 0                                      (guloso)
+                          │
+     analysis.json ──► texto · JSON · SARIF · DOT · Mermaid · UI web embutida</code></pre>
+
+         <p>
+            <b>Avaliação fiel</b>
+            <br><br>
+            O núcleo é um avaliador que segue a lógica documentada da AWS: deny explícito em qualquer política,
+            SCPs e RCPs por nível de OU, permissions boundaries, políticas de identidade, trust policies e regras
+            cross-account, incluindo <i>NotAction</i>, <i>NotResource</i>, <i>NotPrincipal</i> e wildcards em ações
+            e ARNs. Cada <i>Allow</i> vem com um trace dizendo qual statement decidiu. Condições que não podem ser
+            avaliadas estaticamente (MFA, IP de origem, horário) não são descartadas: o passo vira
+            <b>conditional</b> e aparece tracejado no grafo.
+            <br><br>
+
+            <b>O grafo e as regras</b>
+            <br><br>
+            Os nós são principais (usuários, roles, grupos) e um sumidouro por conta, o <b>Tier 0</b> (admin
+            efetivo). As arestas vêm de 39 regras: 30 caminhos de escalada (<i>EL-PE</i>), 6 erros de trust
+            (<i>EL-TR</i>, por exemplo OIDC do GitHub Actions sem condição em <i>sub</i>) e 3 diagnósticos de
+            entrada (<i>EL-PARSE</i>). Toda regra cita a documentação da AWS, o ID do pathfinding.cloud e as
+            técnicas do MITRE ATT&amp;CK correspondentes. A versão atual cobre 33 dos 92 caminhos do catálogo.
+            <br><br>
+
+            <b>Análises</b>
+            <br><br>
+            Sobre o grafo, o escalint calcula os k menores caminhos de cada principal até o Tier 0, tiers de
+            privilégio, raio de impacto (<i>blast radius</i>), ciclos de assume-role, choke points e um plano de
+            correção guloso: a sequência de mudanças, ordenada, que remove todos os caminhos. Para cada passo, ele
+            também diz quais eventos o CloudTrail registraria, ou se aquele passo é um ponto cego.
+         </p>
+
+         <br>
+         <h2>A interface</h2>
+
+         <p>
+            A UI é um app React em TypeScript estrito, com renderer WebGL próprio, embutido no binário. Ela roda
+            local com <i>escalint serve</i> (só em 127.0.0.1, com token de uso único) ou como um único arquivo HTML
+            offline com <i>escalint report --html</i>. São nove visões:
+         </p>
+         <ol>
+            <li><b>Overview:</b> tiers, caminhos críticos, pontos cegos do CloudTrail e o que corrigir primeiro.</li>
+            <li><b>Atlas:</b> todos os principais da conta (ou da organização), agrupados por conta, com zoom
+               semântico; Shift+clique em dois nós mostra o menor caminho entre eles.</li>
+            <li><b>Trace:</b> um caminho passo a passo, com alternativas e choke points. Clicar em uma aresta abre o
+               explicador de política, com o statement exato que permitiu aquele passo.</li>
+            <li><b>Reach:</b> o que um principal alcança, e quem o alcança, em anéis por número de saltos.</li>
+            <li><b>Exposure, Findings, Fix plan, Detect e Diff:</b> matriz principal × serviço, tabela filtrável,
+               plano de correção com prévia ao vivo dos caminhos restantes, eventos do CloudTrail por passo e o que
+               mudou entre dois snapshots.</li>
+         </ol>
+         <img src="../../img/articles/escalint/atlas-dark.png" alt="Visão Atlas do escalint: todos os principais da conta em um grafo WebGL">
+         <p>
+            Todo grafo tem uma tabela equivalente por trás, a navegação funciona pelo teclado e as paletas são
+            seguras para daltonismo. Como o snapshot vem de uma conta que pode ter nomes e políticas hostis, a UI
+            usa CSP estrita e nunca usa <i>innerHTML</i>, e <i>--redact</i> troca todo identificador por um
+            pseudônimo antes de compartilhar um relatório.
+         </p>
+         <img src="../../img/articles/escalint/fix-dark.png" alt="Visão Fix plan do escalint: mudanças ordenadas e os caminhos que restam após cada uma">
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <p>
+            Os binários de release (Linux, macOS e Windows, amd64 e arm64) já trazem a UI embutida e são assinados
+            com cosign, com atestado de proveniência do GitHub. Também há uma imagem distroless:
+         </p>
+         <pre class="code-block"><code># escolha a plataforma em https://github.com/brennocm/escalint/releases
+curl -sSLO https://github.com/brennocm/escalint/releases/download/v0.1.0/escalint_0.1.0_linux_amd64.tar.gz
+gh attestation verify escalint_0.1.0_linux_amd64.tar.gz --repo brennocm/escalint
+tar xzf escalint_0.1.0_linux_amd64.tar.gz escalint
+
+docker run --rm -v "$PWD:/work" ghcr.io/brennocm/escalint:v0.1.0 scan /work/snapshot.json</code></pre>
+         <p>
+            O fluxo básico são três comandos. O <i>collect</i> só faz chamadas de leitura (<i>List*</i> e
+            <i>Get*</i>), e o repositório publica a política IAM mínima para ele:
+         </p>
+         <pre class="code-block"><code>escalint collect -o snapshot.json   # snapshot só leitura com suas credenciais AWS
+escalint serve snapshot.json        # abre a UI em 127.0.0.1 com token de uso único
+escalint scan snapshot.json         # achados no terminal; exit 1 se houver high ou critical</code></pre>
+         <p>
+            Sem credenciais à mão, dá para usar as contas de exemplo do repositório. A saída real (resumida) do
+            <i>scan</i> na conta vulnerável:
+         </p>
+         <pre class="code-block"><code>escalint scan examples/vulnerable-account/snapshot.json</code></pre>
+         <pre class="code-block"><code>1 account(s), 66 node(s), 114 edge(s), 15 path(s) to Tier 0; 19 critical, 28 high, 57 medium, 2 info
+
+arn:aws:iam::111111111111:role/pe002-attacker (role, tier 1)
+  path p_a9433adab2c37415 [CRITICAL, allowed, 1 step(s)]
+    1. arn:aws:iam::111111111111:role/pe002-attacker --[modify_permissions EL-PE-002]--> effective admin (111111111111)
+  CRITICAL EL-PE-002 Put an inline policy on its own role
+    arn:aws:iam::111111111111:role/pe002-attacker can act as effective admin of account 111111111111 using iam:PutRolePolicy
+    policy: inline:arn:aws:iam::111111111111:role/pe002-attacker/p statement #0 (snapshot line 766)
+    ATT&CK: T1098.003 Account Manipulation: Additional Cloud Roles
+    fix: Remove iam:PutRolePolicy from the role's policies, or scope its Resource to roles other than itself
+         and add a permissions boundary that denies it.
+
+arn:aws:iam::111111111111:role/tr002-ci-deploy (role, tier 3)
+  CRITICAL EL-TR-002 GitHub Actions OIDC trust without a sub condition
+    any GitHub Actions workflow, in any repository, can assume arn:aws:iam::111111111111:role/tr002-ci-deploy:
+    the trust has no condition on token.actions.githubusercontent.com:sub
+    policy: trust:arn:aws:iam::111111111111:role/tr002-ci-deploy statement #0 (snapshot line 1170)
+    ATT&CK: T1199 Trusted Relationship; T1078.004 Valid Accounts: Cloud Accounts</code></pre>
+         <p>
+            Cada achado aponta a política e a linha do snapshot que o causam, as técnicas ATT&amp;CK e uma correção
+            concreta. Os códigos de saída permitem usar o escalint como gate: <b>0</b> sem achados acima de
+            <i>--fail-on</i> (padrão <i>high</i>), <b>1</b> com achados e <b>2</b> erro de uso.
+         </p>
+
+         <p>
+            <b>Em CI</b>
+            <br><br>
+            O caso de uso que mais me interessa é impedir que um caminho novo apareça sem ninguém perceber. O
+            <i>escalint diff</i> compara dois snapshots e falha apenas com arestas, caminhos e achados
+            <b>adicionados</b>. O repositório traz uma GitHub Action que, em um job diário, coleta com uma role só
+            leitura via OIDC, compara com o snapshot de ontem e envia o resultado em SARIF para o GitHub Code
+            Scanning:
+         </p>
+         <pre class="code-block"><code>escalint diff baseline.json snapshot.json --fail-on high
+escalint scan snapshot.json --format sarif --output escalint.sarif</code></pre>
+
+         <br>
+         <h2>Onde o escalint se encaixa</h2>
+
+         <p>
+            O escalint não substitui nenhuma das ferramentas citadas. O Prowler continua sendo o lugar para
+            postura geral da conta; o escalint deliberadamente não olha bucket público nem security group aberto.
+            O Pacu e o CloudFox continuam sendo o lugar para exploração e validação ofensiva; o escalint não
+            assume roles, não cria credenciais e não altera nada na conta.
+            <br><br>
+            O espaço que ele ocupa é o do PMapper: análise defensiva, estática e explicável de acesso efetivo em IAM,
+            agora com SCPs e RCPs, catálogo atualizado e mapeado ao pathfinding.cloud, saída pronta para CI e uma
+            interface pensada para que o defensor enxergue o grafo que o atacante já enxerga. A ideia do grafo
+            self-hosted, em que nenhum dado sai da conta, veio do
+            <a href="https://github.com/marcelogsantos/aws-iam-graph">aws-iam-graph</a>, de marcelogsantos; o
+            escalint é uma reimplementação do zero.
+         </p>
+
+         <br>
+         <h2>Limitações</h2>
+
+         <p>
+            A v1 não modela session policies e session tags, políticas baseadas em recurso além da trust policy
+            (bucket policies do S3, key policies do KMS, Lambda, Secrets Manager), usuários root nem atribuições do
+            IAM Identity Center. Condições de requisição não são conhecidas estaticamente, então os passos afetados
+            ficam como <i>conditional</i>. A cobertura é de 33 dos 92 caminhos do pathfinding.cloud; a maioria dos
+            restantes passa uma role para outro serviço de computação e segue o mesmo molde das regras existentes.
+            O inventário de recursos é regional, o plano de correção é guloso (pequeno, mas não garantidamente
+            mínimo) e um snapshot é uma fotografia: depois de mudanças, é preciso coletar de novo.
+            <br><br>
+            E um cuidado importante: o snapshot e os relatórios são, literalmente, um mapa de quem consegue virar
+            administrador. Devem ser tratados como dado sensível e compartilhados só com <i>--redact</i>.
+         </p>
+
+         <br>
+         <h2>Considerações finais</h2>
+
+         <p>
+            Escalada de privilégio em IAM raramente é uma política obviamente errada. É uma soma de permissões
+            razoáveis, espalhadas por principais e contas diferentes, que ninguém revisou juntas. O atacante tem
+            ferramentas para encontrar e percorrer essa soma; o defensor, na maioria das vezes, tem uma lista.
+            <br><br>
+            O escalint tenta equilibrar isso: avaliar as políticas como a AWS avalia, desenhar o grafo, explicar
+            cada aresta com o statement que a permite e dizer onde cortar. Não é garantia de que uma conta está
+            segura, mas é uma forma de olhar para o IAM do mesmo jeito que quem vai atacá-lo.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
