@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ferramentas de segurança e privacidade escritas por Brenno M., com o que cada uma faz e o código no GitHub.">
+    <meta name="theme-color" content="#1a1a1a">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/projects.css">
+    <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+    <title>projects.</title>
+</head>
+
+<body class="projects">
+        <a href="index.html" class="back-home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Voltar
+        </a>
+        <div class="lang-switch">
+            <a href="projects.html" class="active" title="Português (Brasil)" hreflang="pt-br">
+            <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="72" height="48" fill="#009c3b" />
+                    <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                    <circle cx="36" cy="24" r="12" fill="#002776" />
+                    <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                    <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                    <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                    <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                    <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                    <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                </svg>
+            </a>
+            <a href="projects-en.html" title="English (US)" hreflang="en">
+            <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="36" height="24" fill="#fff" />
+                    <rect width="36" height="1.85" y="0" fill="#b22234" />
+                    <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                    <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                    <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                    <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                    <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                    <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                    <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                </svg>
+            </a>
+        </div>
+
+    <div class="wrap">
+
+        <header class="intro">
+            <h1>Projetos</h1>
+            <p>Ferramentas de segurança e privacidade que escrevi. Quase todas rodam na sua própria máquina, sem conta e sem mandar dados para fora. O código de cada uma está no GitHub.</p>
+        </header>
+
+        <main>
+            <div class="cases">
+            <article class="case" id="escalint">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>escalint</h2>
+                        <p class="case-lede">Mapeia quem consegue virar administrador numa conta AWS a partir de um snapshot somente leitura.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Quase ninguém tem AdministratorAccess direto numa conta AWS. O risco está na combinação: iam:PassRole com lambda:CreateFunction, ou uma role cuja trust policy o próprio usuário consegue reescrever. Nenhuma política parece perigosa sozinha. O escalint lê um snapshot IAM de uma ou mais contas, avalia as políticas do jeito que a AWS avalia e monta o grafo de quem consegue agir como quem até chegar em admin.</p>
+                        <ul class="case-points">
+                            <li>39 regras, cada uma ligada à documentação da AWS e ao catálogo do pathfinding.cloud</li>
+                            <li>Mostra o statement exato que libera cada passo e o que o CloudTrail registraria</li>
+                            <li>Calcula o menor conjunto de mudanças que fecha todos os caminhos</li>
+                            <li>Saída em texto, JSON e SARIF para CI, e uma interface web com nove visões</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/escalint.webp" width="1280" height="800" alt="Atlas do escalint: grafo de principals IAM e serviços AWS, com os caminhos críticos destacados" loading="eager" decoding="async"></div>
+                            <figcaption>O Atlas com 65 principals de uma conta de teste.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/escalint" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="articles/pt-br/escalint.html">Ler o artigo</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Go</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="blindsight">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>blindsight</h2>
+                        <p class="case-lede">Confere uma transação Safe multisig offline, antes de você assinar.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Em fevereiro de 2025 a Bybit perdeu cerca de US$ 1,5 bilhão porque os signatários da Safe viram uma transação na tela e assinaram outra: a hardware wallet só mostrava um hash. O blindsight parte do princípio de que a máquina que preparou a transação pode estar comprometida. Ele roda em outro computador, sem rede, e recalcula tudo a partir dos parâmetros brutos.</p>
+                        <ul class="case-points">
+                            <li>Calcula os hashes EIP-712 com duas implementações independentes e não mostra nenhum se elas divergirem</li>
+                            <li>Decodifica a árvore de chamadas, incluindo MultiSend e Safes aninhadas</li>
+                            <li>20 detectores procuram padrões de tomada da Safe, como delegatecall para contrato desconhecido</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/blindsight.webp" width="1200" height="760" alt="Terminal com o blindsight verificando a transação do ataque à Bybit e marcando dois achados críticos" loading="lazy" decoding="async"></div>
+                            <figcaption>O blindsight sobre a transação real do ataque à Bybit.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/blindsight" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="articles/pt-br/blindsight.html">Ler o artigo</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Rust</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="oraclint">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>oraclint</h2>
+                        <p class="case-lede">Linter de segurança estático para deploys de nós Chainlink.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Muitos nós Chainlink são comprometidos por configuração, não por exploit: a UI do operador aberta para a internet, banco sem TLS, senha de keystore curta, flag de desenvolvimento esquecida. O oraclint faz para nós Chainlink o que tfsec e checkov fazem para Terraform. Lê config.toml, secrets.toml, docker-compose, manifests Kubernetes e .env e aponta cada problema antes do deploy, sem encostar no nó em execução.</p>
+                        <ul class="case-points">
+                            <li>35 regras conferidas contra o código-fonte do nó v2.69.0</li>
+                            <li>Cada achado com arquivo, linha e coluna, o motivo e a correção</li>
+                            <li>Nunca imprime segredos; saída em texto, JSON e SARIF para o GitHub code scanning</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/oraclint.webp" width="1600" height="1000" alt="Saída do oraclint listando achados de severidade alta em config.toml, docker-compose.yml e manifests Kubernetes" loading="lazy" decoding="async"></div>
+                            <figcaption>17 achados num nó propositalmente inseguro.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/oraclint" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="articles/pt-br/chainlink-security.html">Ler o artigo</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Go</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="oraclewatch">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>oraclewatch</h2>
+                        <p class="case-lede">Monitora Data Feeds Chainlink do lado de quem consome o preço.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">A Chainlink opera os Data Feeds, mas o risco de usar um feed fica com o protocolo que consome o preço. Um mercado de empréstimo que avalia colateral por um feed assume que o preço está fresco, dentro de limites razoáveis, publicado com o sequencer da L2 no ar e perto do mercado. O oraclewatch lê esses feeds direto da chain e avisa alguém quando uma dessas premissas quebra.</p>
+                        <ul class="case-points">
+                            <li>Roda continuamente as checagens que auditores pedem on-chain, e outras que só fazem sentido fora dela</li>
+                            <li>Incidentes reais viraram regras: o congelamento do feed LUNA/USD em 2022 dispara três delas</li>
+                            <li>Cobre Ethereum e L2s, com um dashboard Grafana pronto</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/oraclewatch.webp" width="1600" height="1000" alt="Dashboard Grafana do oraclewatch com status por rede, sequencer das L2 e idade dos feeds" loading="lazy" decoding="async"></div>
+                            <figcaption>Dashboard Grafana acompanhando ETH/USD em quatro redes.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/oraclewatch" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="articles/pt-br/chainlink-security.html">Ler o artigo</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Go, Grafana</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="pwncortex">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>PwnCortex</h2>
+                        <p class="case-lede">Centraliza um pentest inteiro num só lugar, com IA que roda na sua máquina.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Num pentest, a informação fica espalhada entre saídas de scan, planilhas e anotações. O PwnCortex junta tudo num projeto só: importa os scans, desenha a topologia da rede como grafo, cruza cada host com CVEs do NVD e responde perguntas sobre o alvo com um LLM que recebe o contexto inteiro do projeto. Roda localmente, sem telemetria e sem nuvem.</p>
+                        <ul class="case-points">
+                            <li>Importa Nmap XML, JSON, Markdown ou texto puro</li>
+                            <li>Notas de evidência vão de rascunho a verificada e entram no relatório executivo com score CVSS</li>
+                            <li>Checklist OWASP WSTG com 121 itens; LLM local via Ollama ou via OpenRouter</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/pwncortex.webp" width="1600" height="1000" alt="Grafo de rede do PwnCortex com um host selecionado e seus serviços abertos no painel lateral" loading="lazy" decoding="async"></div>
+                            <figcaption>Grafo de rede montado a partir de um scan Nmap.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/pwncortex" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Python</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="aporte">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>Aporte</h2>
+                        <p class="case-lede">Backtesting que simula aportes mensais com rebalanceamento da carteira.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">A maioria dos backtesters calcula só um aporte único. Quem investe todo mês faz outra coisa: compra o ativo que ficou abaixo da meta na carteira. O Aporte simula exatamente isso, com aportes mensais, quinzenais ou semanais e rebalanceamento automático, e mostra quanto a carteira teria rendido de verdade.</p>
+                        <ul class="case-points">
+                            <li>Dados históricos gratuitos de ações da B3 e dos EUA, BDRs, cripto e ETFs</li>
+                            <li>Compara com IBOV, S&amp;P 500, CDI e IPCA + 6%, com opção de reinvestir dividendos</li>
+                            <li>Self-hosted: os dados financeiros ficam na sua máquina, e o cache Redis responde em menos de 50 ms</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/aporte.webp" width="1600" height="1000" alt="Tela de simulação do Aporte com o patrimônio projetado, curva da carteira e métricas de risco" loading="lazy" decoding="async"></div>
+                            <figcaption>Simulação de BTC e ETH com aporte mensal desde 2020.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/aporte" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>TypeScript, Redis</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="oci-secops">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>OCI SecOps</h2>
+                        <p class="case-lede">Labs de segurança ofensiva e pipelines AppSec no Oracle Cloud, dentro do Always Free.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">O Always Free da Oracle Cloud oferece até 4 OCPUs ARM e 24 GB de RAM sem custo, o suficiente para um lab de segurança. O OCI SecOps provisiona, audita e endurece essas instâncias e as prepara para segurança ofensiva (bug bounty, pentest) ou defensiva (pipelines SAST, DAST e SCA).</p>
+                        <ul class="case-points">
+                            <li>Seis topologias, de uma máquina com todo o limite a um cluster de quatro nós</li>
+                            <li>Aplica os tetos do Always Free localmente, porque numa conta Pay As You Go passar deles gera cobrança</li>
+                            <li>Consulta a cota real da região pela API quando ela é menor que a documentada</li>
+                        </ul>
+                        <figure class="case-media case-media--logo">
+                            <div class="case-frame"><img src="img/projects/oci-secops.webp" width="390" height="390" alt="" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/oci-secops" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="articles/pt-br/oci-secops.html">Ler o artigo</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Shell, OCI</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="no-distraction">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>no-distraction</h2>
+                        <p class="case-lede">Um app de produtividade que funciona offline e não manda nada para servidor nenhum.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Calendário, tarefas, notas, pomodoro, hidratação e refeições numa única tela. É um app pessoal e minimalista que roda inteiro no navegador: não tem conta, servidor, nuvem nem telemetria. Para trocar de máquina, basta exportar um arquivo .json.</p>
+                        <ul class="case-points">
+                            <li>Instalável como PWA no celular e no desktop, funciona offline</li>
+                            <li>Pomodoro baseado em timestamp, que não perde a contagem quando a aba dorme</li>
+                            <li>Módulos independentes em Svelte 5 que só conversam por um event bus tipado</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/no-distraction.webp" width="1600" height="1000" alt="Tela do no-distraction com tarefas do dia, pomodoro em 25 minutos e o calendário" loading="lazy" decoding="async"></div>
+                            <figcaption>Tarefas, pomodoro e calendário na mesma tela.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/no-distraction/no-distraction.github.io" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="https://no-distraction.github.io/" target="_blank" rel="noopener">Abrir o app</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Svelte, TypeScript</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="keyguardian">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>KeyGuardian</h2>
+                        <p class="case-lede">Cofre de senhas para celular, em Flutter, com chave mestra.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Um cofre de senhas para celular feito em Flutter com Firebase. Além do login, abrir o cofre exige uma chave mestra criada pelo usuário, e as credenciais ficam criptografadas.</p>
+                        <ul class="case-points">
+                            <li>Login, cadastro e recuperação de senha com Firebase Auth</li>
+                            <li>Lista, detalhes e edição das credenciais salvas</li>
+                            <li>Gerador de senhas com tamanho, números e caracteres especiais configuráveis</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/keyguardian.webp" width="1280" height="800" alt="Três telas do KeyGuardian: boas-vindas, lista de credenciais salvas e edição de uma credencial" loading="lazy" decoding="async"></div>
+                            <figcaption>Boas-vindas, lista de credenciais e troca de senha.</figcaption>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/keyguardian" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Flutter, Firebase</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="wg-auto">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>WG-Auto</h2>
+                        <p class="case-lede">A VPN WireGuard instalada e configurada com um único script.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Montar uma VPN WireGuard à mão envolve gerar chaves, escrever configurações, ligar o encaminhamento de IP e criar regras de firewall, no servidor e em cada cliente. O WG-Auto faz tudo isso com um script para o servidor e outro para o cliente.</p>
+                        <ul class="case-points">
+                            <li>Gera as chaves e os arquivos de configuração do servidor e do cliente</li>
+                            <li>Liga o IP forwarding e aplica as regras de NAT com iptables</li>
+                            <li>Valida IP, porta e chave pública do servidor antes de configurar o cliente</li>
+                        </ul>
+                        <figure class="case-media case-media--logo">
+                            <div class="case-frame"><img src="img/projects/wg-auto.webp" width="318" height="324" alt="" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/wg-auto" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="articles/pt-br/own-vpn.html">Ler o artigo</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Shell</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="fast-enum">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>Fast-Enum</h2>
+                        <p class="case-lede">Enumeração de subdomínios e web crawling num só comando.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">O reconhecimento de um domínio costuma exigir encadear várias ferramentas na mão. O Fast-Enum roda essa sequência numa execução só: descobre subdomínios, remove os duplicados, testa quais estão no ar e coleta URLs deles.</p>
+                        <ul class="case-points">
+                            <li>Enumeração com assetfinder, subfinder e findomain</li>
+                            <li>Remove duplicados com anew e checa subdomínios ativos com httpx</li>
+                            <li>Coleta URLs históricas com waybackurls</li>
+                        </ul>
+                        <figure class="case-media case-media--logo">
+                            <div class="case-frame"><img src="img/projects/fast-enum.webp" width="232" height="368" alt="" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/fast-enum" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Shell</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="basic-enum-tools">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>Basic-Enum-Tools</h2>
+                        <p class="case-lede">Prepara uma máquina de recon instalando as ferramentas de enumeração de uma vez.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Montar uma máquina de recon do zero toma tempo: instalar Go e Python, dependências e dezenas de ferramentas. O Basic-Enum-Tools faz isso num script, com as ferramentas mais usadas de enumeração de subdomínios, resolução, crawling, fuzzing e automação.</p>
+                        <ul class="case-points">
+                            <li>Subdomínios: assetfinder, subfinder, amass e findomain</li>
+                            <li>Resolução e crawling: httpx, dnsx, gowitness, waybackurls e gau</li>
+                            <li>Fuzzing de diretórios: gobuster e ffuf</li>
+                        </ul>
+                        <figure class="case-media case-media--logo">
+                            <div class="case-frame"><img src="img/projects/basic-enum-tools.webp" width="380" height="378" alt="" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/basic-enum-tools" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Shell</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 20∞</p>
+    </footer>
+
+</body>
+
+</html>

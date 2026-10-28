@@ -474,6 +474,25 @@ body.home {
     color: #9fef00;
 }
 
+/* Categoria que leva para outra página (Projetos) em vez de abrir no lugar */
+.category--link {
+    display: block;
+}
+
+.category-go {
+    width: 20px;
+    height: 20px;
+    display: block;
+    color: #888;
+    transition: color 260ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.category--link:hover .category-go,
+.category--link:focus-visible .category-go {
+    color: #9fef00;
+    transform: translate(2px, -2px);
+}
+
 /* Trocar 0fr por 1fr anima até a altura real do conteúdo: a curva de easing
    nunca é gasta em espaço vazio (era o problema do max-height: 3000px fixo) e a
    mesma duração serve para uma categoria de 3 ou de 8 itens. */

@@ -196,27 +196,6 @@
             text-align: justify;
         }
 
-        .skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .skill-tag {
-            background: rgba(159, 239, 0, 0.1);
-            color: #9fef00;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            border: 1px solid rgba(159, 239, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .skill-tag:hover {
-            background: rgba(159, 239, 0, 0.2);
-            transform: translateY(-2px);
-        }
-
         .certifications-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -385,14 +364,7 @@
                 font-size: 0.9rem;
             }
 
-            .skills-grid {
-                justify-content: center;
-            }
 
-            .skill-tag {
-                font-size: 0.8rem;
-                padding: 6px 12px;
-            }
 
             .certifications-list {
                 grid-template-columns: 1fr;
@@ -661,13 +633,38 @@
                     Technical Skills
                 </h3>
 
-                <div class="skills-grid">
-                    <span class="skill-tag">Penetration Testing</span>
-                    <span class="skill-tag">Web Application Security</span>
-                    <span class="skill-tag">Network Security</span>
-                    <span class="skill-tag">Red Team Operations</span>
-                    <span class="skill-tag">Software Developer (C/C++, Java, Python)</span>
-                    <span class="skill-tag">Automation Developer (PowerShell, CI/CD)</span>
+                <div class="certifications-list">
+                    <div class="cert-item">
+                        <h4>Cybersecurity</h4>
+                    </div>
+                    <div class="cert-item">
+                        <h4>Penetration Testing</h4>
+                    </div>
+                    <div class="cert-item">
+                        <h4>Web Application Security</h4>
+                    </div>
+                    <div class="cert-item">
+                        <h4>Network Security</h4>
+                    </div>
+                    <div class="cert-item">
+                        <h4>Red Team Operations</h4>
+                    </div>
+                    <div class="cert-item">
+                        <h4>Cloud Security</h4>
+                        <div class="issuer">AWS</div>
+                    </div>
+                    <div class="cert-item">
+                        <h4>DevSecOps</h4>
+                        <div class="issuer">CI/CD security, SAST, DAST, SCA</div>
+                    </div>
+                    <div class="cert-item">
+                        <h4>Software Developer</h4>
+                        <div class="issuer">C/C++, Java, Python, Go, Rust</div>
+                    </div>
+                    <div class="cert-item">
+                        <h4>Automation Developer</h4>
+                        <div class="issuer">PowerShell</div>
+                    </div>
                 </div>
             </div>
 
