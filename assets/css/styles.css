@@ -155,38 +155,6 @@ body.home {
     max-width: 44ch;
 }
 
-/* Posts cue - hidden on the desktop split (nothing to scroll to), shown once the columns stack.
-   Mesmo desenho do botão "Voltar" das outras páginas. */
-.scroll-indicator {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #9fef00;
-    padding: 10px 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.scroll-indicator svg {
-    width: 18px;
-    height: 18px;
-    animation: nudge-down 2s infinite;
-}
-
-@keyframes nudge-down {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(6px);
-    }
-}
-
 /* Icons Section */
 .icons {
     display: flex;
@@ -713,12 +681,11 @@ footer {
     }
 
     .hero-section {
-        min-height: calc(100dvh - 64px);
         align-items: center;
         text-align: center;
         overflow: visible;
         gap: 22px;
-        padding: 40px 20px 60px;
+        padding: 40px 20px;
     }
 
     .hero-section h1 {
@@ -733,19 +700,6 @@ footer {
         justify-content: center;
     }
 
-    .scroll-indicator {
-        display: inline-flex;
-        position: absolute;
-        bottom: 24px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .scroll-indicator:hover {
-        /* o translateX mantém a centralização; o Y é o equivalente vertical do slide do "Voltar" */
-        transform: translateX(-50%) translateY(5px);
-    }
-
     .main-content {
         overflow: visible;
         border-left: none;
@@ -756,7 +710,7 @@ footer {
 
 @media (max-width: 768px) {
     .hero-section {
-        padding: 40px 20px 60px;
+        padding: 40px 20px;
     }
 
     .hero-section h1 {
@@ -864,10 +818,6 @@ footer {
     }
 
     .category.expanded .category-content .post {
-        animation: none;
-    }
-
-    .scroll-indicator svg {
         animation: none;
     }
 }

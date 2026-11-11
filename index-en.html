@@ -112,14 +112,6 @@
                         </svg>
                     </a>
                 </div>
-
-                <div class="scroll-indicator" onclick="scrollToPosts()">
-                    <span>View posts</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </div>
             </header>
 
             <!-- Right side: posts -->
@@ -708,7 +700,7 @@
                         <div class="category-title">
                             <span>Projects</span>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">12 items</span>
+                                <span class="category-count">16 items</span>
                                 <svg class="category-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M7 17L17 7M8 7h9v9" />
                                 </svg>
@@ -756,14 +748,6 @@
                 event.stopPropagation();
             }
             window.location.href = url;
-        }
-
-
-        // Scroll to posts section
-        function scrollToPosts() {
-            document.getElementById('posts-section').scrollIntoView({
-                behavior: 'smooth'
-            });
         }
     </script>
 </body>
