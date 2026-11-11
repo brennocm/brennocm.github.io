@@ -184,6 +184,30 @@
                     </div>
                 </div>
             </article>
+            <article class="case" id="doppelganger">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>Doppelgänger</h2>
+                        <p class="case-lede">Detecta vozes clonadas em chamadas ao vivo, direto no navegador.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Golpes com voz clonada imitam um chefe ou parente para pedir uma transferência ou uma aprovação urgente. O Doppelgänger escuta o lado remoto de uma chamada numa aba do navegador (Meet, Teams, WhatsApp Web), dá uma nota a cada trecho de fala e, quando a voz parece sintética, orienta o que fazer: não aprovar nada, pedir a palavra combinada e ligar de volta num número conhecido.</p>
+                        <ul class="case-points">
+                            <li>O modelo anti-spoofing (AASIST-L) roda no navegador com ONNX Runtime Web, e nenhum áudio, transcrição ou nota sai da máquina</li>
+                            <li>Funciona offline depois da primeira visita, e pode ser servido da sua própria máquina em 127.0.0.1</li>
+                            <li>A nota é tratada como estimativa, não como prova, e a própria interface avisa que o modelo não foi avaliado em áudio de chamada</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/doppelganger.webp" width="1000" height="625" alt="Tela do Doppelgänger ouvindo uma aba de chamada, com o cartão de alerta, a curva de dissonância e o protocolo de verificação" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/doppelganger" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="https://brennocm.github.io/doppelganger/app/" target="_blank" rel="noopener">Abrir o app</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>TypeScript, ONNX Runtime Web</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
             <article class="case" id="aporte">
                 <div class="case-body">
                     <div class="case-head">
@@ -399,6 +423,52 @@
                     </div>
                 </div>
             </article>
+            <article class="case" id="tiktok-unwall">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>TikTok Unwall</h2>
+                        <p class="case-lede">Extensão que tira o muro de login do TikTok e devolve a rolagem.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">O TikTok entrega o vídeo à página e depois cobre tudo com um modal de login, borra o fundo e trava a rolagem. A extensão automatiza, num clique, o que daria para fazer à mão apagando nós no DevTools, e só mexe no DOM da aba aberta.</p>
+                        <ul class="case-points">
+                            <li>Não remove nada do DOM: marca os alvos com um atributo e os esconde por CSS, então o Desfazer devolve a página como estava</li>
+                            <li>Um MutationObserver reaplica a regra quando o React remonta o modal a cada troca de vídeo</li>
+                            <li>Containers que também servem a diálogos legítimos só somem quando contêm o formulário de login</li>
+                        </ul>
+                        <figure class="case-media case-media--logo">
+                            <div class="case-frame"><img src="img/projects/tiktok-unwall.webp" width="128" height="128" alt="" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/tiktok-unwall" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>JavaScript</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="bridge-tor-setup">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>bridge-tor-setup</h2>
+                        <p class="case-lede">Prepara uma VPS Debian do zero e sobe uma bridge Tor obfs4 monitorada.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Uma bridge Tor ajuda quem está em redes censuradas a chegar ao Tor. O script faz o hardening básico da VPS, instala o Docker e sobe a bridge oficial do Tor Project junto com o monitoramento, numa execução que pode ser repetida sem refazer o que já foi feito.</p>
+                        <ul class="case-points">
+                            <li>UFW, fail2ban, hardening de kernel e atualizações automáticas de segurança</li>
+                            <li>Correção ufw-docker, sem a qual o Docker ignora as regras do firewall</li>
+                            <li>Uptime Kuma vigiando a porta da bridge e um resumo diário no Telegram com dados da API Onionoo</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/bridge-tor-setup.webp" width="884" height="673" alt="README do bridge-tor-setup com os passos do script e os comandos da primeira e da segunda execução" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/bridge-tor-setup" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>Shell, Docker</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
             <article class="case" id="fast-enum">
                 <div class="case-body">
                     <div class="case-head">
@@ -441,6 +511,30 @@
                         <div class="links">
                             <a class="btn btn--icon" href="https://github.com/brennocm/basic-enum-tools" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
                             <p class="stack"><span class="visually-hidden">Stack: </span>Shell</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="case" id="assistant-cap">
+                <div class="case-body">
+                    <div class="case-head">
+                        <h2>CAP Assistant</h2>
+                        <p class="case-lede">Simulado para a certificação Certified AppSec Practitioner, da The SecOps Group.</p>
+                    </div>
+                    <div class="case-detail">
+                        <p class="case-about">Material que montei para estudar para a CAP: um site com 50 questões de dificuldade parecida com a da prova, cada uma com a explicação de por que cada alternativa está certa ou errada.</p>
+                        <ul class="case-points">
+                            <li>24 tópicos, de SSRF, IDOR e XSS a JWT, CSP e XXE</li>
+                            <li>Correção na hora, com a explicação de todas as alternativas</li>
+                            <li>Navegação livre entre as questões</li>
+                        </ul>
+                        <figure class="case-media">
+                            <div class="case-frame"><img src="img/projects/assistant-cap.webp" width="1000" height="624" alt="Questão sobre SSRF no CAP Assistant, com a alternativa certa em verde, a errada em vermelho e a explicação de cada uma" loading="lazy" decoding="async"></div>
+                        </figure>
+                        <div class="links">
+                            <a class="btn btn--icon" href="https://github.com/brennocm/assistant-cap" target="_blank" rel="noopener" aria-label="Código no GitHub" title="Código no GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></a>
+                            <a class="text-link" href="https://cap-assistant.ct.ws" target="_blank" rel="noopener">Abrir o site</a>
+                            <p class="stack"><span class="visually-hidden">Stack: </span>PHP</p>
                         </div>
                     </div>
                 </div>

