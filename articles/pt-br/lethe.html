@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>lethe.</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../pt-br/lethe.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../en-us/lethe.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>lethe: monitor de OpSec para quem trabalha atrás de VPN e Tor</h1>
+         <p class="meta">
+            <span>nov 16, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Quem faz investigação ou CTI atrás de VPN ou Tor depende de dezenas de detalhes que falham sem avisar. O
+            túnel cai por dois segundos. O kill switch do cliente VPN não cobre uma interface nova. O IPv6 sai por
+            fora, o DNS volta para o resolvedor do provedor, o navegador manda um STUN pela placa de rede, a máquina
+            entra numa Wi-Fi nova. Na maioria das vezes, a pessoa só descobre depois, quando descobre.
+            <br><br>
+            Escrevi o <a href="https://github.com/brennocm/lethe">lethe</a>, um monitor de OpSec para Linux em Go,
+            para acompanhar essas falhas durante o trabalho. Ele não substitui o cliente VPN nem o Tor; roda em cima
+            do ambiente que já existe. Descobre o túnel, confere a configuração antes de começar, vigia todas as
+            interfaces de saída, pode bloquear o vazamento com nftables e grava um log da sessão cifrado, encadeado e
+            assinado.
+            <br><br>
+            O projeto ainda não passou pelos testes manuais de aceitação (Tor real e a GUI no GNOME e no KDE). Por
+            enquanto, não use em operação real.
+         </p>
+
+         <h2>Conceitos</h2>
+
+         <p>
+            <b>Túnel, endpoint e interface de saída</b>
+            <br>
+            <br> Uma VPN ou o Tor criam uma interface de túnel (<i>wg0</i>,
+            <i>tun0</i>) por onde o tráfego deveria passar. O que sai dela é cifrado e enviado pela interface física,
+            a placa de rede ou o Wi-Fi, para um único destino: o endpoint, que é o servidor VPN ou o primeiro relay do
+            Tor (guard ou bridge). O lethe chama de interface de saída toda interface cujo tráfego chega ao fio sem
+            passar por um túnel. Vlans, bonds e bridges sobre uma placa física também contam.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Vazamento</b>
+            <br>
+            <br> Vazamento é qualquer pacote que sai pela interface de saída para um destino que não é o
+            endpoint. Quem recebe esse pacote vê o IP real da máquina. Os casos comuns são o túnel caindo, uma
+            consulta DNS que vai para o resolvedor do provedor, IPv6 roteado por fora e o STUN do WebRTC, que o
+            navegador usa para descobrir o próprio IP e pode mandar pela interface física.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Kill switch</b>
+            <br>
+            <br> É a regra de firewall do cliente VPN que bloqueia o tráfego fora do túnel quando a VPN
+            cai. Cada cliente implementa do seu jeito, e nem todos cobrem IPv6, interfaces que aparecem depois da
+            conexão ou o intervalo em que o cliente está reconectando.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>netfilter e nftables</b>
+            <br>
+            <br> O netfilter é o subsistema do kernel Linux que filtra pacotes, e o nftables é a
+            interface atual para configurá-lo. As regras ficam em tabelas, e as tabelas têm chains presas a pontos
+            do caminho do pacote (hooks), como <i>output</i>, para o que a máquina envia, e <i>netdev egress</i>, logo
+            antes de o frame sair pela placa. Várias tabelas podem existir ao mesmo tempo, de programas diferentes,
+            e um pacote passa por todas elas.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>AF_PACKET e cBPF</b>
+            <br>
+            <br> Um socket <i>AF_PACKET</i> recebe uma cópia dos frames que passam por uma
+            interface, como o tcpdump faz. Um filtro cBPF é um programa pequeno, rodado no kernel para cada frame, que
+            decide se a cópia chega ao programa ou é descartada ali mesmo.
+         </p>
+
+         <br>
+         <h2>A regra central</h2>
+
+         <p>
+            Quase todo o lethe sai de uma regra só: numa interface de saída, só pode sair tráfego para o endpoint do
+            túnel, mais uma lista fechada de exceções de enlace (DHCP, ARP, NDP, EAPOL). Qualquer outra coisa é
+            vazamento. DNS, IPv6, WebRTC, NTP e mDNS são subcasos dessa regra ou checagens de coerência em volta dela.
+            <br><br>
+            Uma interface que aparece no meio da sessão e ainda não foi classificada conta como interface de saída. E
+            quando a ferramenta não consegue enxergar alguma coisa, porque um sensor parou ou o kernel não tem um
+            recurso, o estado fica cinza, nunca verde.
+         </p>
+
+         <br>
+         <h2>Modelo de ameaça</h2>
+
+         <p>
+            O adversário que guiou o design é um grupo criminoso com capacidade técnica alta, interesse em identificar
+            e localizar quem o investiga e disposição para violência física. Ele opera os sites e fóruns que o
+            investigador visita e vê IP de origem, resolvedor DNS, candidatos WebRTC e horários. Manda links e
+            arquivos com beacons. Pode comprometer o navegador e ganhar execução de código com o UID do operador, mas
+            sem root.
+            <br><br>
+            Ficam de fora um adversário em nível de Estado, correlação global de tráfego no Tor, malware com root na
+            máquina e o fingerprint do navegador. Vazamento de identidade dentro do túnel (um login pessoal, o SNI de
+            um serviço) também não entra na v1.
+         </p>
+
+         <br>
+         <h2>Como funciona</h2>
+
+         <pre class="code-block"><code> descoberta ─► preflight ─► arm ─► monitoramento ─► resposta
+ túnel,          checks       guarda   sensores e       alerta, bloqueio,
+ endpoints,      pontuais     nftables checks passivos  pânico
+ interfaces, DNS                          │
+                                          ▼
+                     log cifrado, encadeado (SHA-256) e assinado (Ed25519)</code></pre>
+
+         <p>
+            <b>O sensor de captura</b>
+            <br><br>
+            O sensor principal abre um socket <i>AF_PACKET</i> em cada interface de saída e anexa um filtro cBPF
+            gerado a partir do allowlist. O filtro roda no kernel e só entrega ao programa os pacotes de saída que
+            não são permitidos. ARP, EAPOL (senão cada rekey do Wi-Fi viraria alerta), DHCP, NDP, MLD e o tráfego para
+            os endpoints do túnel ficam no kernel. Como o normal é não chegar nada, um socket simples basta, sem ring
+            buffer. O alvo é detectar um vazamento em menos de 200 ms, com teto de 1 s.
+            <br><br>
+            O que chega é classificado pela ordem abaixo, e o primeiro caso que casar vence:
+         </p>
+         <pre class="code-block"><code>CONDIÇÃO                                            CHECK
+dport 53 (udp/tcp)                                  DNS-001 (decodifica o qname)
+dport 853 (DoT/DoQ)                                 DNS-001
+dport 3478, 5349, 19302-19309 ou cookie STUN        NET-012 (STUN/WebRTC)
+dport 5353, 5355, 137, 138, 1900                    NET-009 (broadcast na LAN)
+IPv6                                                NET-001, subtipo ipv6
+resto                                               NET-001</code></pre>
+         <p>
+            Tudo isso é CRITICAL, menos o broadcast na LAN, que é WARNING (e vira CRITICAL quando o hostname anunciado
+            é o da máquina real). O filtro é trocado de forma atômica sempre que o allowlist muda. O cBPF tem limite
+            de 4096 instruções, então o gerador falha de propósito acima de 256 endpoints, e o estado vai para cinza.
+            <br><br>
+
+            <b>O guarda</b>
+            <br><br>
+            O guarda tem três modos. No <i>off</i>, o lethe só detecta e alerta. No <i>reactive</i>, nenhuma regra é
+            aplicada até o primeiro CRITICAL, e aí tudo é bloqueado, o que significa que o primeiro pacote vazado já
+            saiu. No <i>strict</i>, o arm aplica uma tabela nftables que só deixa sair pelas interfaces físicas o
+            tráfego dos endpoints e as exceções de enlace. Um vazamento barrado vira um evento NET-002, com o UID de
+            quem tentou. Se o daemon morrer, a tabela fica.
+            <br><br>
+            O desenho se apoia numa propriedade do netfilter: um <i>drop</i> em qualquer chain base é definitivo, e um
+            <i>accept</i> em outra tabela não o desfaz. Por isso as tabelas do lethe só acrescentam restrições. Elas
+            não dependem da ordem nem do conteúdo das regras do cliente VPN e nunca mexem nelas.
+            <br><br>
+            Um detalhe apareceu só num kernel de verdade. Quem envia por um socket <i>AF_PACKET</i> (o dhclient, uma
+            ferramenta raw) não passa pelas hooks <i>inet</i> do nftables. A spec previa uma camada <i>netdev
+            egress</i> que barrava só o que não era IP, partindo do princípio de que o IP já tinha passado pela tabela
+            <i>inet</i>. Não tinha. A camada L2 agora aplica o mesmo allowlist de IP, e um teste e2e mostra um frame
+            IP cru saindo sem ela e bloqueado com ela. Antes de armar, o daemon carrega tabelas descartáveis para
+            descobrir o que o kernel suporta e deixa de fora o que falta, avisando no preflight, em vez de tentar
+            aplicar uma tabela que o kernel recusaria.
+            <br><br>
+
+            <b>Não trancar a rede por engano</b>
+            <br><br>
+            Um firewall fail-closed na mão de quem não é especialista em firewall pode deixar a máquina sem rede sem
+            explicar por quê. O lethe tenta evitar isso de algumas formas. No <i>strict</i>, depois de aplicar as
+            tabelas, ele espera até 30 s por uma prova local de que o túnel funciona com o guarda (um handshake
+            WireGuard recente, um circuito Tor, bytes chegando pela interface do túnel). Se a prova não vem, ele
+            remove o guarda e diz o que faltou. Todo estado de bloqueio é descrito em três partes (o que está
+            bloqueado, por quê e como sair), e o painel transforma as saídas em botões. O perfil criado no primeiro
+            uso começa em <i>off</i>, e o <i>strict</i> só é oferecido depois de um selftest aprovado na máquina.
+            <br><br>
+
+            <b>Os túneis</b>
+            <br><br>
+            WireGuard é descoberto pela interface e pelo <i>wgctrl</i> (peers, endpoints, último handshake, fwmark).
+            OpenVPN, pela interface <i>tun</i>/<i>tap</i> e pelos sockets do processo, via sock_diag. Clientes
+            comerciais como Mullvad, Proton e IVPN entram pela mesma detecção genérica, sem integração específica. No
+            Tor, um cliente próprio e mínimo do control port lê os guards em uso e as bridges, que viram o allowlist,
+            e assina os eventos de circuito para não precisar de polling. Bridges <i>obfs4</i> e <i>webtunnel</i>
+            funcionam. <i>snowflake</i> e <i>meek</i> têm destinos dinâmicos (CDNs e pares WebRTC) e ficam só no modo
+            observador.
+            <br><br>
+
+            <b>Os outros checks</b>
+            <br><br>
+            Além da rede, há checks de DNS, túnel, host, persona e do próprio lethe. Alguns dos menos
+            óbvios:
+         </p>
+         <ol>
+            <li><i>HOST-009</i>: o GeoClue ativo manda a lista de BSSIDs próximos para um serviço de localização,
+               o que revela a posição física mesmo com todo o tráfego passando pelo túnel.</li>
+            <li><i>NET-014</i>: o NetworkManager envia o hostname no DHCP por padrão, e o hostname real vai para o
+               roteador da rede.</li>
+            <li><i>NET-013</i>: a checagem de conectividade do NetworkManager usa um socket preso à interface física
+               e pode sair por fora do túnel.</li>
+            <li><i>TUN-004</i>: o lethe tira um hash das tabelas nftables de terceiros no arm e avisa se o kill switch
+               do cliente VPN for alterado ou removido durante a sessão.</li>
+            <li><i>PER-001</i>: o país do IP de saída é comparado com timezone, locale e layout de teclado. Uma persona
+               em Lisboa com teclado ABNT2 e fuso de São Paulo, por exemplo, gera um aviso.</li>
+         </ol>
+
+         <br>
+         <h2>O selftest</h2>
+
+         <p>
+            Um detector que nunca disparou pode não funcionar naquela máquina. O selftest provoca cada caso de
+            propósito e confere se o sensor certo o viu: manda um datagrama para um endereço de documentação, cria uma
+            interface <i>dummy</i>, troca o <i>resolv.conf</i> de teste, sobe um processo com o nome de um item da
+            lista de negação. Os achados reconhecidos como do selftest vão para o log marcados como tal, sem abrir
+            alerta nem executar resposta.
+            <br><br>
+            No <i>strict</i>, o teste precisa abrir exceções temporárias no guarda. O guarda recusa qualquer exceção
+            cujo destino não seja um bloco de documentação (RFC 5737 e RFC 3849), para que um bug no selftest não abra
+            um vazamento real. O teste do pânico aplica as tabelas de verdade, confirma que o tráfego de teste recebe
+            EPERM e as remove; a rede para por cerca de 1 s, e por isso ele pede a passphrase antes.
+         </p>
+
+         <br>
+         <h2>O log da sessão</h2>
+
+         <p>
+            Cada check, alerta, ação e mudança de estado vira um evento. Os eventos são encadeados:
+            <i>hash = SHA-256(prev_hash || JCS(evento))</i>. No arm, o lethe gera um par Ed25519 da sessão e, a cada
+            60 s, assina a posição e o hash atuais da cadeia. Um crash preserva as assinaturas até o último
+            checkpoint.
+            <br><br>
+            Uma chave gerada pela própria ferramenta só prova consistência interna, porque quem tem o log pode
+            reescrever tudo com outra chave. Por isso o arm mostra a impressão digital da chave pública para o
+            operador anotar fora da máquina, no ticket ou no caderno da operação, e o <i>lethe verify</i> compara a
+            cadeia com essa âncora.
+            <br><br>
+            Cada evento é selado sozinho com XChaCha20-Poly1305, com a chave de dados cifrada com age no cabeçalho do
+            segmento. A primeira versão da spec usava um arquivo age por segmento, mas o age só grava um bloco de 64
+            KiB quando ele enche ou quando o arquivo fecha, e um crash perderia o segmento inteiro. Campos sensíveis
+            (consultas DNS, SSIDs, títulos de janela) usam uma segunda chave, então quem audita o log pode ver os
+            eventos sem ver esses valores. Eventos críticos têm <i>fsync</i> na hora; os outros, a cada segundo.
+         </p>
+
+         <br>
+         <h2>Segurança da própria ferramenta</h2>
+
+         <p>
+            Uma ferramenta de OpSec que vaza seria pior do que nenhuma. O lethe não fala com a internet por conta
+            própria: não tem telemetria, verificação de update nem download de base, e a base geográfica vem
+            embutida. Também não executa comandos externos; tudo passa por syscalls, netlink e D-Bus, e a única exceção
+            é o próprio binário re-executado para separar privilégios.
+            <br><br>
+            O daemon roda como root e descarta tudo menos um conjunto mínimo de capabilities. O que depende da sessão
+            gráfica (D-Bus de sessão, PipeWire, notificações) roda num agente separado, com o UID do operador. Como
+            esse UID é o mesmo do navegador, que pode estar comprometido, os dados que vêm do agente só podem abrir ou
+            elevar alertas, nunca fechar nem rebaixar. Ações sensíveis, como encerrar a sessão ou reconhecer um alerta
+            crítico, pedem a passphrase. Na GUI, ela fica num buffer fixo travado na memória com <i>mlock</i> e é
+            apagada depois de usada. No X11, onde qualquer processo do mesmo UID lê o teclado, o painel avisa e sugere
+            digitar a passphrase no terminal.
+         </p>
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <p>
+            Ainda não há pacotes publicados, então a instalação compila os pacotes <i>.deb</i>/<i>.rpm</i> a partir do
+            repositório. O script funciona com apt (Debian, Ubuntu, Kali), dnf (Fedora) e zypper (openSUSE), em amd64
+            ou arm64, e pede <i>sudo</i> uma vez:
+         </p>
+         <pre class="code-block"><code>git clone https://github.com/brennocm/lethe.git &amp;&amp; cd lethe
+./install.sh</code></pre>
+         <p>
+            Depois disso, tudo é feito pelo painel (<i>lethe-gui</i>). Para conferir uma VPN sem configurar nada, ligue
+            a VPN e clique em Check my connection: o painel mostra o IP de saída, os servidores DNS que responderam e
+            se as rotas passam pelo túnel. Nada é gravado.
+            <br><br>
+            Uma sessão completa começa com a configuração inicial, feita uma vez: a rede real (com a VPN desligada), a
+            persona e uma passphrase, que é o único segredo e deve ficar guardada fora da máquina. Depois, com a VPN ou
+            o Tor ligados, Start session começa em Observe only. Durante a sessão, um vazamento crítico abre um alerta
+            vermelho em tela cheia que só fecha com um motivo e a passphrase, e o botão Panic corta a rede na hora.
+            <br><br>
+            Para saber se o kill switch da sua VPN segura uma queda, abra uma sessão em Observe only e use Test a VPN
+            drop: você desconecta a VPN por alguns segundos e o lethe mostra o que saiu.
+            <br><br>
+            Se a rede ficar bloqueada depois de um crash, o painel oferece Release the network. Sem o painel:
+         </p>
+         <pre class="code-block"><code>sudo lethe cleanup   # remove as tabelas lethe* e diz o que removeu</code></pre>
+         <p>
+            Reiniciar a máquina também remove o guarda, de propósito.
+         </p>
+
+         <br>
+         <h2>Limitações</h2>
+
+         <p>
+            Root na máquina pode cegar o daemon, alterar a captura ou matar o processo. No <i>strict</i> a tabela
+            continua lá, mas nada é garantido contra root local. O modo <i>reactive</i> vaza o primeiro pacote. A
+            atribuição de um vazamento a um processo é melhor esforço: uma conexão UDP curta pode terminar antes da
+            consulta, e o evento sai com <i>confidence: none</i>.
+            <br><br>
+            Um documento-beacon aberto pelo túnel revela o IP da VPN, não o real, mas revela atividade e horário; para
+            isso a recomendação continua sendo abrir arquivos de alvos numa VM offline. Tor só dentro de uma VM
+            (Whonix-Gateway) sem VPN no host não funciona no <i>strict</i>. No Wayland, o alerta em tela cheia pode
+            não conseguir tomar o foco. A base geográfica offline envelhece entre releases.
+         </p>
+
+         <br>
+         <h2>Considerações finais</h2>
+
+         <p>
+            O lethe não deixa ninguém anônimo. Ele avisa, no momento em que acontece, quando a VPN, o Tor ou a própria
+            máquina deixa passar alguma coisa, e guarda um registro verificável da sessão. O <i>strict</i> é o modo
+            recomendado, mas o perfil começa em <i>off</i>, o arm se desfaz sozinho se o túnel não funcionar e todo
+            bloqueio diz como sair. Quem usa o lethe é investigador, e não precisa entender de nftables para
+            recuperar a rede.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
