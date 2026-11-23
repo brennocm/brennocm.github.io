@@ -63,6 +63,17 @@
     }
 
     var toc = document.querySelector('.toc') || buildToc();
+
+    /* Título e índice num bloco só: na tela larga ele acompanha a rolagem (post.css). */
+    var header = document.querySelector('.content > .article-header');
+    if (header) {
+        var side = document.createElement('div');
+        side.className = 'post-side';
+        header.parentNode.insertBefore(side, header);
+        side.appendChild(header);
+        if (toc) side.appendChild(toc);
+    }
+
     if (!toc) return;
 
     /* No celular o índice começa fechado: um índice longo empurrava o texto para longe. */
