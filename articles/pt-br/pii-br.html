@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>PII-BR.</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Voltar
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../pt-br/pii-br.html" class="active" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../en-us/pii-br.html" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>PII-BR: detecção e mascaramento de dados pessoais em português</h1>
+         <p class="meta">
+            <span>nov 23, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Quem precisa anonimizar logs, tickets, e-mails ou contratos em português para a LGPD geralmente acaba com
+            um punhado de regex escrito às pressas. Regex encontra CPF, mas não encontra "Maria Aparecida Souza" nem
+            "Rua das Flores, 123, ap. 42". O Presidio, a referência open source em detecção de PII, encontra nomes e
+            endereços, mas não tem reconhecedor para CPF, CNPJ, RG ou CEP.
+            <br><br>
+            Escrevi o <a href="https://github.com/brennocm/PII-BR">PII-BR</a> para juntar as duas coisas. Ele é um
+            pacote Python que combina regras determinísticas, que conferem dígito verificador, DDD e CEP, com um
+            modelo NER treinado em português, e depois mascara o que encontrou. O código, o
+            <a href="https://huggingface.co/datasets/brennocm/PII-BR">dataset</a> e o
+            <a href="https://huggingface.co/brennocm/PII-BR">modelo</a> são abertos, e a
+            <a href="https://huggingface.co/spaces/brennocm/PII-BR">demo</a> roda inteira no navegador.
+         </p>
+
+         <h2>Conceitos</h2>
+
+         <p>
+            <b>Dado pessoal, anonimização e pseudonimização na LGPD</b>
+            <br>
+            <br> Para a LGPD, dado pessoal é qualquer
+            informação relacionada a uma pessoa natural identificada ou identificável (art. 5º, I). Nome e CPF são
+            dados pessoais, e um telefone ou endereço também, porque levam até a pessoa. Dado anonimizado é o que não
+            permite identificar o titular com os meios técnicos razoáveis disponíveis (art. 5º, III), e só ele deixa
+            de ser dado pessoal (art. 12). Pseudonimização é trocar o dado por outro que só volta a apontar para a
+            pessoa com uma informação guardada à parte (art. 13, § 4º), como a chave de um HMAC. Dado pseudonimizado
+            continua sendo dado pessoal.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Dígito verificador</b>
+            <br>
+            <br> CPF e CNPJ terminam em dois dígitos calculados a partir dos anteriores, por
+            módulo 11. Um número com o formato certo e os dígitos finais errados não é um documento válido. Isso
+            permite à regex separar um CPF de onze dígitos quaisquer, coisa que o formato sozinho não faz.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>NER e rótulos BIO</b>
+            <br>
+            <br> Reconhecimento de entidades nomeadas (NER) é classificar cada palavra de um
+            texto como parte de uma entidade ou não. No esquema BIO, <i>B-NOME</i> marca a primeira palavra de um
+            nome, <i>I-NOME</i> as seguintes e <i>O</i> o que não é entidade, então "Maria Aparecida Souza" vira
+            <i>B-NOME I-NOME I-NOME</i>. Modelos BERT quebram as palavras em subtokens (WordPiece), e o rótulo vai no
+            primeiro subtoken de cada palavra.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Span, precisão e recall</b>
+            <br>
+            <br> Um span é um trecho do texto, com início e fim em caracteres e um rótulo
+            (<i>CPF</i>, <i>NOME</i>). Precisão é a fração dos spans detectados que estavam certos; recall é a fração
+            dos dados pessoais reais que foram encontrados; F1 é a média harmônica dos dois. Para mascarar, o recall
+            pesa mais: um falso positivo esconde uma palavra à toa, e um falso negativo deixa um dado pessoal à
+            mostra.
+         </p>
+
+         <br>
+         <h2>O que ele detecta</h2>
+
+         <p>
+            São nove entidades. As que têm formato fixo ficam com as regras, e as que dependem de contexto ficam com o
+            modelo. CPF, CNPJ e telefone passam pelos dois.
+         </p>
+         <pre class="code-block"><code>ENTIDADE    EXEMPLO                        DETECÇÃO
+NOME        Maria Aparecida Souza          modelo
+CPF         123.456.789-09                 regex + dígito verificador + modelo
+CNPJ        12.ABC.345/01DE-35             regex + dígito verificador + modelo
+RG          12.345.678-9                   modelo + contexto
+TELEFONE    (11) 98765-4321                regex + DDD válido + modelo
+EMAIL       maria.souza@example.com        regex
+ENDERECO    Rua das Flores, 123, ap. 42    modelo
+CEP         01310-100                      regex + contexto
+DATA_NASC   nascida em 03/07/1990          modelo</code></pre>
+
+         <br>
+         <h2>Como funciona</h2>
+
+         <pre class="code-block"><code>                texto
+                  │
+      ┌───────────┴────────────┐
+      ▼                        ▼
+ regex + validação        modelo NER
+ CPF, CNPJ, telefone,     BERTimbau int8,
+ e-mail, CEP              janelas de 256 tokens
+      │                        │
+      │                 limiar de confiança
+      └───────────┬────────────┘
+                  ▼
+           fusão de spans
+                  │
+                  ▼
+ mascaramento: redação · parcial · pseudônimo · sintético</code></pre>
+
+         <p>
+            <b>As regras</b>
+            <br><br>
+            O CPF é validado por módulo 11, e sequências repetidas como 111.111.111-11 são descartadas. O CNPJ aceita
+            os dois formatos: o numérico e o alfanumérico que a Receita começou a emitir em julho de 2026 (IN RFB nº
+            2.229/2024). No alfanumérico, as 12 primeiras posições aceitam [0-9A-Z], cada caractere vale
+            <i>ord(c) - 48</i> no cálculo, e os dois dígitos verificadores continuam numéricos. Pela mesma conta,
+            12.ABC.345/01DE-35, o exemplo oficial da Receita, é válido.
+            <br><br>
+            O telefone precisa de um dos 67 DDDs em uso no plano de numeração da Anatel e do formato de fixo (8
+            dígitos, começando com 2 a 5) ou de celular (9 dígitos, começando com 9). Números de empresa, como 0800,
+            0300 e 4004-xxxx, ficam de fora porque não identificam uma pessoa. O CEP só conta quando aparece perto de
+            uma palavra de contexto, porque oito dígitos soltos podem ser qualquer coisa.
+            <br><br>
+            Um documento com formato certo e dígito verificador errado gera um alerta de "possível documento
+            inválido" e é mascarado mesmo assim. Pode ser um CPF real digitado com um erro, e deixá-lo à mostra é o
+            erro mais caro.
+            <br><br>
+
+            <b>O modelo</b>
+            <br><br>
+            O modelo é um fine-tuning do <a href="https://huggingface.co/neuralmind/bert-base-portuguese-cased">BERTimbau
+            base</a>, com rótulos BIO no primeiro subtoken de cada palavra. Textos longos são lidos em janelas de 256
+            tokens com sobreposição de 64. O limiar de confiança (0,5) vale só para o modelo e é aplicado antes da
+            fusão, para que um palpite fraco nunca apague um achado da regex.
+            <br><br>
+            Para rodar em CPU, o modelo é quantizado em int8 dinâmico. Quantizar todas as camadas lineares estraga
+            o modelo: o recall cai pela metade e os scores ficam em torno de 0,3. A culpada é a saída do FFN de cada
+            camada (<i>layer.N.output.dense</i>), então essas camadas ficam em fp32 e o resto vai para int8. O script de
+            exportação para ONNX falha se o int8 perder mais de 0,5 ponto de F1 em relação ao fp32.
+            <br><br>
+
+            <b>A fusão</b>
+            <br><br>
+            Cada span do modelo é comparado com os spans da regex que ele sobrepõe. Quando os dois têm o mesmo rótulo,
+            sai um span só, com fonte <i>ambos</i> e as bordas da regex, que são mais precisas para formato fixo. Um
+            CPF ou CNPJ com dígito válido vence o modelo. O modelo vence em nome, endereço e RG. Nos outros casos, fica
+            o span mais longo.
+            <br><br>
+            A fusão nunca deixa à mostra um caractere que algum span cobria. O modelo só substitui um span da regex
+            que ele cobre por inteiro. Se o modelo marca só <i>-100</i> de <i>CEP 01310-100</i> como endereço, o CEP
+            da regex continua lá e o <i>01310</i> não aparece no texto mascarado.
+            <br><br>
+
+            <b>O mascaramento</b>
+            <br><br>
+            Há quatro estratégias. A redação troca o valor pelo rótulo (<i>[CPF]</i>). A parcial mantém parte do valor
+            (<i>***.456.789-**</i>), o que ajuda a depurar sem expor o documento inteiro. O pseudônimo troca o valor
+            por um identificador estável (<i>&lt;CPF_1&gt;</i>), calculado com HMAC-SHA256 e um sal secreto por
+            sessão, para que o mesmo CPF receba o mesmo pseudônimo em todas as linhas de um CSV. O sal é necessário
+            porque existem só 1 bilhão de bases de CPF, e um hash sem sal se reverte por força bruta. A sintética
+            gera um valor aleatório que passa na validação, útil para bases de teste.
+         </p>
+
+         <br>
+         <h2>O dataset</h2>
+
+         <p>
+            Um corpus real com dados pessoais seria justamente o que a LGPD manda proteger, então o dataset do PII-BR
+            é sintético: 38 mil
+            frases geradas a partir de templates em 8 domínios (atendimento, WhatsApp, e-mail, contrato, cadastro,
+            ticket, log e boletim de ocorrência). Como cada valor é inserido pelo gerador, a anotação sai certa por
+            construção, e o dataset inteiro se reproduz a partir de uma seed.
+            <br><br>
+            O risco de um dataset sintético é o modelo aprender os templates em vez da tarefa. Por isso a avaliação
+            usa três splits:
+         </p>
+         <ol>
+            <li><i>test</i>: os mesmos templates do treino, com valores novos. É o número mais otimista.</li>
+            <li><i>test_hard</i>: templates que o modelo nunca viu.</li>
+            <li><i>test_real</i>: cerca de 200 frases que escrevi à mão, fora do sistema de templates. É o mais
+               próximo do uso real.</li>
+         </ol>
+         <p>
+            O treino leva cerca de 30 minutos numa GPU T4 gratuita do Kaggle (lr 5e-5, até 4 épocas com early
+            stopping, batch 16, fp16). Na minha máquina, sem GPU, o mesmo treino levaria umas 16 horas.
+         </p>
+
+         <br>
+         <h2>Resultados</h2>
+
+         <p>
+            Métrica por span, contando acerto quando o rótulo é o mesmo e o trecho se sobrepõe ao de referência, que
+            é o que importa para mascarar. No <i>test_real</i>:
+         </p>
+         <pre class="code-block"><code>SISTEMA                              PRECISÃO  RECALL   F1
+híbrido (modelo int8 + regex)        0,939     0,990    0,964
+só o modelo (int8)                   0,928     0,955    0,941
+só o modelo (fp32)                   0,928     0,960    0,944
+só regex (o pacote, sem modelo)      0,989     0,450    0,619
+Presidio (padrão, spaCy pt)          0,595     0,604    0,600</code></pre>
+         <p>
+            A regex quase não erra quando encontra algo (precisão de 0,989), mas só encontra metade dos dados, porque
+            não vê nome, endereço nem data. O Presidio tem 0% em CPF, CNPJ e CEP, já que não tem reconhecedor para
+            eles. O híbrido chega a 0,990 de recall, e no <i>test_real</i> o recall por entidade fica em 1,000 em
+            todas, menos nome (0,986) e CEP (0,917). A quantização em int8 custou 0,003 de F1. A latência mediana do
+            híbrido, em CPU, é de 0,25 s para um texto de 720 caracteres.
+            <br><br>
+            Os erros que sobram são, na maioria, falsos positivos, e boa parte vem de logs. Uma chave de NF-e, um
+            endereço IP e um ID de transação Pix foram marcados como CPF, o que derruba a precisão de CPF para 0,840
+            no <i>test_real</i>. Uma placa de carro virou RG, e "Bairro Vila Industrial" virou um endereço separado.
+            Do lado dos falsos negativos, que são os erros que deixam dado pessoal passar, ficaram casos como um CEP
+            dentro de uma URL de log (<i>GET /v2/zipcode/93228670</i>) e o "Santos" de "Cb. Santos", que o modelo
+            não reconheceu como nome.
+         </p>
+
+         <br>
+         <h2>A demo no navegador</h2>
+
+         <p>
+            O plano era uma demo em Gradio num Space gratuito do Hugging Face. Em novembro de 2026, o Hugging Face
+            passou a exigir plano pago para Spaces Gradio e Docker, e só o Space estático continuou gratuito. Então a
+            demo virou uma página estática que roda tudo no navegador.
+            <br><br>
+            O núcleo do <i>pii_br</i> só usa a biblioteca padrão do Python, então roda no Pyodide (CPython compilado
+            para WebAssembly) sem nenhuma alteração. O modelo foi exportado para ONNX em int8, com cerca de 190 MB, e
+            roda no <i>onnxruntime-web</i>. A tokenização WordPiece e a decodificação das janelas estão escritas em
+            Python puro, no mesmo arquivo que o pacote usa fora do navegador, então a demo e a biblioteca usam o
+            mesmo código. As versões do Pyodide e do <i>onnxruntime-web</i> são fixadas com SRI, e o modelo é
+            fixado por commit.
+            <br><br>
+            O texto colado na demo não sai da máquina de quem está testando, porque não há servidor. A primeira visita
+            baixa cerca de 200 MB (modelo e Pyodide), que ficam no Cache Storage depois disso. Enquanto o modelo
+            carrega, a página funciona só com as regras. Um texto de 1.000 caracteres leva uns 2 s, porque o Space
+            estático não envia os cabeçalhos que liberariam threads no WebAssembly.
+         </p>
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <p>
+            A instalação vem direto do repositório. O núcleo não tem dependências, e o modelo é o extra
+            <i>[model]</i>:
+         </p>
+         <pre class="code-block"><code>pip install "pii-br[model] @ git+https://github.com/brennocm/PII-BR"</code></pre>
+         <pre class="code-block"><code>from pii_br import Detector, Masker
+from pii_br.model import NerModel
+
+detector = Detector(NerModel("brennocm/PII-BR"))  # sem modelo, Detector() usa só as regras
+texto = "Sou Ana Lima, CPF 123.456.789-09, whats (11) 98765-4321."
+spans = detector.detect(texto)
+
+masker = Masker()  # um sal secreto por sessão
+masker.mask(texto, spans, "redact")     # Sou [NOME], CPF [CPF], whats [TELEFONE].
+masker.mask(texto, spans, "partial")    # Sou [NOME], CPF ***.456.789-**, whats (**) *****-4321.
+masker.mask(texto, spans, "pseudonym")  # Sou &lt;NOME_1&gt;, CPF &lt;CPF_1&gt;, whats &lt;TELEFONE_1&gt;.
+masker.mask(texto, spans, "synthetic")  # Sou Gabriela Reis, CPF 609.746.327-83, ...</code></pre>
+         <p>
+            O valor sintético é aleatório e passa na validação, então pode coincidir com o CPF ou o telefone de uma
+            pessoa real. Ele serve para dados de teste. Para publicar um texto, use <i>redact</i> ou
+            <i>pseudonym</i>.
+            <br><br>
+            Para rodar o projeto localmente, o repositório usa <i>mise</i> e <i>uv</i>:
+         </p>
+         <pre class="code-block"><code>mise install &amp;&amp; mise run setup                   # dependências + hook de pre-commit
+mise run dev                                     # app Gradio em http://127.0.0.1:7860
+mise run web                                     # demo do Space em http://127.0.0.1:8000
+uv run python -m data_gen.generate --out data    # gera o dataset (reprodutível por seed)</code></pre>
+         <p>
+            O app Gradio local aceita upload de <i>.txt</i> e <i>.csv</i>, o que a demo estática não faz.
+         </p>
+
+         <br>
+         <h2>Limitações</h2>
+
+         <p>
+            O modelo foi treinado só com dados sintéticos. O <i>test_real</i> mede a distância para texto real, mas
+            tem cerca de 200 frases e serve como sinal, sem ser garantia. Nomes sem contexto ("Jorge chegou") e nomes
+            que também são palavras comuns são os casos mais difíceis. RG não tem formato nacional, então o modelo
+            depende de palavras como "RG" e "identidade" perto do número.
+            <br><br>
+            O PII-BR não cobre os dados sensíveis do art. 5º, II da LGPD (saúde, religião, orientação sexual), nem
+            placas, cartões, PIS ou CNH.
+            <br><br>
+            E ele não certifica anonimização. Pelo art. 12 da LGPD, dado anonimizado é o que não pode ser revertido
+            por meios razoáveis, e mascarar entidades não remove quasi-identificadores como cargo, bairro e datas. Use
+            o PII-BR para reduzir risco, com revisão humana onde o texto importa.
+         </p>
+
+         <br>
+         <h2>Considerações finais</h2>
+
+         <p>
+            Regras e modelo erram em lugares diferentes. A regex é precisa e cega para contexto; o modelo entende
+            contexto, mas ainda marca uma chave de NF-e como CPF. No <i>test_real</i>, juntar os dois subiu o F1 de 0,619
+            (só regras) e 0,941 (só modelo) para 0,964.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

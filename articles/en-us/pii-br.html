@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>PII-BR.</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="breadcrumb">
+            <a href="/index-en.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </a>
+        </nav>
+        <div class="header-controls">
+            <div class="language-toggle">
+                <a href="../pt-br/pii-br.html" title="Português (Brasil)">
+                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="72" height="48" fill="#009c3b" />
+                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
+                        <circle cx="36" cy="24" r="12" fill="#002776" />
+                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
+                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
+                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
+                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
+                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
+                    </svg>
+                </a>
+                <a href="../en-us/pii-br.html" class="active" title="English (US)">
+                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="36" height="24" fill="#fff" />
+                        <rect width="36" height="1.85" y="0" fill="#b22234" />
+                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
+                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
+                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
+                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
+                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
+                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
+                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>PII-BR: detecting and masking personal data in Brazilian Portuguese</h1>
+         <p class="meta">
+            <span>Nov 23, 2026</span> by <a href="https://www.linkedin.com/in/brennocm/">Brenno M.</a>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Teams that need to anonymize logs, tickets, e-mails or contracts written in Brazilian Portuguese under the
+            LGPD (Brazil's data protection law) usually end up with a handful of hastily written regexes. A regex
+            finds a CPF (the Brazilian taxpayer ID), but it does not find "Maria Aparecida Souza" or "Rua das Flores,
+            123, ap. 42". Presidio, the reference open source PII detector, finds names and addresses, but it has no
+            recognizer for CPF, CNPJ (company ID), RG (state ID) or CEP (postal code).
+            <br><br>
+            I wrote <a href="https://github.com/brennocm/PII-BR">PII-BR</a> to combine the two. It is a Python package
+            that pairs deterministic rules, which check digits, area codes and postal codes, with an NER model trained
+            on Portuguese, and then masks what it found. The code, the
+            <a href="https://huggingface.co/datasets/brennocm/PII-BR">dataset</a> and the
+            <a href="https://huggingface.co/brennocm/PII-BR">model</a> are open, and the
+            <a href="https://huggingface.co/spaces/brennocm/PII-BR">demo</a> runs entirely in the browser.
+         </p>
+
+         <h2>Concepts</h2>
+
+         <p>
+            <b>Personal data, anonymization and pseudonymization under the LGPD</b>
+            <br>
+            <br> Under the LGPD, personal data is any
+            information related to an identified or identifiable natural person (art. 5, I). Names and CPFs are
+            personal data, and so are phone numbers and addresses, because they lead to the person. Anonymized data
+            is data that does not allow the data subject to be identified with the reasonable technical means
+            available (art. 5, III), and only that stops being personal data (art. 12). Pseudonymization replaces the
+            data with something that only points back to the person with information kept separately (art. 13,
+            § 4), such as an HMAC key. Pseudonymized data is still personal data.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Check digits</b>
+            <br>
+            <br> CPF and CNPJ numbers end in two digits computed from the previous ones with mod 11. A
+            number with the right format and wrong final digits is not a valid document. That lets the regex tell a
+            CPF apart from any eleven digits, which the format alone cannot do.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>NER and BIO labels</b>
+            <br>
+            <br> Named entity recognition (NER) means classifying each word of a text as part of an
+            entity or not. In the BIO scheme, <i>B-NOME</i> marks the first word of a name, <i>I-NOME</i> the
+            following ones and <i>O</i> anything that is not an entity, so "Maria Aparecida Souza" becomes
+            <i>B-NOME I-NOME I-NOME</i>. BERT models split words into subtokens (WordPiece), and the label goes on the
+            first subtoken of each word.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Spans, precision and recall</b>
+            <br>
+            <br> A span is a stretch of text, with a start and end in characters and a
+            label (<i>CPF</i>, <i>NOME</i>). Precision is the fraction of detected spans that were right; recall is
+            the fraction of the real personal data that was found; F1 is the harmonic mean of the two. For masking,
+            recall matters more: a false positive hides a word for nothing, and a false negative leaves personal data
+            in plain sight.
+         </p>
+
+         <br>
+         <h2>What it detects</h2>
+
+         <p>
+            There are nine entities. The ones with a fixed format go to the rules, and the ones that depend on context
+            go to the model. CPF, CNPJ and phone numbers go through both.
+         </p>
+         <pre class="code-block"><code>ENTITY      EXAMPLE                        DETECTION
+NOME        Maria Aparecida Souza          model
+CPF         123.456.789-09                 regex + check digits + model
+CNPJ        12.ABC.345/01DE-35             regex + check digits + model
+RG          12.345.678-9                   model + context
+TELEFONE    (11) 98765-4321                regex + valid area code + model
+EMAIL       maria.souza@example.com        regex
+ENDERECO    Rua das Flores, 123, ap. 42    model
+CEP         01310-100                      regex + context
+DATA_NASC   nascida em 03/07/1990          model</code></pre>
+         <p>
+            The labels are in Portuguese because they are the package's own entity names: name, phone, address and
+            date of birth.
+         </p>
+
+         <br>
+         <h2>How it works</h2>
+
+         <pre class="code-block"><code>                 text
+                  │
+      ┌───────────┴────────────┐
+      ▼                        ▼
+ regex + validation       NER model
+ CPF, CNPJ, phone,        BERTimbau int8,
+ e-mail, CEP              256-token windows
+      │                        │
+      │                confidence threshold
+      └───────────┬────────────┘
+                  ▼
+             span merge
+                  │
+                  ▼
+ masking: redact · partial · pseudonym · synthetic</code></pre>
+
+         <p>
+            <b>The rules</b>
+            <br><br>
+            CPFs are validated with mod 11, and repeated sequences such as 111.111.111-11 are rejected. CNPJ accepts
+            both formats: the numeric one and the alphanumeric one the Federal Revenue started issuing in July 2026
+            (IN RFB nº 2.229/2024). In the alphanumeric format, the first 12 positions accept [0-9A-Z], each character
+            is worth <i>ord(c) - 48</i> in the calculation, and the two check digits stay numeric. By that math,
+            12.ABC.345/01DE-35, the Revenue's official example, is valid.
+            <br><br>
+            A phone number needs one of the 67 area codes in use in Anatel's numbering plan and either the landline
+            format (8 digits, starting with 2 to 5) or the mobile one (9 digits, starting with 9). Business numbers
+            such as 0800, 0300 and 4004-xxxx are left out because they do not identify a person. A CEP only counts when
+            it appears near a context word, because eight loose digits could be anything.
+            <br><br>
+            A document with the right format and a wrong check digit raises a "possibly invalid document" warning and
+            is masked anyway. It may be a real CPF typed with one mistake, and leaving it visible is the most expensive
+            error.
+            <br><br>
+
+            <b>The model</b>
+            <br><br>
+            The model is a fine-tune of <a href="https://huggingface.co/neuralmind/bert-base-portuguese-cased">BERTimbau
+            base</a>, with BIO labels on the first subtoken of each word. Long texts are read in 256-token windows
+            with an overlap of 64. The confidence threshold (0.5) applies only to the model and runs before the merge,
+            so a weak guess never wipes out a regex finding.
+            <br><br>
+            To run on CPU, the model is quantized to dynamic int8. Quantizing every linear layer breaks it: recall
+            drops by half and scores hover around 0.3. The culprit is the FFN output of each layer
+            (<i>layer.N.output.dense</i>), so those layers stay in fp32 and the rest goes to int8. The ONNX export
+            script fails if int8 loses more than 0.5 F1 points against fp32.
+            <br><br>
+
+            <b>The merge</b>
+            <br><br>
+            Each model span is compared with the regex spans it overlaps. When both have the same label, a single span
+            comes out, with source <i>ambos</i> ("both") and the regex boundaries, which are more precise for fixed
+            formats. A CPF or CNPJ with valid check digits beats the model. The model wins for names, addresses and
+            RG. In every other case the longer span stays.
+            <br><br>
+            The merge never exposes a character that some span covered. The model only replaces a regex span it
+            covers entirely. If the model marks only <i>-100</i> of <i>CEP 01310-100</i> as an address, the regex CEP
+            stays and <i>01310</i> does not show up in the masked text.
+            <br><br>
+
+            <b>Masking</b>
+            <br><br>
+            There are four strategies. Redaction replaces the value with the label (<i>[CPF]</i>). Partial keeps part
+            of the value (<i>***.456.789-**</i>), which helps debugging without exposing the whole document.
+            Pseudonym replaces the value with a stable identifier (<i>&lt;CPF_1&gt;</i>), computed with HMAC-SHA256
+            and a secret per-session salt, so the same CPF gets the same pseudonym on every line of a CSV. The salt is
+            needed because there are only one billion CPF bases, and an unsalted hash can be reversed by brute
+            force. Synthetic generates a random value that passes validation, useful for test databases.
+         </p>
+
+         <br>
+         <h2>The dataset</h2>
+
+         <p>
+            A real corpus full of personal data would be exactly what the LGPD tells you to protect, so the PII-BR
+            dataset is synthetic: 38 thousand sentences generated from templates across 8 domains (customer support,
+            WhatsApp, e-mail, contracts, sign-up forms, tickets, logs and police reports). Since the generator inserts
+            every value, the annotation is correct by construction, and the whole dataset can be rebuilt from a seed.
+            <br><br>
+            The risk with a synthetic dataset is that the model learns the templates instead of the task. That is why
+            evaluation uses three splits:
+         </p>
+         <ol>
+            <li><i>test</i>: the same templates as training, with new values. It is the most optimistic number.</li>
+            <li><i>test_hard</i>: templates the model has never seen.</li>
+            <li><i>test_real</i>: about 200 sentences I wrote by hand, outside the template system. It is the closest
+               to real use.</li>
+         </ol>
+         <p>
+            Training takes about 30 minutes on a free Kaggle T4 GPU (lr 5e-5, up to 4 epochs with early stopping,
+            batch 16, fp16). On my machine, which has no GPU, the same run would take around 16 hours.
+         </p>
+
+         <br>
+         <h2>Results</h2>
+
+         <p>
+            Span-level metrics, counting a hit when the label matches and the span overlaps the reference, which is
+            what matters for masking. On <i>test_real</i>:
+         </p>
+         <pre class="code-block"><code>SYSTEM                               PRECISION  RECALL   F1
+hybrid (int8 model + regex)          0.939      0.990    0.964
+model only (int8)                    0.928      0.955    0.941
+model only (fp32)                    0.928      0.960    0.944
+regex only (the package, no model)   0.989      0.450    0.619
+Presidio (default, spaCy pt)         0.595      0.604    0.600</code></pre>
+         <p>
+            The regex is almost never wrong when it finds something (0.989 precision), but it finds only half the
+            data, because it cannot see names, addresses or dates. Presidio scores 0% on CPF, CNPJ and CEP, since it
+            has no recognizer for them. The hybrid reaches 0.990 recall, and on <i>test_real</i> per-entity recall is
+            1.000 for every entity except names (0.986) and CEP (0.917). Int8 quantization cost 0.003 F1. Median
+            hybrid latency on CPU is 0.25 s for a 720-character text.
+            <br><br>
+            Most of the remaining errors are false positives, and many come from logs. An NF-e (electronic invoice)
+            key, an IP address and a Pix transaction ID were tagged as CPF, which pulls CPF precision down to 0.840 on
+            <i>test_real</i>. A license plate became an RG, and "Bairro Vila Industrial" became a separate address. On
+            the false negative side, the errors that let personal data through, there was a CEP inside a log URL
+            (<i>GET /v2/zipcode/93228670</i>) and the "Santos" in "Cb. Santos", which the model did not recognize as a
+            name.
+         </p>
+
+         <br>
+         <h2>The in-browser demo</h2>
+
+         <p>
+            The plan was a Gradio demo on a free Hugging Face Space. In November 2026, Hugging Face started requiring a
+            paid plan for Gradio and Docker Spaces, and only static Spaces stayed free. So the demo became a static
+            page that runs everything in the browser.
+            <br><br>
+            The <i>pii_br</i> core uses only the Python standard library, so it runs on Pyodide (CPython compiled to
+            WebAssembly) without changes. The model was exported to ONNX in int8, at about 190 MB, and runs on
+            <i>onnxruntime-web</i>. WordPiece tokenization and window decoding are written in pure Python, in the same
+            file the package uses outside the browser, so the demo and the library run the same code. Pyodide and
+            <i>onnxruntime-web</i> are pinned to exact versions with SRI, and the model is pinned by commit.
+            <br><br>
+            Text pasted into the demo never leaves the visitor's machine, because there is no server. The first visit
+            downloads about 200 MB (model and Pyodide), which stays in Cache Storage afterwards. While the model loads,
+            the page works with the rules only. A 1,000-character text takes about 2 s, because the static Space does
+            not send the headers that would enable WebAssembly threads.
+         </p>
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <p>
+            Installation comes straight from the repository. The core has no dependencies, and the model is the
+            <i>[model]</i> extra:
+         </p>
+         <pre class="code-block"><code>pip install "pii-br[model] @ git+https://github.com/brennocm/PII-BR"</code></pre>
+         <pre class="code-block"><code>from pii_br import Detector, Masker
+from pii_br.model import NerModel
+
+detector = Detector(NerModel("brennocm/PII-BR"))  # without a model, Detector() uses only the rules
+texto = "Sou Ana Lima, CPF 123.456.789-09, whats (11) 98765-4321."
+spans = detector.detect(texto)
+
+masker = Masker()  # one secret salt per session
+masker.mask(texto, spans, "redact")     # Sou [NOME], CPF [CPF], whats [TELEFONE].
+masker.mask(texto, spans, "partial")    # Sou [NOME], CPF ***.456.789-**, whats (**) *****-4321.
+masker.mask(texto, spans, "pseudonym")  # Sou &lt;NOME_1&gt;, CPF &lt;CPF_1&gt;, whats &lt;TELEFONE_1&gt;.
+masker.mask(texto, spans, "synthetic")  # Sou Gabriela Reis, CPF 609.746.327-83, ...</code></pre>
+         <p>
+            The synthetic value is random and passes validation, so it may match the CPF or phone number of a real
+            person. It is meant for test data. To publish a text, use <i>redact</i> or <i>pseudonym</i>.
+            <br><br>
+            To run the project locally, the repository uses <i>mise</i> and <i>uv</i>:
+         </p>
+         <pre class="code-block"><code>mise install &amp;&amp; mise run setup                   # dependencies + pre-commit hook
+mise run dev                                     # Gradio app at http://127.0.0.1:7860
+mise run web                                     # Space demo at http://127.0.0.1:8000
+uv run python -m data_gen.generate --out data    # builds the dataset (reproducible by seed)</code></pre>
+         <p>
+            The local Gradio app accepts <i>.txt</i> and <i>.csv</i> uploads, which the static demo does not.
+         </p>
+
+         <br>
+         <h2>Limitations</h2>
+
+         <p>
+            The model was trained only on synthetic data. <i>test_real</i> measures the gap to real text, but it has
+            about 200 sentences and is a signal, not a guarantee. Names without context ("Jorge chegou") and names that
+            are also common words are the hardest cases. RG has no national format, so the model relies on words such
+            as "RG" and "identidade" near the number.
+            <br><br>
+            PII-BR does not cover the sensitive data in art. 5, II of the LGPD (health, religion, sexual orientation),
+            nor license plates, cards, PIS or CNH (driver's license).
+            <br><br>
+            And it does not certify anonymization. Under art. 12 of the LGPD, anonymized data is data that cannot be
+            reversed by reasonable means, and masking entities does not remove quasi-identifiers such as job title,
+            neighborhood and dates. Use PII-BR to reduce risk, with human review where the text matters.
+         </p>
+
+         <br>
+         <h2>Final thoughts</h2>
+
+         <p>
+            Rules and the model fail in different places. The regex is precise and blind to context; the model
+            understands context but still tags an NF-e key as a CPF. On <i>test_real</i>, combining them raised F1
+            from 0.619 (rules only) and 0.941 (model only) to 0.964.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
