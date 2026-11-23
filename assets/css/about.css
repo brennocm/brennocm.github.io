@@ -375,82 +375,60 @@
     font-weight: 600;
 }
 
-/* Contato: só o e-mail, grande, com o mesmo preenchimento verde do nome na home */
+/* Contato: uma linha de terminal. Ao passar o mouse o e-mail "decifra" (JS) e fica verde. */
 .mail {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1.25rem;
+    align-items: baseline;
+    gap: 0.25rem 0.625rem;
     padding-top: 1.25rem;
+    font-family: ui-monospace, 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+}
+
+.mail-prompt {
+    color: var(--signal);
+    user-select: none;
 }
 
 .mail-link {
-    position: relative;
-    display: inline-block;
     color: var(--ink);
-    font-size: min(1.25rem, 5.2vw);
-    font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
     overflow-wrap: anywhere;
     text-decoration: underline;
     text-decoration-color: var(--rule);
     text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
-    transition: text-decoration-color 200ms var(--ease);
-}
-
-.mail-link::after {
-    content: attr(data-text);
-    content: attr(data-text) / "";
-    position: absolute;
-    inset: 0;
-    color: var(--signal);
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 420ms var(--ease);
-    pointer-events: none;
+    text-underline-offset: 0.25em;
+    transition: color 200ms var(--ease), text-decoration-color 200ms var(--ease);
 }
 
 .mail-link:hover,
 .mail-link:focus-visible {
+    color: var(--signal);
     text-decoration-color: var(--signal);
 }
 
-.mail-link:hover::after,
-.mail-link:focus-visible::after {
-    clip-path: inset(0 0 0 0);
+.mail-link.is-decoding {
+    color: var(--ink-faint);
 }
 
 .mail-btn {
-    padding: 0.4375rem 0.875rem;
-    border: 1px solid var(--rule);
-    border-radius: 6px;
+    padding: 0;
+    border: 0;
     background: none;
-    color: var(--ink-muted);
+    color: var(--ink-faint);
     font: inherit;
-    font-size: var(--type-small);
     cursor: pointer;
-    transition: border-color 150ms var(--ease), color 150ms var(--ease);
+    transition: color 150ms var(--ease);
 }
 
-.mail-btn:hover {
-    border-color: var(--ink-faint);
+.mail-btn::before { content: "["; }
+.mail-btn::after { content: "]"; }
+
+.mail-btn:hover,
+.mail-btn:focus-visible {
     color: var(--ink);
 }
 
 .mail-btn.is-done {
-    border-color: var(--signal);
     color: var(--signal);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .mail-link::after {
-        clip-path: none;
-        opacity: 0;
-    }
-
-    .mail-link:hover::after,
-    .mail-link:focus-visible::after {
-        opacity: 1;
-    }
 }

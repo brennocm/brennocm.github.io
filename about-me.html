@@ -205,7 +205,8 @@
 <section>
 <h2>Contato</h2>
 <div class="mail">
-    <a class="mail-link" href="mailto:brennocmiranda@outlook.com" data-text="brennocmiranda@outlook.com">brennocmiranda@outlook.com</a>
+    <span class="mail-prompt" aria-hidden="true">~$</span>
+    <a class="mail-link" href="mailto:brennocmiranda@outlook.com" aria-label="brennocmiranda@outlook.com">brennocmiranda@outlook.com</a>
     <button type="button" class="mail-btn" data-mail="brennocmiranda@outlook.com" data-copied="copiado">copiar</button>
 </div>
 </section>
@@ -213,6 +214,29 @@
     </div>
 </div>
 <script>
+    // contato: ao passar o mouse, o e-mail "decifra" da esquerda para a direita
+    (function () {
+        var link = document.querySelector('.mail-link');
+        if (!link || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var text = link.textContent, glyphs = '!<>-_\\/[]{}=+*^?#01', timer = null;
+        function run() {
+            clearInterval(timer);
+            var step = 0, total = text.length + 6;
+            link.classList.add('is-decoding');
+            timer = setInterval(function () {
+                var out = '';
+                for (var i = 0; i < text.length; i++) {
+                    out += (i < step - 6 || text[i] === '@' || text[i] === '.') ? text[i]
+                        : glyphs[Math.floor(Math.random() * glyphs.length)];
+                }
+                link.textContent = out;
+                if (++step > total) { clearInterval(timer); link.textContent = text; link.classList.remove('is-decoding'); }
+            }, 22);
+        }
+        link.addEventListener('mouseenter', run);
+        link.addEventListener('focus', run);
+    })();
+
     // contato: copiar o e-mail com confirmação
     (function () {
         var btn = document.querySelector('.mail-btn');
