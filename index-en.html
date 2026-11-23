@@ -3,710 +3,298 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/site.css">
+    <link rel="stylesheet" href="assets/css/home.css">
     <link rel="icon" type="image/png" href="/img/home/favicon.png" />
     <title>home.</title>
 </head>
 
-<body class="home">
-    <div class="home-shell">
-        <!-- Top bar: about me + language flags, centered -->
-        <nav class="top-bar">
-            <a href="about-me-en.html" class="about-me-link">/about-me</a>
-            <div class="language-toggle">
-                <a href="index.html" title="Português (Brasil)">
-                    <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Green background -->
-                        <rect width="72" height="48" fill="#009c3b" />
-                        <!-- Yellow diamond -->
-                        <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
-                        <!-- Blue circle -->
-                        <circle cx="36" cy="24" r="12" fill="#002776" />
-                        <!-- White curved band -->
-                        <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
-                        <!-- Stars (simplified representation) -->
-                        <circle cx="30" cy="28" r="0.6" fill="#fff" />
-                        <circle cx="33" cy="30" r="0.5" fill="#fff" />
-                        <circle cx="36" cy="31" r="0.6" fill="#fff" />
-                        <circle cx="39" cy="30" r="0.5" fill="#fff" />
-                        <circle cx="42" cy="28" r="0.6" fill="#fff" />
-                        <circle cx="31" cy="26" r="0.4" fill="#fff" />
-                        <circle cx="35" cy="27" r="0.4" fill="#fff" />
-                        <circle cx="37" cy="27" r="0.4" fill="#fff" />
-                        <circle cx="41" cy="26" r="0.4" fill="#fff" />
-                        <circle cx="34" cy="18" r="0.5" fill="#fff" />
-                    </svg>
-                </a>
-                <a href="index-en.html" class="active" title="English (US)">
-                    <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="36" height="24" fill="#fff" />
-                        <rect width="36" height="1.85" y="0" fill="#b22234" />
-                        <rect width="36" height="1.85" y="3.7" fill="#b22234" />
-                        <rect width="36" height="1.85" y="7.4" fill="#b22234" />
-                        <rect width="36" height="1.85" y="11.1" fill="#b22234" />
-                        <rect width="36" height="1.85" y="14.8" fill="#b22234" />
-                        <rect width="36" height="1.85" y="18.5" fill="#b22234" />
-                        <rect width="36" height="1.85" y="22.2" fill="#b22234" />
-                        <rect width="14.4" height="12.95" fill="#3c3b6e" />
-                    </svg>
-                </a>
-            </div>
+<body>
+    <div class="page">
+        <nav class="site-nav">
+            <a href="about-me-en.html">About</a>
+            <p class="lang" aria-label="Language">
+                <a href="index.html" lang="pt-BR">PT</a>
+                <span aria-hidden="true">/</span>
+                <a href="index-en.html" lang="en" aria-current="page">EN</a>
+            </p>
         </nav>
 
-        <div class="split-layout">
-            <!-- Left side: identity -->
-            <header class="hero-section">
-                <h1><a href="https://youtu.be/OtUgra5BtwI?si=fY86QZqPCy_Cxb6B&amp;t=0" class="hero-name" target="_blank" rel="noopener">Brenno M.</a></h1>
-                <p class="hero-description">
-                    Cybersecurity engineer passionate about making the internet a safer place.
-                </p>
-                <div class="icons">
-                    <a href="https://www.linkedin.com/in/brennocm/" title="LinkedIn">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
-                        </svg>
-                    </a>
-                    <a href="http://github.com/brennocm" title="GitHub">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
-                        </svg>
-                    </a>
-                    <a href="https://huggingface.co/brennocm" title="Hugging Face">
-                        <svg width="48" height="48" viewBox="-2 -2 28 28" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M1.4446 11.5059c0 1.1021.1673 2.1585.4847 3.1563-.0378-.0028-.0691-.0058-.1058-.0058-.4209 0-.8015.16-1.0704.4512-.3454.3737-.4984.8335-.4316 1.293a1.576 1.576 0 0 0 .2148.5978c-.2319.1864-.4018.4456-.4844.7578-.0646.2448-.131.7543.2149 1.2794a1.4552 1.4552 0 0 0-.0625.1055c-.208.3923-.2207.8372-.0371 1.25.2783.6258.9696 1.1175 2.3126 1.6467.8356.3292 1.5988.5411 1.6056.543 1.1046.2847 2.104.4277 2.969.4277 1.4173 0 2.4754-.3849 3.1525-1.1446 1.538.2651 2.791.1403 3.592.006.6773.7555 1.7332 1.1387 3.1467 1.1387.8649 0 1.8643-.143 2.969-.4278.0068-.0019.77-.2138 1.6056-.543 1.343-.5292 2.0343-1.0208 2.3126-1.6466.1836-.4129.171-.8577-.037-1.25a1.4685 1.4685 0 0 0-.0626-.1056c.346-.525.2795-1.0346.2149-1.2793-.0826-.3122-.2525-.5714-.4844-.7579.11-.1816.1831-.3788.2148-.5977.0669-.4595-.0862-.9193-.4316-1.293-.2688-.2913-.6495-.4513-1.0704-.4513-.0209 0-.0376.0008-.0588.0018.3162-.9966.4846-2.0518.4846-3.1523 0-5.807-4.7362-10.5144-10.5789-10.5144-5.8426 0-10.5788 4.7073-10.5788 10.5144Zm10.5788-9.4831c5.2727 0 9.5476 4.246 9.5476 9.483a9.4201 9.4201 0 0 1-.2696 2.2365c-.0039-.0047-.0079-.011-.0117-.0156-.274-.3255-.6679-.5059-1.1075-.5059-.352 0-.714.1155-1.0763.3438-.2403.1517-.5058.422-.7793.7598-.2534-.3492-.608-.5832-1.0137-.6465a1.5174 1.5174 0 0 0-.2344-.0176c-.9263 0-1.4828.7993-1.6935 1.5177-.1046.2426-.6065 1.3482-1.3614 2.0978-1.1681 1.1601-1.4458 2.3534-.8396 3.6382-.843.1029-1.5836.0927-2.365-.006.5906-1.212.3626-2.4388-.8426-3.6322-.755-.7496-1.2568-1.8552-1.3614-2.0978-.2107-.7184-.7673-1.5177-1.6935-1.5177-.078 0-.1568.0054-.2344.0176-.4057.0633-.7604.2973-1.0137.6465-.2735-.3379-.539-.6081-.7794-.7598-.3622-.2283-.7243-.3438-1.0762-.3438-.4266 0-.8094.171-1.0821.4786a9.4208 9.4208 0 0 1-.2598-2.1936c0-5.237 4.2749-9.483 9.5475-9.483zM8.6443 7.0036c-.4838.0043-.9503.2667-1.1934.7227-.3536.6633-.1006 1.4873.5645 1.84.351.1862.4883-.5261.836-.6485.3107-.1095.841.399 1.0078.086.3536-.6634.1025-1.4874-.5625-1.84a1.3659 1.3659 0 0 0-.6524-.1602Zm6.8403 0c-.2199-.002-.4426.05-.6504.1602-.665.3526-.9181 1.1766-.5645 1.84.1669.313.6971-.1955 1.0079-.086.3476.1224.4867.8347.838.6485.6649-.3527.916-1.1767.5624-1.84-.243-.456-.7096-.7184-1.1934-.7227Zm-9.7565 1.418a.8768.8768 0 0 0-.877.877c0 .4846.3925.877.877.877a.8768.8768 0 0 0 .877-.877.8768.8768 0 0 0-.877-.877zm12.6434 0c-.4845 0-.879.3925-.879.877 0 .4846.3945.877.879.877a.8768.8768 0 0 0 .877-.877.8768.8768 0 0 0-.877-.877zM8.7927 11.459c-.179-.003-.2793.1107-.2793.416 0 .8097.3874 2.125 1.4279 2.924.207-.7123 1.3453-1.2832 1.5079-1.2012.2315.1167.2191.4417.6074.7266.3884-.285.374-.6098.6056-.7266.1627-.082 1.3009.4889 1.5079 1.2012 1.0404-.799 1.4278-2.1144 1.4278-2.924 0-1.2212-1.583.6402-3.5413.6485-1.4686-.0061-2.7266-1.0558-3.2639-1.0645zM4.312 14.4768c.5792.365 1.6964 2.2751 2.1056 3.0177.1371.2488.371.3536.582.3536.4188 0 .7465-.4138.0391-.9395-1.0636-.791-.6914-2.0846-.1836-2.1642a.4302.4302 0 0 1 .0664-.004c.4616 0 .666.7892.666.7892s.5959 1.4898 1.6213 2.508c.942.9356 1.062 1.703.4961 2.6661-.0164-.004-.0159.0236-.1484.2149-.1853.2673-.4322.4688-.7188.6152-.5062.2269-1.1397.2696-1.7833.2696-1.037 0-2.1017-.1824-2.6975-.336-.0293-.0075-3.6505-.9567-3.1916-1.8224.0771-.1454.2033-.2031.3633-.2031.6463 0 1.823.9551 2.3283.9551.113 0 .196-.0865.2285-.2031.2249-.8045-3.2787-1.0522-2.9846-2.1642.0519-.1967.193-.2757.3907-.2754.854 0 2.7704 1.4923 3.172 1.4923.0307 0 .0525-.0085.0645-.0274.2012-.3227.1096-.5865-1.3087-1.4395-1.4182-.8533-2.4315-1.329-1.8653-1.9416.0651-.0707.1574-.1015.2695-.1015.8611.0002 2.8948 1.84 2.8948 1.84s.5487.5683.8809.5683c.0762 0 .1416-.0315.1855-.1054.2355-.3946-2.1858-2.2183-2.3224-2.971-.0926-.51.0641-.7676.3555-.7676-.0006.008.1701-.0285.4942.1759zm16.2257.5918c-.1366.7526-2.5579 2.5764-2.3224 2.9709.044.074.1092.1055.1855.1055.3321 0 .881-.5684.881-.5684s2.0336-1.8397 2.8947-1.84c.1121 0 .2044.0308.2695.1016.5662.6125-.447 1.0882-1.8653 1.9415-1.4183.853-1.51 1.1168-1.3087 1.4396.012.0188.0337.0273.0644.0273.4016 0 2.3181-1.4923 3.1721-1.4923.1977-.0002.3388.0787.3907.2754.294 1.112-3.2095 1.3597-2.9846 2.1642.0325.1166.1156.2032.2285.2032.5054 0 1.682-.9552 2.3283-.9552.16 0 .2862.0577.3633.2032.459.8656-3.1623 1.8149-3.1916 1.8224-.5958.1535-1.6605.336-2.6975.336-.6351 0-1.261-.0409-1.7638-.2599-.2949-.1472-.5488-.3516-.7383-.625-.0411-.0682-.1026-.1476-.1426-.205-.5726-.9679-.455-1.7371.4903-2.676 1.0254-1.0182 1.6212-2.508 1.6212-2.508s.2044-.7891.666-.7891a.4318.4318 0 0 1 .0665.0039c.5078.0796.88 1.3732-.1836 2.1642-.7074.5257-.3797.9395.039.9395.211 0 .445-.1047.5821-.3535.4092-.7426 1.5264-2.6527 2.1056-3.0178.5588-.3524.99-.1816.8497.5918z" />
-                        </svg>
-                    </a>
-                    <a href="https://app.hackthebox.com/public/users/1394828" title="HackTheBox" class="htb-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.8 3.4L12 11l-6.8-3.42L12 4.18zM4 8.62l7 3.5v7.78l-7-3.5V8.62zm9 11.28v-7.78l7-3.5v7.78l-7 3.5z" />
-                        </svg>
-                    </a>
-                    <a href="https://tryhackme.com/p/brennocm" title="TryHackMe" class="thm-icon">
-                        <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Cloud shape -->
-                            <path
-                                d="M38.5 18.5c0-0.5-0.1-1-0.2-1.5C37.5 11.5 32.5 7 26.5 7c-4.5 0-8.5 2.5-10.5 6.2C15 13.1 14 13 13 13c-5.5 0-10 4.5-10 10s4.5 10 10 10h2"
-                                stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round" />
-                            <path d="M42 23c0-3.3-2.7-6-6-6h-1" stroke="currentColor" stroke-width="3.5" fill="none"
-                                stroke-linecap="round" />
-                            <!-- Binary rain numbers -->
-                            <text x="20" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
-                                fill="currentColor">10</text>
-                            <text x="32" y="32" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
-                                fill="currentColor">10</text>
-                            <text x="22" y="39" font-family="Arial, sans-serif" font-size="7" font-weight="bold"
-                                fill="currentColor">1110</text>
-                            <text x="18" y="45" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
-                                fill="currentColor">01</text>
-                            <text x="27" y="46" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
-                                fill="currentColor">01</text>
-                            <text x="36" y="44" font-family="Arial, sans-serif" font-size="5" font-weight="bold"
-                                fill="currentColor">10</text>
-                        </svg>
-                    </a>
-                </div>
-            </header>
+        <div class="layout">
+        <header class="intro">
+            <h1><a href="https://youtu.be/OtUgra5BtwI?si=fY86QZqPCy_Cxb6B&amp;amp;t=0" target="_blank" rel="noopener" data-text="Brenno M.">Brenno M.</a></h1>
+            <p class="intro-text">Cybersecurity engineer passionate about making the internet a safer place.</p>
+            <nav class="profiles" aria-label="Profiles">
+                <!-- Ícones: Font Awesome Free (CC BY 4.0) e Simple Icons (CC0) -->
+                <a href="https://www.linkedin.com/in/brennocm/" title="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 640 640" fill="currentColor" aria-hidden="true"><path d="M196.3 512h-92.9V212.9h92.9zm-46.5-339.9c-29.7 0-53.8-24.6-53.8-54.3c0-14.3 5.7-27.9 15.8-38s23.8-15.8 38-15.8s27.9 5.7 38 15.8s15.8 23.8 15.8 38c0 29.7-24.1 54.3-53.8 54.3M543.9 512h-92.7V366.4c0-34.7-.7-79.2-48.3-79.2c-48.3 0-55.7 37.7-55.7 76.7V512h-92.8V212.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3c94 0 111.3 61.9 111.3 142.3V512z"/></svg></a>
+                <a href="http://github.com/brennocm" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 640 640" fill="currentColor" aria-hidden="true"><path d="M280.5 426.5c-66-8-112.5-55.5-112.5-117c0-25 9-52 24-70c-6.5-16.5-5.5-51.5 2-66c20-2.5 47 8 63 22.5c19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22c7 13.5 8 48.5 1.5 65.5c16 19 24.5 44.5 24.5 70.5c0 61.5-46.5 108-113.5 116.5c17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C505 523.5 576 433 576 321c0-141.5-115-257-256.5-257S64 179.5 64 321c0 111 70.5 203 165.5 237.5c13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5c-33 0-52.5-18-66.5-51.5c-5.5-13.5-11.5-21.5-23-23c-6-.5-8-3-8-6c0-6 10-10.5 20-10.5c14.5 0 27 9 40 27.5c10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg></a>
+                <a href="https://huggingface.co/brennocm" title="Hugging Face" aria-label="Hugging Face"><svg viewBox="0 0 640 640" fill="currentColor" aria-hidden="true"><path d="M318.8 72.2c130 0 235.4 105.8 235.4 236.3c0 17.7-1.9 35-5.6 51.7c-1.4 6.5-3.1 12.8-5.1 19.1c6.5-.6 13 .6 18.7 3.5c12.6 6.5 20.2 21.7 18.2 35.7c-.7 4.9-2.4 9.4-4.8 13.5c5.2 4.2 9 10.1 10.8 17.1c1.4 5.5 2.9 17.1-4.8 28.9c5.8 9.2 6.6 20.6 2.2 30.6c-6.2 14.1-21.7 25.3-51.7 37.3c-32.5 13-67.1 21.9-102.3 21.9c-32 0-55.9-8.9-71-26.4c-13 2.2-26.3 3.4-40 3.4c-12.7 0-25.2-1-37.3-2.9c-15.1 17.2-38.8 25.9-70.6 25.9c-35.1 0-70-9-102.4-21.9c-30-12-45.5-23.1-51.7-37.3c-4.4-9.9-3.6-21.4 2.2-30.6c-7.7-11.9-6.3-23.4-4.8-28.9c1.8-7 5.7-12.9 10.8-17.1q-3.75-6.15-4.8-13.5c-1.5-10.4 2-20.7 9.7-29.2C76 382.6 85 379 94.1 379.1c-1.9-6.1-3.6-12.4-5-18.7c-3.7-16.7-5.7-34-5.7-51.8c0-130.5 105.4-236.3 235.4-236.3zM149.5 375c-13-8.2-22.1-3.6-19 13.4s57.2 58.2 52 67.2c-5.2 8.8-23.5-10.1-23.8-10.5c0 0-58.2-53.1-70.8-39.3s9.6 25.4 41.3 44.7s34.2 24.4 29.7 31.7s-74.5-52-81.1-26.8c-6.5 25.1 71.4 32.4 66.7 49.8c-4.8 17.4-54.9-32.8-65.2-13.3c-10.3 19.6 70.8 42.6 71.4 42.7c26.2 6.8 92.6 21.3 115.9-12.9c16.7-24.6 15.6-43.1-7.4-66.1s-36.3-56.7-36.3-56.7c0-.2-5-19.5-16.3-17.8c-11.4 1.8-19.7 31 4.1 48.9s-4.7 30-13.9 13.3c-9.2-16.8-34.2-59.9-47.1-68.2zm360.6 13.4c3.1-17-6.1-21.6-19-13.4c-13 8.3-37.9 51.4-47.1 68.2s-37.7 4.6-13.9-13.3s15.4-47.1 4.1-48.9s-16.3 17.8-16.3 17.8c-.1.2-13.4 33.7-36.3 56.7s-24.1 41.5-7.4 66.1c23.2 34.2 89.7 19.7 115.9 12.9c1.5-.4 81.6-23.3 71.4-42.7c-10.3-19.5-60.4 30.6-65.3 13.3c-4.8-17.3 73.2-24.6 66.7-49.8c-6.6-25.1-76.6 34.1-81.1 26.8s-2-12.4 29.7-31.7s54-30.9 41.3-44.7S482 445 482 445c-.4.4-18.6 19.3-23.8 10.5c-5.3-8.9 48.9-50.1 52-67.2zM318.8 96.6c-116.6 0-211.1 94.9-211.1 211.9c0 17.1 2 33.8 5.8 49.7c0-.1.1-.1.2-.2c6.1-7.4 14.9-11.4 24.7-11.4c17.7 0 31.1 11.9 41.5 24.9c6.8-9.4 17.1-15 27.9-15c20.7 0 33.2 18.1 37.9 34.3c2.3 5.5 13.6 30.5 30.4 47.4c25.7 25.8 32.2 52.4 19.4 80.9c16 1.8 32.8 1.7 49.2-.3c-12.5-28.4-6-54.9 19.6-80.6c16.9-16.9 28.1-41.9 30.5-47.4c4.7-16.2 17.2-34.3 37.9-34.3c10.9 0 21.2 5.6 27.9 15c10.4-13 23.8-24.9 41.5-24.9c8.7 0 16.6 3.1 22.5 8.9c5-22 6.4-45.8 4.1-68.7C517.9 179.9 428 96.5 318.7 96.5zm1.5 234.2c43.6 0 79-42 79-14.5c0 27.4-19.2 80.9-78.8 80.9c-19.2 0-34.2-5.5-45.8-13.9c-23.2-19.4-33.4-48.2-33.4-66.9c0-27.4 35.4 14.5 79 14.5zm-13.3 25c-8.2 2.4-15.5 6.8-21.5 12.6c22 12.8 50.4 12.9 71.7-1.3c-5.5-4.9-12-8.7-19.1-11c-5.1-1.6-10.4 15.8-16 15.8c-5.2 0-10.3-17.6-15.1-16.2zm-127.9-76.3c-10.9 0-19.8-8.9-19.8-19.8s8.9-19.8 19.8-19.8s19.8 8.9 19.8 19.8s-8.9 19.8-19.8 19.8m282.4 0c-10.9 0-19.8-8.9-19.8-19.8s8.9-19.8 19.8-19.8s19.8 8.9 19.8 19.8s-8.9 19.8-19.8 19.8m-244-55.4c7.9-14.9 26.3-20.5 41.1-12.6s20.4 26.4 12.6 41.2c-3.7 7-15.5-4.4-22.4-1.9c-7.7 2.7-10.8 18.7-18.6 14.6c-14.8-7.9-20.4-26.4-12.6-41.2zm164.4-12.6c14.8-7.9 33.2-2.3 41.1 12.6s2.2 33.3-12.6 41.2c-7.8 4.2-10.9-11.8-18.7-14.6c-6.9-2.4-18.7 9-22.4 1.9c-7.9-14.9-2.2-33.3 12.6-41.2z"/></svg></a>
+                <a href="https://app.hackthebox.com/public/users/1394828" title="HackTheBox" aria-label="HackTheBox"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m22.51 6.457l.001-.013a.9.9 0 0 0-.271-.638l-.027-.024q-.028-.025-.057-.048q-.03-.022-.06-.04l-.029-.02l-9.61-5.547a.89.89 0 0 0-.922.004L1.933 5.674l-.03.02l-.023.014l-.02.015a1 1 0 0 0-.147.134l-.003.003a.9.9 0 0 0-.221.584v.014l-.001.027v11.07c0 .328.18.63.469.784l9.599 5.542l.023.011a1 1 0 0 0 .166.07l.04.01l.072.015l.035.006a.8.8 0 0 0 .216 0q.018-.002.035-.006l.072-.014l.04-.012l.064-.022a1 1 0 0 0 .102-.047l.023-.011l9.599-5.542a.89.89 0 0 0 .469-.784V6.478zM5.255 6.082l6.537-3.774a.42.42 0 0 1 .418 0l6.537 3.774a.418.418 0 0 1 0 .725l-6.537 3.774a.42.42 0 0 1-.418 0L5.254 6.807a.418.418 0 0 1 0-.725m5.614 14.345a.417.417 0 0 1-.626.361l-6.524-3.766a.42.42 0 0 1-.209-.361V9.127a.417.417 0 0 1 .626-.361l6.524 3.766a.42.42 0 0 1 .209.362zm9.623-3.766a.42.42 0 0 1-.209.36l-6.524 3.767a.417.417 0 0 1-.626-.36v-7.533c0-.15.08-.287.209-.362l6.524-3.766a.417.417 0 0 1 .626.36z"/></svg></a>
+                <a href="https://tryhackme.com/p/brennocm" title="TryHackMe" aria-label="TryHackMe"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.705 0C7.54 0 4.902 2.285 4.349 5.291a4.525 4.525 0 0 0-4.107 4.5a4.525 4.525 0 0 0 4.52 4.52h6.761a.625.625 0 1 0 0-1.25H4.761a3.273 3.273 0 0 1-3.27-3.27A3.273 3.273 0 0 1 6.59 7.08a.625.625 0 0 0 .7-1.035a4.5 4.5 0 0 0-1.68-.69a5.22 5.22 0 0 1 5.096-4.104a5.22 5.22 0 0 1 5.174 4.57a5 5 0 0 0-.488.305a.625.625 0 1 0 .731 1.013a3.25 3.25 0 0 1 1.912-.616a3.28 3.28 0 0 1 3.203 2.61a.625.625 0 0 0 1.225-.251a4.53 4.53 0 0 0-4.428-3.61a4.5 4.5 0 0 0-.958.105C16.556 2.328 13.9 0 10.705 0m5.192 10.64a.9.9 0 0 0-.462.108a.9.9 0 0 0-.313.29a1.3 1.3 0 0 0-.175.427a2.4 2.4 0 0 0-.054.514q0 .271.054.517q.055.246.175.43a.9.9 0 0 0 .313.297q.19.11.462.11q.27 0 .46-.11a.9.9 0 0 0 .309-.296q.12-.185.173-.431q.054-.246.054-.517q0-.27-.054-.514a1.3 1.3 0 0 0-.173-.426a.9.9 0 0 0-.309-.291a.9.9 0 0 0-.46-.108m6.486 0a.9.9 0 0 0-.462.108a.9.9 0 0 0-.313.29a1.3 1.3 0 0 0-.175.427a2.4 2.4 0 0 0-.053.514q0 .271.053.517q.055.246.175.43a.9.9 0 0 0 .313.297q.19.11.462.11q.27 0 .46-.11a.9.9 0 0 0 .31-.296q.117-.185.172-.431t.054-.517q0-.27-.054-.514a1.3 1.3 0 0 0-.173-.426a.9.9 0 0 0-.308-.291a.9.9 0 0 0-.461-.108m-8.537.068l-.84.618l.313.43l.476-.368v1.877h.603v-2.557zm6.486 0l-.841.618l.314.43l.477-.368v1.877h.603v-2.557zm-4.435.445q.119 0 .193.084q.074.085.114.21q.039.125.054.269a2.5 2.5 0 0 1 0 .533q-.015.145-.054.27a.6.6 0 0 1-.114.21a.24.24 0 0 1-.193.085a.25.25 0 0 1-.195-.086a.6.6 0 0 1-.118-.209a1.3 1.3 0 0 1-.056-.27a2.7 2.7 0 0 1 0-.533q.015-.144.056-.27a.6.6 0 0 1 .118-.209a.25.25 0 0 1 .195-.084m6.486 0q.12 0 .193.084q.074.085.114.21t.054.269a2.5 2.5 0 0 1 0 .533q-.014.145-.054.27a.6.6 0 0 1-.114.21a.24.24 0 0 1-.193.085a.25.25 0 0 1-.195-.086a.6.6 0 0 1-.117-.209a1.3 1.3 0 0 1-.056-.27a2.6 2.6 0 0 1 0-.533q.014-.144.056-.27a.6.6 0 0 1 .117-.209a.25.25 0 0 1 .195-.084m-2.191 3.51a.93.93 0 0 0-.463.109a.9.9 0 0 0-.312.291q-.12.182-.175.426a2.4 2.4 0 0 0-.054.514q0 .27.054.516t.175.432a.9.9 0 0 0 .312.296a.9.9 0 0 0 .463.11q.27 0 .46-.11a.9.9 0 0 0 .308-.296a1.3 1.3 0 0 0 .174-.432q.054-.245.054-.516q0-.27-.054-.514a1.3 1.3 0 0 0-.174-.426a.9.9 0 0 0-.309-.291a.9.9 0 0 0-.46-.108zm-6.402.07l-.841.617l.314.43l.476-.369v1.878h.604v-2.557zm2.125 0l-.841.617l.314.43l.477-.369v1.878h.603v-2.557zm2.116 0l-.84.617l.313.43l.477-.369v1.878h.603v-2.557zm2.16.443q.12 0 .194.085a.6.6 0 0 1 .114.21q.04.124.053.269a2.6 2.6 0 0 1 0 .532a1.3 1.3 0 0 1-.053.27a.6.6 0 0 1-.114.21a.24.24 0 0 1-.193.085a.25.25 0 0 1-.196-.085a.6.6 0 0 1-.117-.21a1.3 1.3 0 0 1-.056-.27a2.6 2.6 0 0 1 0-.532q.014-.145.056-.27a.6.6 0 0 1 .117-.209a.25.25 0 0 1 .196-.085zm-6.729 3.073a.7.7 0 0 0-.335.078a.66.66 0 0 0-.227.211a.9.9 0 0 0-.127.31q-.04.177-.04.373c0 .196.013.256.04.375a.9.9 0 0 0 .127.313a.65.65 0 0 0 .227.215q.138.08.335.08a.66.66 0 0 0 .334-.08a.65.65 0 0 0 .225-.215q.086-.135.125-.313a2 2 0 0 0 .04-.375q0-.195-.04-.373a.9.9 0 0 0-.125-.31a.66.66 0 0 0-.225-.21a.7.7 0 0 0-.334-.08zm3.086 0a.7.7 0 0 0-.336.078a.66.66 0 0 0-.226.211a.9.9 0 0 0-.127.31a1.7 1.7 0 0 0-.04.373q0 .197.04.375a.9.9 0 0 0 .127.313q.088.135.226.215q.14.08.336.08a.66.66 0 0 0 .334-.08a.65.65 0 0 0 .224-.215q.087-.135.126-.313a1.75 1.75 0 0 0 0-.748a1 1 0 0 0-.126-.31a.66.66 0 0 0-.224-.21a.7.7 0 0 0-.334-.08zm5.108 0a.7.7 0 0 0-.336.078a.66.66 0 0 0-.226.211a.9.9 0 0 0-.127.31q-.04.177-.04.373c0 .196.013.256.04.375a.9.9 0 0 0 .127.313q.087.135.226.215q.14.08.336.08t.334-.08a.65.65 0 0 0 .224-.215q.087-.135.126-.313a2 2 0 0 0 .04-.375q0-.195-.04-.373a1 1 0 0 0-.126-.31a.66.66 0 0 0-.224-.21a.7.7 0 0 0-.334-.08zm-6.658.05l-.61.448l.227.311l.346-.266v1.362h.438v-1.856zm3.068 0l-.61.448l.227.311l.346-.266v1.362h.438v-1.856zm5.108 0l-.611.448l.228.311l.346-.266v1.362h.438v-1.856zm-9.712.322q.087 0 .14.062a.4.4 0 0 1 .083.151a1 1 0 0 1 .04.196a2 2 0 0 1 0 .386a1 1 0 0 1-.04.197a.4.4 0 0 1-.083.152a.18.18 0 0 1-.14.061a.18.18 0 0 1-.141-.06a.4.4 0 0 1-.085-.153a1 1 0 0 1-.041-.197a2 2 0 0 1 0-.386a1 1 0 0 1 .04-.196a.4.4 0 0 1 .086-.151a.18.18 0 0 1 .141-.062m3.086 0q.086 0 .14.062a.4.4 0 0 1 .082.151a1 1 0 0 1 .04.196a2 2 0 0 1 0 .386a1 1 0 0 1-.04.197a.4.4 0 0 1-.082.152a.18.18 0 0 1-.14.061a.18.18 0 0 1-.141-.06a.4.4 0 0 1-.086-.153a1 1 0 0 1-.04-.197a2 2 0 0 1-.011-.195q0-.086.01-.191a1 1 0 0 1 .041-.196a.4.4 0 0 1 .086-.151a.18.18 0 0 1 .141-.062m5.108 0q.087 0 .14.062a.4.4 0 0 1 .082.151a1 1 0 0 1 .04.196a2 2 0 0 1 0 .386a1 1 0 0 1-.04.197a.4.4 0 0 1-.082.152a.18.18 0 0 1-.14.061a.18.18 0 0 1-.142-.06a.4.4 0 0 1-.085-.153a1 1 0 0 1-.04-.197a2 2 0 0 1-.011-.195q0-.086.01-.191a1 1 0 0 1 .04-.196a.5.5 0 0 1 .086-.151a.18.18 0 0 1 .142-.062m-1.684 1.814a.7.7 0 0 0-.336.079a.66.66 0 0 0-.227.21a.9.9 0 0 0-.127.31a1.7 1.7 0 0 0 0 .748a1 1 0 0 0 .127.314q.088.135.227.215q.14.08.336.08a.66.66 0 0 0 .334-.08a.65.65 0 0 0 .224-.215q.087-.135.126-.314a1.7 1.7 0 0 0-.001-.747a.9.9 0 0 0-.125-.31a.65.65 0 0 0-.224-.211a.7.7 0 0 0-.334-.079m3.063 0a.7.7 0 0 0-.336.079a.7.7 0 0 0-.227.21a.9.9 0 0 0-.127.31a1.7 1.7 0 0 0 0 .748a.9.9 0 0 0 .127.314a.66.66 0 0 0 .227.215q.138.08.336.08a.65.65 0 0 0 .334-.08a.65.65 0 0 0 .223-.215q.087-.135.126-.314a1.7 1.7 0 0 0 0-.747a.9.9 0 0 0-.126-.31a.65.65 0 0 0-.223-.211a.7.7 0 0 0-.334-.079m-1.545.05l-.611.448l.228.312l.346-.267v1.363h.438v-1.856zm-1.518.323q.086 0 .14.061a.4.4 0 0 1 .082.152a1 1 0 0 1 .04.195a2 2 0 0 1 0 .387a1 1 0 0 1-.04.197a.4.4 0 0 1-.082.152a.18.18 0 0 1-.14.06a.18.18 0 0 1-.142-.06a.4.4 0 0 1-.085-.152a1 1 0 0 1-.04-.197a2 2 0 0 1-.011-.195q0-.087.01-.192a1 1 0 0 1 .041-.195q.03-.09.085-.152a.18.18 0 0 1 .142-.061m3.063 0q.086 0 .14.061a.4.4 0 0 1 .082.152a1 1 0 0 1 .04.195a2 2 0 0 1 0 .387a1 1 0 0 1-.04.197a.4.4 0 0 1-.083.152a.18.18 0 0 1-.14.06a.18.18 0 0 1-.141-.06a.4.4 0 0 1-.085-.152a1 1 0 0 1-.04-.197a2 2 0 0 1 0-.387a1 1 0 0 1 .04-.195q.03-.09.085-.152a.18.18 0 0 1 .142-.061m-9.713.185a.5.5 0 0 0-.232.055a.46.46 0 0 0-.157.146a.6.6 0 0 0-.089.215a1.2 1.2 0 0 0-.027.259q0 .135.027.26a.7.7 0 0 0 .089.216q.06.094.157.149a.46.46 0 0 0 .232.056q.136-.001.231-.056a.45.45 0 0 0 .156-.149a.7.7 0 0 0 .087-.217a1.2 1.2 0 0 0 0-.518a.7.7 0 0 0-.087-.215a.45.45 0 0 0-.156-.146a.46.46 0 0 0-.23-.055zm1.052.035l-.423.31l.158.217l.24-.185v.944h.303v-1.286zm-1.052.224q.06 0 .097.042a.3.3 0 0 1 .057.105a.7.7 0 0 1 .028.136q.006.073.007.133q0 .06-.007.135a.7.7 0 0 1-.028.136a.3.3 0 0 1-.057.105a.12.12 0 0 1-.097.043a.13.13 0 0 1-.098-.043a.3.3 0 0 1-.059-.105a.6.6 0 0 1-.028-.136a1.4 1.4 0 0 1 0-.268a.6.6 0 0 1 .028-.136a.3.3 0 0 1 .06-.105a.13.13 0 0 1 .097-.042m3.775 1.394a.46.46 0 0 0-.232.054a.45.45 0 0 0-.157.146a.6.6 0 0 0-.088.214a1.2 1.2 0 0 0 0 .519a.6.6 0 0 0 .088.217a.46.46 0 0 0 .157.15a.46.46 0 0 0 .232.054a.45.45 0 0 0 .232-.055a.45.45 0 0 0 .155-.149a.7.7 0 0 0 .087-.217a1.2 1.2 0 0 0 0-.519a.6.6 0 0 0-.087-.214a.45.45 0 0 0-.155-.146a.46.46 0 0 0-.232-.054m1.052.034l-.423.31l.158.216l.24-.185v.945h.303V22.68zm-1.052.223q.06 0 .098.043a.3.3 0 0 1 .057.105a.6.6 0 0 1 .027.135a1.3 1.3 0 0 1 0 .268a.7.7 0 0 1-.027.137a.3.3 0 0 1-.057.105a.12.12 0 0 1-.098.042a.13.13 0 0 1-.098-.042a.3.3 0 0 1-.059-.105a.6.6 0 0 1-.028-.137a1.4 1.4 0 0 1 0-.268a.6.6 0 0 1 .028-.135a.3.3 0 0 1 .06-.105a.12.12 0 0 1 .097-.043"/></svg></a>
+            </nav>
+        </header>
 
-            <!-- Right side: posts -->
-            <main class="main-content" id="posts-section">
-                <div class="category" id="technical-category">
-                    <div class="category-header" onclick="toggleCategory('technical')">
-                        <div class="category-title">
-                            <span>Articles</span>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">11 items</span>
-                                <span class="category-arrow">▼</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="category-content" id="technical-content">
-                        <div class="category-inner">
-                            <article class="post" onclick="openArticle('articles/en-us/pii-br.html', event)">
-                                <div>
-                                    <h2>PII-BR: Detecting Personal Data in Brazilian Portuguese</h2>
-                                    <p>Python package that combines check-digit rules with a BERTimbau model to find and mask CPF, CNPJ, names and addresses.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Nov 23, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Privacy</span>
-                                        <span class="tag">Python</span>
-                                        <span class="tag">ML</span>
-                                        <span class="tag">Tools</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/lethe.html', event)">
-                                <div>
-                                    <h2>lethe: An OpSec Monitor for VPN and Tor</h2>
-                                    <p>Go monitor that watches every outbound interface, detects traffic escaping the tunnel and blocks the leak with nftables.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Nov 16, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Privacy</span>
-                                        <span class="tag">OPSEC</span>
-                                        <span class="tag">Go</span>
-                                        <span class="tag">Tools</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/escalint.html', event)">
-                                <div>
-                                    <h2>escalint: AWS IAM Escalation Paths, Made Visual</h2>
-                                    <p>Go tool that evaluates IAM policies the way AWS does, builds a who-can-act-as-whom graph and shows every path to admin.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Oct 23, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">AWS</span>
-                                        <span class="tag">IAM</span>
-                                        <span class="tag">Go</span>
-                                        <span class="tag">Tools</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/chainlink-security.html', event)">
-                                <div>
-                                    <h2>oraclint and oraclewatch: Chainlink Oracle Security</h2>
-                                    <p>Static linter for Chainlink nodes and a consumer-side Data Feed monitor, both written in Go.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Oct 22, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Web3</span>
-                                        <span class="tag">Go</span>
-                                        <span class="tag">DevSecOps</span>
-                                        <span class="tag">Tools</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/blindsight.html', event)">
-                                <div>
-                                    <h2>blindsight: Offline Verification of Safe Transactions</h2>
-                                    <p>Offline Rust verifier that recomputes the EIP-712 hashes of Safe transactions and detects payloads that can take over the multisig.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Oct 10, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Web3</span>
-                                        <span class="tag">Rust</span>
-                                        <span class="tag">Tools</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/tor-bridge.html', event)">
-                                <div>
-                                    <h2>Creating a Tor Bridge</h2>
-                                    <p>Deploying an obfs4 bridge on Docker, with monitoring, alerting and host hardening.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Sep 14, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Privacy</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/oci-secops.html', event)">
-                                <div>
-                                    <h2>OCI-SecOps: Automated Security Infrastructure</h2>
-                                    <p>Infrastructure orchestration toolkit for pentesting and security CI/CD on OCI Always Free.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Mar 20, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Pentest</span>
-                                        <span class="tag">Cloud</span>
-                                        <span class="tag">DevSecOps</span>
-                                        <span class="tag">Tools</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/own-vpn.html', event)">
-                                <div>
-                                    <h2>Creating Your Own VPN</h2>
-                                    <p>Creation and configuration of a VPN using your own server.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Jan 10, 2025</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">OPSEC</span>
-                                        <span class="tag">Privacy</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/proxychains-use.html', event)">
-                                <div>
-                                    <h2>Using Proxychains</h2>
-                                    <p>Tool that redirects program traffic through one or more proxies.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Dec 30, 2024</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Privacy</span>
-                                        <span class="tag">OPSEC</span>
-                                        <span class="tag">Tools</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/opsec-environment.html', event)">
-                                <div>
-                                    <h2>OPSEC Environment Configuration</h2>
-                                    <p>Setting up a privacy-focused Windows environment using Whonix.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Dec 18, 2024</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">OPSEC</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/creating-tor-website.html', event)">
-                                <div>
-                                    <h2>Creating Websites on the Tor Network</h2>
-                                    <p>Setting up a static website on the Tor network.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Dec 05, 2024</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Tor</span>
-                                        <span class="tag">Hidden Services</span>
-                                        <span class="tag">Deep Web</span>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-                <div class="category" id="writeups-category">
-                    <div class="category-header" onclick="toggleCategory('writeups')">
-                        <div class="category-title">
-                            <span>Write-ups</span>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">42 items</span>
-                                <span class="category-arrow">▼</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="category-content" id="writeups-content">
-                        <div class="category-inner">
-                            <div class="wu-folder">
-                                <div class="wu-folder-header" onclick="toggleFolder(this, event)">
-                                    <span class="wu-folder-name">HackTheBox</span>
-                                    <span class="wu-folder-meta"><span class="wu-num">27</span><span class="wu-caret">▼</span></span>
-                                </div>
-                                <div class="wu-folder-body"><div class="wu-folder-inner">
-                                <div class="wu-folder wu-folder--nested">
-                                    <div class="wu-folder-header" onclick="toggleFolder(this, event)">
-                                        <span class="wu-folder-name">Machines</span>
-                                        <span class="wu-folder-meta"><span class="wu-num">13</span><span class="wu-caret">▼</span></span>
-                                    </div>
-                                    <div class="wu-folder-body"><div class="wu-folder-inner">
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/beep.html', event)">
-                                <div>
-                                    <h2>Beep</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/blocky.html', event)">
-                                <div>
-                                    <h2>Blocky</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/blue.html', event)">
-                                <div>
-                                    <h2>Blue</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/devel.html', event)">
-                                <div>
-                                    <h2>Devel</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/irked.html', event)">
-                                <div>
-                                    <h2>Irked</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/jerry.html', event)">
-                                <div>
-                                    <h2>Jerry</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/knife.html', event)">
-                                <div>
-                                    <h2>Knife</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/kobold.html', event)">
-                                <div>
-                                    <h2>Kobold</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/lame.html', event)">
-                                <div>
-                                    <h2>Lame</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/legacy.html', event)">
-                                <div>
-                                    <h2>Legacy</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/optimum.html', event)">
-                                <div>
-                                    <h2>Optimum</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/reactor.html', event)">
-                                <div>
-                                    <h2>Reactor</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/machines/sense.html', event)">
-                                <div>
-                                    <h2>Sense</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                                    </div></div>
-                                </div>
-                                <div class="wu-folder wu-folder--nested">
-                                    <div class="wu-folder-header" onclick="toggleFolder(this, event)">
-                                        <span class="wu-folder-name">Starting Point</span>
-                                        <span class="wu-folder-meta"><span class="wu-num">14</span><span class="wu-caret">▼</span></span>
-                                    </div>
-                                    <div class="wu-folder-body"><div class="wu-folder-inner">
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/meow.html', event)">
-                                <div>
-                                    <h2>Meow</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/fawn.html', event)">
-                                <div>
-                                    <h2>Fawn</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/dancing.html', event)">
-                                <div>
-                                    <h2>Dancing</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/redeemer.html', event)">
-                                <div>
-                                    <h2>Redeemer</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/explosion.html', event)">
-                                <div>
-                                    <h2>Explosion</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/preignition.html', event)">
-                                <div>
-                                    <h2>Preignition</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/mongod.html', event)">
-                                <div>
-                                    <h2>Mongod</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/synced.html', event)">
-                                <div>
-                                    <h2>Synced</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/appointment.html', event)">
-                                <div>
-                                    <h2>Appointment</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/sequel.html', event)">
-                                <div>
-                                    <h2>Sequel</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/crocodile.html', event)">
-                                <div>
-                                    <h2>Crocodile</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/responder.html', event)">
-                                <div>
-                                    <h2>Responder</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/three.html', event)">
-                                <div>
-                                    <h2>Three</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/hackthebox/starting-point/archetype.html', event)">
-                                <div>
-                                    <h2>Archetype</h2>
-                                    <span class="wu-diff wu-diff--very-easy">Very Easy</span>
-                                </div>
-                            </article>
-                                    </div></div>
-                                </div>
-                                </div></div>
-                            </div>
-                            <div class="wu-folder">
-                                <div class="wu-folder-header" onclick="toggleFolder(this, event)">
-                                    <span class="wu-folder-name">TryHackMe</span>
-                                    <span class="wu-folder-meta"><span class="wu-num">15</span><span class="wu-caret">▼</span></span>
-                                </div>
-                                <div class="wu-folder-body"><div class="wu-folder-inner">
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/relevant.html', event)">
-                                <div>
-                                    <h2>Relevant</h2>
-                                    <span class="wu-diff wu-diff--medium">Medium</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/olympus.html', event)">
-                                <div>
-                                    <h2>Olympus</h2>
-                                    <span class="wu-diff wu-diff--medium">Medium</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/blueprint.html', event)">
-                                <div>
-                                    <h2>Blueprint</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/team.html', event)">
-                                <div>
-                                    <h2>Team</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/wgel.html', event)">
-                                <div>
-                                    <h2>Wgel CTF</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/startup.html', event)">
-                                <div>
-                                    <h2>Startup</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/basic-pentesting.html', event)">
-                                <div>
-                                    <h2>Basic Pentesting</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/bounty-hacker.html', event)">
-                                <div>
-                                    <h2>Bounty Hacker</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/blog.html', event)">
-                                <div>
-                                    <h2>Blog</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/ignite.html', event)">
-                                <div>
-                                    <h2>Ignite</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/cyberheroes.html', event)">
-                                <div>
-                                    <h2>CyberHeroes</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/brooklyn-nine-nine.html', event)">
-                                <div>
-                                    <h2>Brooklyn Nine Nine</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/agent-sudo.html', event)">
-                                <div>
-                                    <h2>Agent Sudo</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/kenobi.html', event)">
-                                <div>
-                                    <h2>Kenobi</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/writeups/tryhackme/blue.html', event)">
-                                <div>
-                                    <h2>Blue</h2>
-                                    <span class="wu-diff wu-diff--easy">Easy</span>
-                                </div>
-                            </article>
-                                </div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <main>
+            <div class="filters" role="group" aria-label="Filter posts">
+                <button type="button" data-filter="recent" aria-pressed="true">Recent</button>
+                <button type="button" data-filter="technical" aria-pressed="false">Articles <span class="count">11</span></button>
+                <button type="button" data-filter="writeups" aria-pressed="false">Write-ups <span class="count">42</span></button>
+                <button type="button" data-filter="reviews" aria-pressed="false">Certification reviews <span class="count">6</span></button>
+                <button type="button" data-filter="career" aria-pressed="false">Career tips <span class="count">1</span></button>
+                <a href="projects-en.html">Projects <span class="count">24</span></a>
+            </div>
 
-                <div class="category" id="reviews-category">
-                    <div class="category-header" onclick="toggleCategory('reviews')">
-                        <div class="category-title">
-                            <span>Certification Reviews</span>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">6 items</span>
-                                <span class="category-arrow">▼</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="category-content" id="reviews-content">
-                        <div class="category-inner">
-                            <article class="post" onclick="openArticle('articles/en-us/secplus-review.html', event)">
-                                <div>
-                                    <h2>CompTIA Security+ (SY0-701) Review</h2>
-                                    <p>Study reference for CompTIA's Security+.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Sep 06, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Cybersecurity</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/ejpt-review.html', event)">
-                                <div>
-                                    <h2>Junior Penetration Tester (eJPT) Review</h2>
-                                    <p>Study reference for the eJPT certification from INE Security.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Mar 29, 2026</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Pentest</span>
-                                        <span class="tag">Hacking</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/cbp-review.html', event)">
-                                <div>
-                                    <h2>Certified Blockchain Practitioner (CBP) Review</h2>
-                                    <p>Study reference for the CBP certification from The SecOps Group.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Apr 11, 2025</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Blockchain</span>
-                                        <span class="tag">Web3</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/ccsp-aws-review.html', event)">
-                                <div>
-                                    <h2>Certified Cloud Security Practitioner – AWS Review</h2>
-                                    <p>Study reference for the CCSP-AWS certification from The SecOps Group.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Apr 07, 2025</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">AWS</span>
-                                        <span class="tag">Cloud Security</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/cnsp-review.html', event)">
-                                <div>
-                                    <h2>Certified Network Security Practitioner Review</h2>
-                                    <p>Study reference for the CNSP certification from The SecOps Group.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Mar 31, 2025</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Network Security</span>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="post" onclick="openArticle('articles/en-us/cap-review.html', event)">
-                                <div>
-                                    <h2>Certified AppSec Practitioner (CAP) Review</h2>
-                                    <p>Study reference for the CAP certification from The SecOps Group.</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Jan 21, 2025</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Web Security</span>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
+            <ol class="entries" id="entries">
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/pii-br.html">
+                    <time datetime="2026-11-23">Nov 23, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">PII-BR: Detecting Personal Data in Brazilian Portuguese</span>
+                        <span class="entry-desc">Python package that combines check-digit rules with a BERTimbau model to find and mask CPF, CNPJ, names and addresses.</span>
+                        <span class="entry-tags"><span class="tag">Privacy</span><span class="tag">Python</span><span class="tag">ML</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/lethe.html">
+                    <time datetime="2026-11-16">Nov 16, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">lethe: An OpSec Monitor for VPN and Tor</span>
+                        <span class="entry-desc">Go monitor that watches every outbound interface, detects traffic escaping the tunnel and blocks the leak with nftables.</span>
+                        <span class="entry-tags"><span class="tag">Privacy</span><span class="tag">OPSEC</span><span class="tag">Go</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/escalint.html">
+                    <time datetime="2026-10-23">Oct 23, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">escalint: AWS IAM Escalation Paths, Made Visual</span>
+                        <span class="entry-desc">Go tool that evaluates IAM policies the way AWS does, builds a who-can-act-as-whom graph and shows every path to admin.</span>
+                        <span class="entry-tags"><span class="tag">AWS</span><span class="tag">IAM</span><span class="tag">Go</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/chainlink-security.html">
+                    <time datetime="2026-10-22">Oct 22, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">oraclint and oraclewatch: Chainlink Oracle Security</span>
+                        <span class="entry-desc">Static linter for Chainlink nodes and a consumer-side Data Feed monitor, both written in Go.</span>
+                        <span class="entry-tags"><span class="tag">Web3</span><span class="tag">Go</span><span class="tag">DevSecOps</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/blindsight.html">
+                    <time datetime="2026-10-10">Oct 10, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">blindsight: Offline Verification of Safe Transactions</span>
+                        <span class="entry-desc">Offline Rust verifier that recomputes the EIP-712 hashes of Safe transactions and detects payloads that can take over the multisig.</span>
+                        <span class="entry-tags"><span class="tag">Web3</span><span class="tag">Rust</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/tor-bridge.html">
+                    <time datetime="2026-09-14">Sep 14, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Creating a Tor Bridge</span>
+                        <span class="entry-desc">Deploying an obfs4 bridge on Docker, with monitoring, alerting and host hardening.</span>
+                        <span class="entry-tags"><span class="tag">Privacy</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="reviews">
+                <a href="articles/en-us/secplus-review.html">
+                    <time datetime="2026-09-06">Sep 06, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">CompTIA Security+ (SY0-701) Review</span>
+                        <span class="entry-desc">Study reference for CompTIA&#x27;s Security+.</span>
+                        <span class="entry-tags"><span class="tag">Cybersecurity</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="reviews">
+                <a href="articles/en-us/ejpt-review.html">
+                    <time datetime="2026-03-29">Mar 29, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Junior Penetration Tester (eJPT) Review</span>
+                        <span class="entry-desc">Study reference for the eJPT certification from INE Security.</span>
+                        <span class="entry-tags"><span class="tag">Pentest</span><span class="tag">Hacking</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/oci-secops.html">
+                    <time datetime="2026-03-20">Mar 20, 2026</time>
+                    <span class="entry-body">
+                        <span class="entry-title">OCI-SecOps: Automated Security Infrastructure</span>
+                        <span class="entry-desc">Infrastructure orchestration toolkit for pentesting and security CI/CD on OCI Always Free.</span>
+                        <span class="entry-tags"><span class="tag">Pentest</span><span class="tag">Cloud</span><span class="tag">DevSecOps</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="career">
+                <a href="articles/en-us/tips/redteam-roadmap.html">
+                    <time datetime="2025-08-20">Aug 20, 2025</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Red Team Roadmap</span>
+                        <span class="entry-desc">Interactive roadmap in dependency order</span>
+                        <span class="entry-tags"><span class="tag">Red Team</span><span class="tag">Roadmap</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="reviews">
+                <a href="articles/en-us/cbp-review.html">
+                    <time datetime="2025-04-11">Apr 11, 2025</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Certified Blockchain Practitioner (CBP) Review</span>
+                        <span class="entry-desc">Study reference for the CBP certification from The SecOps Group.</span>
+                        <span class="entry-tags"><span class="tag">Blockchain</span><span class="tag">Web3</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="reviews">
+                <a href="articles/en-us/ccsp-aws-review.html">
+                    <time datetime="2025-04-07">Apr 07, 2025</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Certified Cloud Security Practitioner – AWS Review</span>
+                        <span class="entry-desc">Study reference for the CCSP-AWS certification from The SecOps Group.</span>
+                        <span class="entry-tags"><span class="tag">AWS</span><span class="tag">Cloud Security</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="reviews">
+                <a href="articles/en-us/cnsp-review.html">
+                    <time datetime="2025-03-31">Mar 31, 2025</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Certified Network Security Practitioner Review</span>
+                        <span class="entry-desc">Study reference for the CNSP certification from The SecOps Group.</span>
+                        <span class="entry-tags"><span class="tag">Network Security</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="reviews">
+                <a href="articles/en-us/cap-review.html">
+                    <time datetime="2025-01-21">Jan 21, 2025</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Certified AppSec Practitioner (CAP) Review</span>
+                        <span class="entry-desc">Study reference for the CAP certification from The SecOps Group.</span>
+                        <span class="entry-tags"><span class="tag">Web Security</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/own-vpn.html">
+                    <time datetime="2025-01-10">Jan 10, 2025</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Creating Your Own VPN</span>
+                        <span class="entry-desc">Creation and configuration of a VPN using your own server.</span>
+                        <span class="entry-tags"><span class="tag">OPSEC</span><span class="tag">Privacy</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/proxychains-use.html">
+                    <time datetime="2024-12-30">Dec 30, 2024</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Using Proxychains</span>
+                        <span class="entry-desc">Tool that redirects program traffic through one or more proxies.</span>
+                        <span class="entry-tags"><span class="tag">Privacy</span><span class="tag">OPSEC</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/opsec-environment.html">
+                    <time datetime="2024-12-18">Dec 18, 2024</time>
+                    <span class="entry-body">
+                        <span class="entry-title">OPSEC Environment Configuration</span>
+                        <span class="entry-desc">Setting up a privacy-focused Windows environment using Whonix.</span>
+                        <span class="entry-tags"><span class="tag">OPSEC</span></span>
+                    </span>
+                </a>
+            </li>
+            <li class="entry" data-category="technical">
+                <a href="articles/en-us/creating-tor-website.html">
+                    <time datetime="2024-12-05">Dec 05, 2024</time>
+                    <span class="entry-body">
+                        <span class="entry-title">Creating Websites on the Tor Network</span>
+                        <span class="entry-desc">Setting up a static website on the Tor network.</span>
+                        <span class="entry-tags"><span class="tag">Tor</span><span class="tag">Hidden Services</span><span class="tag">Deep Web</span></span>
+                    </span>
+                </a>
+            </li>
+            </ol>
 
-                <div class="category" id="career-category">
-                    <div class="category-header" onclick="toggleCategory('career')">
-                        <div class="category-title">
-                            <span>Career Tips</span>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">1 item</span>
-                                <span class="category-arrow">▼</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="category-content" id="career-content">
-                        <div class="category-inner">
-                            <article class="post" onclick="openArticle('articles/en-us/tips/redteam-roadmap.html', event)">
-                                <div>
-                                    <h2>Red Team Roadmap</h2>
-                                    <p>Interactive roadmap in dependency order</p>
-                                    <div class="meta">
-                                        <span class="meta-date">📅 Aug 20, 2025</span>
-                                    </div>
-                                    <div class="post-tags">
-                                        <span class="tag">Red Team</span>
-                                        <span class="tag">Roadmap</span>
-                                        <span class="tag">Career</span>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
+            <section class="writeups" id="writeups" data-category="writeups" aria-label="Write-ups">
+        <details class="wu-folder">
+            <summary><span>HackTheBox</span><span class="count">27</span></summary>
+            <details class="wu-folder wu-folder--nested">
+                <summary><span>Machines</span><span class="count">13</span></summary>
+                <ul class="wu-list">
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/beep.html"><span class="wu-name">Beep</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/blocky.html"><span class="wu-name">Blocky</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/blue.html"><span class="wu-name">Blue</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/devel.html"><span class="wu-name">Devel</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/irked.html"><span class="wu-name">Irked</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/jerry.html"><span class="wu-name">Jerry</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/knife.html"><span class="wu-name">Knife</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/kobold.html"><span class="wu-name">Kobold</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/lame.html"><span class="wu-name">Lame</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/legacy.html"><span class="wu-name">Legacy</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/optimum.html"><span class="wu-name">Optimum</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/reactor.html"><span class="wu-name">Reactor</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/machines/sense.html"><span class="wu-name">Sense</span><span class="wu-diff">Easy</span></a></li>
+                </ul>
+            </details>
+            <details class="wu-folder wu-folder--nested">
+                <summary><span>Starting Point</span><span class="count">14</span></summary>
+                <ul class="wu-list">
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/meow.html"><span class="wu-name">Meow</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/fawn.html"><span class="wu-name">Fawn</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/dancing.html"><span class="wu-name">Dancing</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/redeemer.html"><span class="wu-name">Redeemer</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/explosion.html"><span class="wu-name">Explosion</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/preignition.html"><span class="wu-name">Preignition</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/mongod.html"><span class="wu-name">Mongod</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/synced.html"><span class="wu-name">Synced</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/appointment.html"><span class="wu-name">Appointment</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/sequel.html"><span class="wu-name">Sequel</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/crocodile.html"><span class="wu-name">Crocodile</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/responder.html"><span class="wu-name">Responder</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/three.html"><span class="wu-name">Three</span><span class="wu-diff">Very Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/hackthebox/starting-point/archetype.html"><span class="wu-name">Archetype</span><span class="wu-diff">Very Easy</span></a></li>
+                </ul>
+            </details>
+        </details>
+        <details class="wu-folder">
+            <summary><span>TryHackMe</span><span class="count">15</span></summary>
+            <ul class="wu-list">
+                    <li><a href="articles/en-us/writeups/tryhackme/relevant.html"><span class="wu-name">Relevant</span><span class="wu-diff">Medium</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/olympus.html"><span class="wu-name">Olympus</span><span class="wu-diff">Medium</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/blueprint.html"><span class="wu-name">Blueprint</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/team.html"><span class="wu-name">Team</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/wgel.html"><span class="wu-name">Wgel CTF</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/startup.html"><span class="wu-name">Startup</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/basic-pentesting.html"><span class="wu-name">Basic Pentesting</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/bounty-hacker.html"><span class="wu-name">Bounty Hacker</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/blog.html"><span class="wu-name">Blog</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/ignite.html"><span class="wu-name">Ignite</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/cyberheroes.html"><span class="wu-name">CyberHeroes</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/brooklyn-nine-nine.html"><span class="wu-name">Brooklyn Nine Nine</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/agent-sudo.html"><span class="wu-name">Agent Sudo</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/kenobi.html"><span class="wu-name">Kenobi</span><span class="wu-diff">Easy</span></a></li>
+                    <li><a href="articles/en-us/writeups/tryhackme/blue.html"><span class="wu-name">Blue</span><span class="wu-diff">Easy</span></a></li>
+            </ul>
+        </details>
+            </section>
+        </main>
+        </div>
 
-                <!--
+        <!--
                     Hey, you there reading the source.
 
                     If you made it this far, your recon has already started. Good instinct.
@@ -718,7 +306,7 @@
                     b.
                 -->
 
-                <!-- Online tools: out of the menu for now
+        <!-- Online tools: out of the menu for now
                 <div class="category" id="tools-category">
                     <div class="category-header" onclick="toggleCategory('tools')">
                         <div class="category-title">
@@ -790,61 +378,48 @@
                     </div>
                 </div>
                 -->
-
-                <a class="category category--link" id="projects-category" href="projects-en.html">
-                    <div class="category-header">
-                        <div class="category-title">
-                            <span>Projects</span>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="category-count">24 items</span>
-                                <svg class="category-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M7 17L17 7M8 7h9v9" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-            </main>
-        </div>
     </div>
 
     <script>
-        // Toggle category expansion
-        function toggleCategory(categoryName) {
-            const category = document.getElementById(categoryName + '-category');
-            if (!category) return;
+        (function () {
+            var RECENT = 8;
+            var buttons = document.querySelectorAll('.filters button');
+            var entries = document.querySelectorAll('#entries .entry');
+            var writeups = document.getElementById('writeups');
+            var list = document.getElementById('entries');
 
-            // Close all other expanded categories
-            document.querySelectorAll('.category.expanded').forEach(cat => {
-                if (cat.id !== category.id) {
-                    cat.classList.remove('expanded');
-                }
-            });
-
-            // Toggle the clicked category
-            category.classList.toggle('expanded');
-        }
-
-        // Toggle a write-up subfolder (scoped accordion, like the main categories)
-        function toggleFolder(header, event) {
-            if (event) event.stopPropagation();
-            const folder = header.parentElement;
-            Array.prototype.forEach.call(folder.parentElement.children, function (sib) {
-                if (sib !== folder && sib.classList && sib.classList.contains('wu-folder')) {
-                    sib.classList.remove('open');
-                }
-            });
-            folder.classList.toggle('open');
-        }
-
-        // Open article in same tab
-        function openArticle(url, event) {
-            if (event) {
-                event.stopPropagation();
+            function show(filter) {
+                var shown = 0;
+                entries.forEach(function (li) {
+                    var visible = filter === 'recent' ? shown < RECENT : li.dataset.category === filter;
+                    li.hidden = !visible;
+                    if (visible) shown++;
+                });
+                list.hidden = filter === 'writeups';
+                writeups.hidden = filter !== 'writeups';
+                buttons.forEach(function (b) {
+                    b.setAttribute('aria-pressed', String(b.dataset.filter === filter));
+                });
             }
-            window.location.href = url;
-        }
+
+            buttons.forEach(function (b) {
+                b.addEventListener('click', function () {
+                    var f = b.dataset.filter;
+                    history.replaceState(null, '', f === 'recent' ? location.pathname : '#' + f);
+                    show(f);
+                });
+            });
+
+            function fromHash() {
+                var h = location.hash.slice(1);
+                var known = Array.prototype.some.call(buttons, function (b) { return b.dataset.filter === h; });
+                show(known ? h : 'recent');
+            }
+
+            // links para "#career" etc. com a home já aberta, e o botão voltar
+            window.addEventListener('hashchange', fromHash);
+            fromHash();
+        })();
     </script>
 </body>
 

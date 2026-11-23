@@ -1,0 +1,241 @@
+/* Esqueleto comum a todas as páginas: cores, barra do topo, caminho, colunas. */
+
+:root {
+    color-scheme: dark;
+    --canvas: #161616;
+    --ink: #ececec;
+    --ink-muted: #a3a3a3;
+    --ink-faint: #8a8a8a;
+    --rule: #2b2b2b;
+    /* HackTheBox green: only for the current filter, focus and selection */
+    --signal: #a4e635;
+    --selection: rgba(164, 230, 53, 0.28);
+
+    --type-name: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+    --type-title: 1.0625rem;
+    --type-body: 1rem;
+    --type-small: 0.875rem;
+
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+    --measure: 46rem;
+    --raised: #1c1c1c;
+    --chip-border: #333;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--canvas);
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: var(--type-body);
+    line-height: 1.55;
+    letter-spacing: 0.005em;
+    caret-color: var(--signal);
+}
+
+::selection {
+    background: var(--selection);
+    color: var(--ink);
+}
+
+a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.page {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 5rem;
+}
+
+/* Barra do topo: caminho ou link à esquerda, idioma à direita */
+
+/* páginas sem .page em volta (posts, projetos) */
+.post-nav {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 0;
+}
+
+
+.site-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: var(--type-small);
+    color: var(--ink-muted);
+}
+
+.site-nav a {
+    text-decoration: none;
+}
+
+.site-nav a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+}
+
+.lang {
+    display: flex;
+    gap: 0.375rem;
+    margin: 0;
+}
+
+.lang [aria-current="page"] {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+
+/* Caminho no topo, "brennocm / artigos / lethe": cada trecho leva um nível acima */
+.crumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.375rem;
+    margin: 0;
+}
+
+.crumb a {
+    color: var(--ink-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 0.25em;
+}
+
+.crumb a:hover {
+    color: var(--ink);
+    text-decoration-color: currentColor;
+}
+
+.crumb span[aria-hidden] {
+    color: var(--ink-faint);
+}
+
+.crumb [aria-current] {
+    color: var(--ink);
+}
+
+/* Título da página, sempre na coluna da esquerda */
+
+.intro {
+    margin: 3.5rem 0 3rem;
+}
+
+.intro h1 {
+    margin: 0;
+    font-size: var(--type-name);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+}
+
+.intro h1 a {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* uma cópia verde do nome por cima, revelada da esquerda para a direita */
+.intro h1 a::after {
+    content: attr(data-text);
+    content: attr(data-text) / "";
+    position: absolute;
+    inset: 0;
+    color: var(--signal);
+    white-space: nowrap;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 420ms var(--ease);
+    pointer-events: none;
+}
+
+.intro h1 a:hover::after,
+.intro h1 a:focus-visible::after {
+    clip-path: inset(0 0 0 0);
+}
+
+.intro-text {
+    margin: 0.75rem 0 0;
+    max-width: 38rem;
+    color: var(--ink-muted);
+    text-wrap: pretty;
+}
+
+/* Telas largas: título fixo à esquerda, conteúdo à direita, em todas as páginas */
+
+@media (min-width: 1024px) {
+    .layout {
+        display: grid;
+        grid-template-columns: minmax(16rem, 22rem) minmax(0, 46rem);
+        justify-content: space-between;
+        gap: 4rem;
+    }
+
+    .layout .intro {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        margin: 0;
+        padding-top: 4.5rem;
+    }
+
+    .layout .intro h1 {
+        font-size: 3rem;
+    }
+
+    .layout main {
+        padding-top: 4.5rem;
+    }
+}
+
+@media (max-width: 1023px) {
+    .page,
+    .post-nav {
+        max-width: var(--measure);
+    }
+}
+
+@media (max-width: 560px) {
+    .intro {
+        margin: 2.5rem 0 2.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+
+    .intro h1 a::after {
+        clip-path: none;
+        opacity: 0;
+    }
+
+    .intro h1 a:hover::after,
+    .intro h1 a:focus-visible::after {
+        opacity: 1;
+    }
+}
+
