@@ -352,9 +352,106 @@
     scroll-margin-top: 1.5rem;
 }
 
-/* a coluna da esquerda aqui é mais alta que a tela: sem fixar, senão o fim do mapa some */
+/* Telas largas: a coluna da esquerda é mais alta que a tela, então ela rola junto
+   e só o mapa fica preso no topo, acompanhando o currículo. */
 @media (min-width: 1024px) {
     .layout .intro {
         position: static;
+        align-self: stretch;
+    }
+
+    .career-map {
+        position: sticky;
+        top: 1.5rem;
+    }
+}
+
+/* a experiência que está na tela fica marcada no mapa */
+.cm-row.is-current {
+    color: var(--ink);
+}
+
+.cm-row.is-current .cm-label {
+    font-weight: 600;
+}
+
+/* Contato: só o e-mail, grande, com o mesmo preenchimento verde do nome na home */
+.mail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    padding-top: 1.25rem;
+}
+
+.mail-link {
+    position: relative;
+    display: inline-block;
+    color: var(--ink);
+    /* cabe numa linha até 320 px */
+    font-size: min(2rem, 5.6vw);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 200ms var(--ease);
+}
+
+.mail-link::after {
+    content: attr(data-text);
+    content: attr(data-text) / "";
+    position: absolute;
+    inset: 0;
+    color: var(--signal);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 420ms var(--ease);
+    pointer-events: none;
+}
+
+.mail-link:hover,
+.mail-link:focus-visible {
+    text-decoration-color: var(--signal);
+}
+
+.mail-link:hover::after,
+.mail-link:focus-visible::after {
+    clip-path: inset(0 0 0 0);
+}
+
+.mail-btn {
+    padding: 0.4375rem 0.875rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: none;
+    color: var(--ink-muted);
+    font: inherit;
+    font-size: var(--type-small);
+    cursor: pointer;
+    transition: border-color 150ms var(--ease), color 150ms var(--ease);
+}
+
+.mail-btn:hover {
+    border-color: var(--ink-faint);
+    color: var(--ink);
+}
+
+.mail-btn.is-done {
+    border-color: var(--signal);
+    color: var(--signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mail-link::after {
+        clip-path: none;
+        opacity: 0;
+    }
+
+    .mail-link:hover::after,
+    .mail-link:focus-visible::after {
+        opacity: 1;
     }
 }
