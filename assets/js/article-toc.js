@@ -65,6 +65,27 @@
     var toc = document.querySelector('.toc') || buildToc();
     if (!toc) return;
 
+    /* No celular o índice começa fechado: um índice longo empurrava o texto para longe. */
+    var tocTitle = toc.querySelector('h2');
+    if (tocTitle) {
+        var toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'toc-toggle';
+        toggle.textContent = tocTitle.textContent;
+        tocTitle.textContent = '';
+        tocTitle.appendChild(toggle);
+        var small = window.matchMedia('(max-width: 1023px)');
+        var setOpen = function (open) {
+            toc.classList.toggle('is-collapsed', !open);
+            toggle.setAttribute('aria-expanded', String(open));
+        };
+        setOpen(!small.matches);
+        toggle.addEventListener('click', function () {
+            if (small.matches) setOpen(toc.classList.contains('is-collapsed'));
+        });
+        small.addEventListener('change', function (e) { setOpen(!e.matches); });
+    }
+
     var entries = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'))
         .map(function (link) {
             return { link: link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) };

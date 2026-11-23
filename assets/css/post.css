@@ -1,0 +1,321 @@
+/* Posts (artigos, write-ups, reviews, dicas): camada sobre articles.css.
+   Esqueleto, cores e barra do topo em site.css; aqui só o que é do texto. */
+
+body {
+    padding-top: 0;
+    line-height: 1.55;
+}
+
+.content {
+    max-width: 72rem;
+    margin: 0 auto 4rem;
+    padding: 3rem 1rem 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+}
+
+.article-header {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 1.5rem;
+}
+
+.article-header h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    text-wrap: balance;
+}
+
+.article-header .meta {
+    font-size: var(--type-small);
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+}
+
+/* índice: sem números e sem rótulo em caixa alta */
+.toc {
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+    scrollbar-color: var(--rule) transparent;
+}
+
+.toc h2 {
+    font-size: var(--type-small);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-muted);
+}
+
+.toc > ul > li > a::before {
+    content: none;
+}
+
+.toc a {
+    padding: 0.375rem 0 0.375rem 0.875rem;
+    font-size: var(--type-small);
+    color: var(--ink-faint);
+    border-left: 1px solid var(--rule);
+    transition: color 150ms var(--ease), border-color 150ms var(--ease);
+}
+
+.toc a:hover {
+    color: var(--ink);
+    border-left-color: var(--ink-faint);
+}
+
+.toc a.active,
+.toc a.active-group {
+    color: var(--ink);
+    border-left-color: var(--signal);
+}
+
+.toc a.active::before {
+    color: inherit;
+}
+
+.toc::-webkit-scrollbar-thumb,
+.toc:hover::-webkit-scrollbar-thumb,
+.toc::-webkit-scrollbar-thumb:hover {
+    background: var(--rule);
+}
+
+/* corpo */
+.article-body {
+    /* caminhos e listas com "/" (var/lib/tor/..., A/B/C) quebravam a página em 320 px */
+    overflow-wrap: anywhere;
+    max-width: none;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+}
+
+.article-body p,
+.article-body li {
+    color: #cfcfcf;
+    text-wrap: pretty;
+}
+
+.article-body h2 {
+    margin: 3.5rem 0 1.25rem;
+    padding-top: 0;
+    border-top: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    text-wrap: balance;
+}
+
+.article-body h2:first-child,
+.article-body > h2:first-of-type {
+    margin-top: 2.5rem;
+}
+
+.article-body h2[id]::before {
+    content: none;
+}
+
+.article-body h3 {
+    font-size: 1.1875rem;
+    color: var(--ink);
+}
+
+.article-body h4 {
+    color: var(--ink);
+}
+
+.article-body p > b:first-child:has(+ br),
+.article-body p > br + b:has(+ br) {
+    font-size: 1.05em;
+    color: var(--ink);
+}
+
+.article-body a {
+    color: var(--ink);
+    border-bottom: 0;
+    text-decoration: underline;
+    text-decoration-color: var(--ink-faint);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color 150ms var(--ease), text-decoration-color 150ms var(--ease);
+}
+
+.article-body a:hover {
+    color: var(--signal);
+    text-decoration-color: currentColor;
+}
+
+.article-body img {
+    border-radius: 4px;
+    border-color: var(--rule);
+}
+
+/* código: texto neutro; o verde fica para estado e foco */
+.code-block {
+    background: #101010;
+    color: #dcdcdc;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+}
+
+.code-block::-webkit-scrollbar-thumb,
+.code-block::-webkit-scrollbar-thumb:hover {
+    background: var(--rule);
+}
+
+/* write-ups */
+.writeup-body h2 {
+    margin: 2.5rem 0 1rem;
+    padding-top: 0;
+}
+
+.attack-flow {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+}
+
+.attack-flow figcaption {
+    color: var(--ink-muted);
+    font-size: var(--type-small);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.attack-flow svg {
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* dicas: listas de links */
+.guide .article-body .link-list a::after {
+    content: none;
+}
+
+footer {
+    color: var(--ink-faint);
+    border-top: 0;
+}
+
+/* Telas largas: título e índice à esquerda, texto à direita, como nas outras páginas */
+@media (min-width: 1024px) {
+    .content {
+        display: grid;
+        grid-template-columns: minmax(16rem, 22rem) minmax(0, 46rem);
+        grid-template-rows: auto 1fr;
+        grid-template-areas:
+            "cabecalho corpo"
+            "indice    corpo";
+        justify-content: space-between;
+        column-gap: 4rem;
+        padding-top: 4.5rem;
+    }
+
+    .article-header {
+        align-self: start;
+    }
+
+    .article-body > :first-child,
+    .article-body > h2:first-of-type:first-child {
+        margin-top: 0;
+    }
+
+    .toc {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 1023px) {
+    .content {
+        max-width: var(--measure);
+    }
+
+    .content {
+        display: block;
+    }
+
+    .toc {
+        border-color: var(--rule);
+    }
+}
+
+/* índice: no celular vira um botão que abre e fecha (article-toc.js) */
+.toc-toggle {
+    all: unset;
+}
+
+@media (max-width: 1023px) {
+    .toc-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .toc-toggle::after {
+        content: "";
+        width: 0.4rem;
+        height: 0.4rem;
+        margin-right: 0.25rem;
+        border-right: 1.5px solid var(--ink-faint);
+        border-bottom: 1.5px solid var(--ink-faint);
+        transform: rotate(45deg);
+        transition: transform 150ms var(--ease);
+    }
+
+    .toc-toggle:focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 3px;
+    }
+
+    .toc.is-collapsed .toc-toggle::after {
+        transform: rotate(-45deg);
+    }
+
+    .toc.is-collapsed > ul {
+        display: none;
+    }
+
+    .toc.is-collapsed h2 {
+        margin-bottom: 0;
+    }
+
+    .toc {
+        padding: 1rem 0;
+    }
+}
+
+@media (max-width: 560px) {
+    /* o diagrama encolhia junto com a tela e as letras ficavam ilegíveis */
+    .attack-flow {
+        overflow-x: auto;
+    }
+
+    .attack-flow svg {
+        min-width: 560px;
+    }
+
+    .content {
+        padding: 2.5rem 1rem 0;
+        border: 0;
+    }
+}
+
+/* Red Team Roadmap: ferramenta interativa, na mesma largura e com o mesmo título */
+.rt-main {
+    max-width: 72rem;
+    padding: 3rem 1rem 5rem;
+}
+
+.rt-intro h1 {
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+}
