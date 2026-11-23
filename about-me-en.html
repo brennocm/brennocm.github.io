@@ -1,907 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/site.css">
+    <link rel="stylesheet" href="assets/css/about.css">
     <link rel="icon" type="image/png" href="/img/home/favicon.png" />
     <title>about me.</title>
-    <style>
-        .about-page {
-            min-height: 100vh;
-            background: #1a1a1a;
-            padding: 80px 20px 40px;
-        }
-
-        .back-home {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #9fef00;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-decoration: none;
-            padding: 10px 16px;
-            border: 1px solid rgba(159, 239, 0, 0.3);
-            border-radius: 8px;
-            background: rgba(26, 26, 26, 0.9);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .back-home:hover {
-            background: rgba(159, 239, 0, 0.1);
-            border-color: #9fef00;
-            transform: translateX(-5px);
-        }
-
-        .back-home svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Language switch - top right, same feel as the "Back" button */
-        .lang-switch {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            padding: 8px 10px;
-            border: 1px solid rgba(159, 239, 0, 0.3);
-            border-radius: 8px;
-            background: rgba(26, 26, 26, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-
-        .lang-switch a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 24px;
-            border-radius: 5px;
-            overflow: hidden;
-            opacity: 0.55;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .lang-switch a:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .lang-switch a.active {
-            opacity: 1;
-            border-color: #9fef00;
-        }
-
-        .lang-switch svg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .about-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .about-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .about-header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #fff;
-            margin: 0 0 16px;
-        }
-
-        .about-header .subtitle {
-            font-size: 1.2rem;
-            color: #9fef00;
-            font-family: 'Courier New', monospace;
-        }
-
-        .profile-section {
-            display: flex;
-            align-items: stretch;
-            gap: 40px;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .profile-intro {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .profile-intro p {
-            color: #b0b0b0;
-            line-height: 1.8;
-            font-size: 1.05rem;
-            margin: 0;
-            text-align: justify;
-        }
-
-        .info-section {
-            background: rgba(17, 17, 17, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .info-section h3 {
-            font-size: 1.4rem;
-            color: #9fef00;
-            margin: 0 0 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(159, 239, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .info-section h3 svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .info-item {
-            margin-bottom: 20px;
-            padding-left: 20px;
-            border-left: 2px solid #333;
-        }
-
-        .info-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .info-item h4 {
-            font-size: 1.1rem;
-            color: #fff;
-            margin: 0 0 5px;
-        }
-
-        .info-item .company {
-            color: #9fef00;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-        }
-
-        .info-item .period {
-            color: #666;
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-        }
-
-        .info-item p {
-            color: #888;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin: 0;
-            text-align: justify;
-        }
-
-        .certifications-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .cert-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .cert-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(159, 239, 0, 0.3);
-        }
-
-        .cert-item h4 {
-            color: #fff;
-            font-size: 0.95rem;
-            margin: 0 0 5px;
-        }
-
-        .cert-item .issuer {
-            color: #666;
-            font-size: 0.85rem;
-        }
-
-        .contact-links {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #b0b0b0;
-            text-decoration: none;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .contact-link:hover {
-            color: #9fef00;
-            border-color: rgba(159, 239, 0, 0.3);
-            transform: translateY(-3px);
-        }
-
-        .contact-link svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Tooltip for email */
-        .contact-link.email-tooltip {
-            position: relative;
-        }
-
-        .contact-link.email-tooltip::after {
-            content: attr(data-email);
-            position: absolute;
-            bottom: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(17, 17, 17, 0.95);
-            color: #9fef00;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(159, 239, 0, 0.3);
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .contact-link.email-tooltip::before {
-            content: '';
-            position: absolute;
-            bottom: calc(100% + 2px);
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: rgba(159, 239, 0, 0.3);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        .contact-link.email-tooltip:hover::after,
-        .contact-link.email-tooltip:hover::before {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        @media (max-width: 768px) {
-            .about-page {
-                padding: 60px 25px 30px;
-            }
-
-            .about-header {
-                margin-bottom: 40px;
-            }
-
-            .about-header h1 {
-                font-size: 2rem;
-            }
-
-            .about-header .subtitle {
-                font-size: 0.95rem;
-            }
-
-            /* on phones each role gets its own line, without the separator */
-            .about-header .role {
-                display: block;
-                line-height: 1.5;
-            }
-
-            .about-header .role-sep {
-                display: none;
-            }
-
-            .profile-section {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                gap: 25px;
-            }
-
-            .profile-intro {
-                min-width: 100%;
-            }
-
-            .profile-intro p {
-                font-size: 0.95rem;
-                text-align: justify;
-            }
-
-            .info-section {
-                padding: 20px 15px;
-            }
-
-            .info-section h3 {
-                font-size: 1.2rem;
-            }
-
-            .info-item {
-                padding-left: 15px;
-            }
-
-            .info-item h4 {
-                font-size: 1rem;
-            }
-
-            .info-item p {
-                font-size: 0.9rem;
-            }
-
-
-
-            .certifications-list {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-links {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .contact-link {
-                justify-content: center;
-            }
-
-            .back-home {
-                top: 10px;
-                left: 10px;
-                padding: 8px 12px;
-                font-size: 0.85rem;
-            }
-
-            .lang-switch {
-                top: 10px;
-                right: 10px;
-                padding: 6px 8px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .about-page {
-                padding: 55px 20px 20px;
-            }
-
-            .about-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .about-header .subtitle {
-                font-size: 0.85rem;
-            }
-
-            .info-section {
-                padding: 15px 12px;
-            }
-
-            .info-section h3 {
-                font-size: 1.1rem;
-                gap: 8px;
-            }
-
-            .info-section h3 svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            .info-item {
-                padding-left: 12px;
-                margin-bottom: 15px;
-            }
-
-            .info-item h4 {
-                font-size: 0.95rem;
-            }
-
-            .info-item .company {
-                font-size: 0.85rem;
-            }
-
-            .info-item .period {
-                font-size: 0.8rem;
-            }
-
-            .info-item p {
-                font-size: 0.85rem;
-                line-height: 1.5;
-            }
-        }
-    </style>
 </head>
-
 <body>
-    <div class="about-page">
-        <a href="index-en.html" class="back-home">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Back
-        </a>
-
-        <div class="lang-switch">
-            <a href="about-me.html" title="Português (Brasil)">
-                <svg viewBox="0 0 72 48" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="72" height="48" fill="#009c3b" />
-                    <polygon points="36,4 68,24 36,44 4,24" fill="#ffdf00" />
-                    <circle cx="36" cy="24" r="12" fill="#002776" />
-                    <path d="M24.5,21 Q36,28 47.5,21" stroke="#fff" stroke-width="2.5" fill="none" />
-                    <circle cx="30" cy="28" r="0.6" fill="#fff" />
-                    <circle cx="33" cy="30" r="0.5" fill="#fff" />
-                    <circle cx="36" cy="31" r="0.6" fill="#fff" />
-                    <circle cx="39" cy="30" r="0.5" fill="#fff" />
-                    <circle cx="42" cy="28" r="0.6" fill="#fff" />
-                </svg>
+<div class="page">
+    <nav class="site-nav">
+        <p class="crumb"><a href="index-en.html">brennocm</a><span aria-hidden="true">/</span><span aria-current="page">about</span></p>
+        <p class="lang" aria-label="Language">
+            <a href="about-me.html" lang="pt-BR">PT</a>
+            <span aria-hidden="true">/</span>
+            <a href="about-me-en.html" lang="en" aria-current="page">EN</a>
+        </p>
+    </nav>
+    <div class="layout">
+    <header class="intro">
+        <h1>Brenno M.</h1>
+        <p class="roles-line">Security Engineer, Information Security Researcher</p>
+        <p class="intro-text">I'm a cybersecurity engineer passionate about protecting the internet, obsessed with finding vulnerabilities and helping organizations strengthen their defenses. Outside of work, I'm a big admirer of classic literature, becoming an avid reader of Western works. My favorite books are: "The Death of Ivan Ilyich", "The Sorrows of Young Werther", "Family Happiness", and "Dom Casmurro".</p>
+        <figure class="career-map" style="--today:0.8542" aria-label="Career timeline">
+        <div class="cm-axis" aria-hidden="true"><span class="cm-label"></span><span class="cm-ticks"><span style="--x:0.0000">2020</span><span style="--x:0.2500">2022</span><span style="--x:0.5000">2024</span><span style="--x:0.7500">2026</span><span class="cm-now" style="--x:0.8542">today</span></span></div>
+        <div class="cm-group">
+            <p class="cm-group-name">Work</p>
+            <a class="cm-row" href="#xp-serasa-experian-cybersecurity-engineer" data-tip="Cybersecurity Engineer, Jun 2025 – Present" aria-label="Cybersecurity Engineer, Serasa Experian: Jun 2025 – Present">
+                <span class="cm-label">Serasa Experian</span>
+                <span class="cm-tip" aria-hidden="true">Cybersecurity Engineer<br><span>Jun 2025 – Present</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--work cm-bar--now" style="--a:0.6771;--b:0.8542;--f:0.8542"></span></span>
             </a>
-            <a href="about-me-en.html" class="active" title="English (US)">
-                <svg viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="36" height="24" fill="#fff" />
-                    <rect width="36" height="1.85" y="0" fill="#b22234" />
-                    <rect width="36" height="1.85" y="3.7" fill="#b22234" />
-                    <rect width="36" height="1.85" y="7.4" fill="#b22234" />
-                    <rect width="36" height="1.85" y="11.1" fill="#b22234" />
-                    <rect width="36" height="1.85" y="14.8" fill="#b22234" />
-                    <rect width="36" height="1.85" y="18.5" fill="#b22234" />
-                    <rect width="36" height="1.85" y="22.2" fill="#b22234" />
-                    <rect width="14.4" height="12.95" fill="#3c3b6e" />
-                </svg>
+            <a class="cm-row" href="#xp-darede-cyber-defense-analyst-soc" data-tip="Cyber Defense Analyst | SOC, May 2023 – Dec 2024" aria-label="Cyber Defense Analyst | SOC, Darede: May 2023 – Dec 2024">
+                <span class="cm-label">Darede</span>
+                <span class="cm-tip" aria-hidden="true">Cyber Defense Analyst | SOC<br><span>May 2023 – Dec 2024</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--work" style="--a:0.4167;--b:0.6146;--f:0.6146"></span></span>
             </a>
         </div>
-
-        <div class="about-container">
-            <div class="about-header">
-                <h1>Brenno M.</h1>
-                <span class="subtitle"><span class="role">// Security Engineer</span><span
-                        class="role-sep"> | </span><span class="role">Information Security Researcher</span></span>
-            </div>
-
-            <!-- Profile Section -->
-            <div class="profile-section">
-                <div class="profile-intro">
-                    <p>
-                        I'm a cybersecurity engineer passionate about protecting the internet,
-                        obsessed with finding vulnerabilities and helping organizations strengthen their
-                        defenses. Outside of work, I'm a big admirer of classic literature, becoming an avid reader of
-                        Western works. My favorite books are: "The Death of Ivan Ilyich", "The Sorrows of Young
-                        Werther", "Family Happiness", and "Dom Casmurro".
-                    </p>
-                </div>
-            </div>
-
-            <!-- Experience Section -->
-            <div class="info-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                    </svg>
-                    Professional Experience
-                </h3>
-
-                <div class="info-item">
-                    <h4>Cybersecurity Engineer</h4>
-                    <div class="company">Serasa Experian</div>
-                    <div class="period">Jun 2025 - Present · Remote</div>
-                    <p>
-                        Serasa Experian, part of the global Experian group, is a credit bureau and datatech that
-                        provides risk analysis, authentication, and fraud prevention solutions for businesses, as well
-                        as consumer services like the Serasa Score and debt negotiation.
-                        <br><br>
-                        Key responsibilities:
-                        <br>• Automating IAM Assurance workflows to improve speed, reliability, and audit readiness
-                        <br>• Implementing and advocating for role-based access control (RBAC) in IAM processes
-                        <br>• Maintaining and enhancing Identity Governance & Administration (IGA) platforms like
-                        SailPoint and Privileged Access Management (PAM) solutions like CyberArk
-                    </p>
-                </div>
-
-                <div class="info-item">
-                    <h4>Cyber Defense Analyst | SOC</h4>
-                    <div class="company">Darede</div>
-                    <div class="period">May 2023 - Dec 2024 · 1 year 8 months · Remote</div>
-                    <p>
-                        Darede is a consultancy company specializing in Information Technology (IT) services. As a
-                        partner of Amazon Web Services and Microsoft Azure, Darede aims to bring innovation and
-                        excellence by offering its customers the best services in the market.
-                        <br><br>
-                        Key responsibilities:
-                        <br>• Operating vulnerability management and SIEM systems, aiming for the shortest response time
-                        to security incidents
-                        <br>• Working with identity management and access provisioning
-                        <br>• Executing playbooks and monitoring incident conditions
-                        <br>• Preparing reports and indicators of security threats and incidents
-                        <br>• Operating in clients' AWS infrastructure, working with services like CloudTrail, IAM, WAF,
-                        GuardDuty, Inspector, and CloudWatch
-                    </p>
-                </div>
-            </div>
-
-            <!-- Volunteer Section -->
-            <div class="info-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                    Volunteer Experience
-                </h3>
-
-                <div class="info-item">
-                    <h4>Tor Bridge Operator</h4>
-                    <div class="company">The Tor Project</div>
-                    <div class="period">Sep 2026 - Present</div>
-                    <p>
-                        The Tor Project is a nonprofit developing free and open-source privacy and anti-censorship technology, relied on by journalists, activists, and everyday users in countries with restricted internet access.
-                        <br><br>
-                        Key contributions:
-                        <br>• Deploying and maintaining an obfs4 bridge relay, providing an unlisted entry point that helps users in censored regions connect to the Tor network undetected
-                        <br>• Hardening and monitoring the underlying server infrastructure (firewall, intrusion prevention, automated security patching) to keep the relay reliable and secure
-                        <br>• Building automated monitoring (uptime alerts and daily network-status reporting via the Tor Metrics API) to track relay health and availability
-                        <br>• Following Tor Project operational best practices for relay configuration and contact reporting
-                    </p>
-                </div>
-
-                <div class="info-item">
-                    <h4>Security Researcher &amp; CTF Player</h4>
-                    <div class="company">hackersOnSteroids</div>
-                    <div class="period">Aug 2026 - Present</div>
-                    <p>
-                        hackersOnSteroids is Brazil's #1-ranked team on Hack The Box (peak #9 worldwide), an international collective of ~30 pentesters, exploit/malware developers, and infrastructure and mobile security specialists competing together since 2024.
-                        <br><br>
-                        Key contributions:
-                        <br>• Competing weekly in Hack The Box's active season, working through machines across Web, Pwn, Reverse Engineering, Active Directory, and Cryptography categories under competitive time pressure
-                        <br>• Writing internal write-ups on retired machines, exploit notes, and custom tooling for the team's blog, documenting techniques for other members to learn from
-                        <br>• Studying and applying emerging offensive security techniques and TTPs to stay competitive against top-ranked global teams
-                        <br>• Collaborating with teammates and partner crews on knowledge-sharing and post-competition retrospectives to continuously improve team performance
-                    </p>
-                </div>
-
-                <div class="info-item">
-                    <h4>Lead Cybersecurity Researcher</h4>
-                    <div class="company">LICS | UNICAMP Cybersecurity League</div>
-                    <div class="period">Feb 2025 - Dec 2026 · 1 year 11 months</div>
-                    <p>
-                        LICS (UNICAMP Cybersecurity League) is a student-led organization focused on hands-on cybersecurity learning through events, workshops, and community-driven study.
-                        <br><br>
-                        Key contributions:
-                        <br>• Led the LICS OffSec Festival, a free online event featuring 4 well-known cybersecurity professionals and nearly 900 registrations, designed to bridge academia and industry by making professional-level talks accessible at no cost
-                        <br>• Built and maintained the group's study roadmap, helping members follow a structured path across core offensive and defensive security topics
-                        <br>• Created training materials (technical and theoretical) to support continuous learning and practical skill development
-                        <br>• Helped plan and prepare CTF practice sessions to strengthen hands-on security skills and teamwork
-                    </p>
-                </div>
-
-                <div class="info-item">
-                    <h4>Web3 Security Researcher</h4>
-                    <div class="company">LBU | UNICAMP Blockchain League</div>
-                    <div class="period">Feb 2023 - Dec 2023 · 11 months</div>
-                    <p>
-                        LBU (UNICAMP Blockchain League) is a student-led group focused on blockchain learning and practical applications through community-driven content.
-                        <br><br>
-                        Key contributions:
-                        <br>• Writing 4 technical articles on Web3 and blockchain security topics, translating concepts into practical takeaways for students
-                        <br>• Creating technical and theoretical learning materials to support the group's study track
-                        <br>• Supporting the newsletter by proposing themes, doing content review, and ensuring technical accuracy and clarity
-                    </p>
-                </div>
-
-                <div class="info-item">
-                    <h4>"Multiplicadores" Program | Volunteer Seller</h4>
-                    <div class="company">Fundação Estudar</div>
-                    <div class="period">May 2022 - Aug 2022 · 4 months · Social Services</div>
-                    <p>
-                        Fundação Estudar is a non-profit organization dedicated to education. Its core belief is that Brazil will become a better country with more determined young people pursuing paths that make a positive impact.<br><br>In my volunteer role, I worked in a sales position with the mission of reaching and influencing as many people as possible.
-                    </p>
-                </div>
-
-                <div class="info-item">
-                    <h4>DIO Voluntary Program | Usability Tester</h4>
-                    <div class="company">Digital Innovation One</div>
-                    <div class="period">Mar 2022 - Dec 2022 · 10 months</div>
-                    <p>
-                        DIO, which stands for Digital Innovation One, is an EdTech company that collaborates with leading players in the Brazilian market to democratize technology education.<br><br>As a DIO Tester, I contributed by providing feedback on upcoming advertising content and participating in surveys aimed at enhancing Digital Innovation One's digital services.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Education Section -->
-            <div class="info-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                    </svg>
-                    Education
-                </h3>
-                <div class="info-item">
-                    <h4>Bachelor of Technology in Systems Analysis and Development</h4>
-                    <div class="company">State University of Campinas (UNICAMP)</div>
-                    <div class="period">Mar 2022 - Jul 2027</div>
-                    <p>
-                        The Technology in Systems Analysis and Development (TADS) program is a UNICAMP course in the IT
-                        field. This course is designed for students interested in pursuing careers related to software
-                        analysis, design, development, testing, and maintenance.
-                    </p>
-                </div>
-
-                <div class="info-item">
-                    <h4>Higher Interdisciplinary Training Program (ProFIS)</h4>
-                    <div class="company">State University of Campinas (UNICAMP)</div>
-                    <div class="period">Mar 2020 - Apr 2021</div>
-                    <p>
-                        The Higher Interdisciplinary Training Program (ProFIS) is an exclusive undergraduate course
-                        offered by UNICAMP for students from public schools in Campinas. The program selects the top two
-                        students from each school based on their ENEM scores, and I had the honor of ranking first at my
-                        school.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Skills Section -->
-            <div class="info-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                    </svg>
-                    Technical Skills
-                </h3>
-
-                <div class="certifications-list">
-                    <div class="cert-item">
-                        <h4>Cybersecurity</h4>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Penetration Testing</h4>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Web Application Security</h4>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Network Security</h4>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Red Team Operations</h4>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Cloud Security</h4>
-                        <div class="issuer">AWS</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>DevSecOps</h4>
-                        <div class="issuer">CI/CD security, SAST, DAST, SCA</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Software Developer</h4>
-                        <div class="issuer">C/C++, Java, Python, Go, Rust</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Automation Developer</h4>
-                        <div class="issuer">PowerShell</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Certifications Section -->
-            <div class="info-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="8" r="7"></circle>
-                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                    </svg>
-                    Certifications
-                </h3>
-
-                <div class="certifications-list">
-                    <div class="cert-item">
-                        <h4>CompTIA Security+ (SY0-701)</h4>
-                        <div class="issuer">CompTIA · Sep 2026</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Junior Penetration Tester (eJPT)</h4>
-                        <div class="issuer">INE Security · Mar 2026</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Certified Blockchain Practitioner (CBP)</h4>
-                        <div class="issuer">The SecOps Group · Apr 2025</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Certified Cloud Security Practitioner – AWS (CCSP-AWS)</h4>
-                        <div class="issuer">The SecOps Group · Apr 2025</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Certified Network Security Practitioner (CNSP)</h4>
-                        <div class="issuer">The SecOps Group · Mar 2025</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Certified AppSec Practitioner (CAP)</h4>
-                        <div class="issuer">The SecOps Group · Jan 2025</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Multi-Cloud Red Team Analyst (MCRTA)</h4>
-                        <div class="issuer">CyberWarfare Labs · Jun 2024</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>AWS Certified Cloud Practitioner (AWS CCP)</h4>
-                        <div class="issuer">Amazon Web Services (AWS) · Aug 2023</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Courses Section -->
-            <div class="info-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                    </svg>
-                    Courses
-                </h3>
-
-                <div class="certifications-list">
-                    <div class="cert-item">
-                        <h4>The Foundations of Cybersecurity</h4>
-                        <div class="issuer">Coursera · Kennesaw State University</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Data Security &amp; Information Privacy</h4>
-                        <div class="issuer">Coursera · Macquarie University</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Identity Access Management (IAM) and Secure Authentication</h4>
-                        <div class="issuer">Coursera · Macquarie University</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Cyber Academy 2025</h4>
-                        <div class="issuer">Febraban</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Ethical Hacking Web API (EHAPI)</h4>
-                        <div class="issuer">GoHacking</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Security Essentials (GHSE)</h4>
-                        <div class="issuer">GoHacking</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Web Penetration Tester Path</h4>
-                        <div class="issuer">HTB Academy</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Recon Badge</h4>
-                        <div class="issuer">PentesterLab</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Introduction to Offensive Security with Artificial Intelligence</h4>
-                        <div class="issuer">Red Team Leaders</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Introduction to Red Team Operation Management</h4>
-                        <div class="issuer">Red Team Leaders</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>OpSec & Anonymity for Red Teams</h4>
-                        <div class="issuer">Red Team Leaders</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>DevSecOps Learning Path</h4>
-                        <div class="issuer">TryHackMe</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Jr Penetration Tester Learning Path</h4>
-                        <div class="issuer">TryHackMe</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Web Fundamentals Learning Path</h4>
-                        <div class="issuer">TryHackMe</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Android Application Analysis</h4>
-                        <div class="issuer">WB Educação</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Maltego as a Cyber Intelligence Tool</h4>
-                        <div class="issuer">WB Educação</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>OSINT on Cloud</h4>
-                        <div class="issuer">WB Educação</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>Tor as a Privacy Framework</h4>
-                        <div class="issuer">WB Educação</div>
-                    </div>
-                    <div class="cert-item">
-                        <h4>OPSEC</h4>
-                        <div class="issuer">CTI Expert</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contact Section -->
-            <div class="info-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                        <polyline points="22,6 12,13 2,6"></polyline>
-                    </svg>
-                    Contact
-                </h3>
-
-                <div class="contact-links">
-                    <a href="https://www.linkedin.com/in/brennocm/" class="contact-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
-                        </svg>
-                        LinkedIn
-                    </a>
-                    <a href="http://github.com/brennocm" class="contact-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
-                        </svg>
-                        GitHub
-                    </a>
-                    <a href="https://huggingface.co/brennocm" class="contact-link">
-                        <svg viewBox="-2 -2 28 28" fill="currentColor">
-                            <path
-                                d="M1.4446 11.5059c0 1.1021.1673 2.1585.4847 3.1563-.0378-.0028-.0691-.0058-.1058-.0058-.4209 0-.8015.16-1.0704.4512-.3454.3737-.4984.8335-.4316 1.293a1.576 1.576 0 0 0 .2148.5978c-.2319.1864-.4018.4456-.4844.7578-.0646.2448-.131.7543.2149 1.2794a1.4552 1.4552 0 0 0-.0625.1055c-.208.3923-.2207.8372-.0371 1.25.2783.6258.9696 1.1175 2.3126 1.6467.8356.3292 1.5988.5411 1.6056.543 1.1046.2847 2.104.4277 2.969.4277 1.4173 0 2.4754-.3849 3.1525-1.1446 1.538.2651 2.791.1403 3.592.006.6773.7555 1.7332 1.1387 3.1467 1.1387.8649 0 1.8643-.143 2.969-.4278.0068-.0019.77-.2138 1.6056-.543 1.343-.5292 2.0343-1.0208 2.3126-1.6466.1836-.4129.171-.8577-.037-1.25a1.4685 1.4685 0 0 0-.0626-.1056c.346-.525.2795-1.0346.2149-1.2793-.0826-.3122-.2525-.5714-.4844-.7579.11-.1816.1831-.3788.2148-.5977.0669-.4595-.0862-.9193-.4316-1.293-.2688-.2913-.6495-.4513-1.0704-.4513-.0209 0-.0376.0008-.0588.0018.3162-.9966.4846-2.0518.4846-3.1523 0-5.807-4.7362-10.5144-10.5789-10.5144-5.8426 0-10.5788 4.7073-10.5788 10.5144Zm10.5788-9.4831c5.2727 0 9.5476 4.246 9.5476 9.483a9.4201 9.4201 0 0 1-.2696 2.2365c-.0039-.0047-.0079-.011-.0117-.0156-.274-.3255-.6679-.5059-1.1075-.5059-.352 0-.714.1155-1.0763.3438-.2403.1517-.5058.422-.7793.7598-.2534-.3492-.608-.5832-1.0137-.6465a1.5174 1.5174 0 0 0-.2344-.0176c-.9263 0-1.4828.7993-1.6935 1.5177-.1046.2426-.6065 1.3482-1.3614 2.0978-1.1681 1.1601-1.4458 2.3534-.8396 3.6382-.843.1029-1.5836.0927-2.365-.006.5906-1.212.3626-2.4388-.8426-3.6322-.755-.7496-1.2568-1.8552-1.3614-2.0978-.2107-.7184-.7673-1.5177-1.6935-1.5177-.078 0-.1568.0054-.2344.0176-.4057.0633-.7604.2973-1.0137.6465-.2735-.3379-.539-.6081-.7794-.7598-.3622-.2283-.7243-.3438-1.0762-.3438-.4266 0-.8094.171-1.0821.4786a9.4208 9.4208 0 0 1-.2598-2.1936c0-5.237 4.2749-9.483 9.5475-9.483zM8.6443 7.0036c-.4838.0043-.9503.2667-1.1934.7227-.3536.6633-.1006 1.4873.5645 1.84.351.1862.4883-.5261.836-.6485.3107-.1095.841.399 1.0078.086.3536-.6634.1025-1.4874-.5625-1.84a1.3659 1.3659 0 0 0-.6524-.1602Zm6.8403 0c-.2199-.002-.4426.05-.6504.1602-.665.3526-.9181 1.1766-.5645 1.84.1669.313.6971-.1955 1.0079-.086.3476.1224.4867.8347.838.6485.6649-.3527.916-1.1767.5624-1.84-.243-.456-.7096-.7184-1.1934-.7227Zm-9.7565 1.418a.8768.8768 0 0 0-.877.877c0 .4846.3925.877.877.877a.8768.8768 0 0 0 .877-.877.8768.8768 0 0 0-.877-.877zm12.6434 0c-.4845 0-.879.3925-.879.877 0 .4846.3945.877.879.877a.8768.8768 0 0 0 .877-.877.8768.8768 0 0 0-.877-.877zM8.7927 11.459c-.179-.003-.2793.1107-.2793.416 0 .8097.3874 2.125 1.4279 2.924.207-.7123 1.3453-1.2832 1.5079-1.2012.2315.1167.2191.4417.6074.7266.3884-.285.374-.6098.6056-.7266.1627-.082 1.3009.4889 1.5079 1.2012 1.0404-.799 1.4278-2.1144 1.4278-2.924 0-1.2212-1.583.6402-3.5413.6485-1.4686-.0061-2.7266-1.0558-3.2639-1.0645zM4.312 14.4768c.5792.365 1.6964 2.2751 2.1056 3.0177.1371.2488.371.3536.582.3536.4188 0 .7465-.4138.0391-.9395-1.0636-.791-.6914-2.0846-.1836-2.1642a.4302.4302 0 0 1 .0664-.004c.4616 0 .666.7892.666.7892s.5959 1.4898 1.6213 2.508c.942.9356 1.062 1.703.4961 2.6661-.0164-.004-.0159.0236-.1484.2149-.1853.2673-.4322.4688-.7188.6152-.5062.2269-1.1397.2696-1.7833.2696-1.037 0-2.1017-.1824-2.6975-.336-.0293-.0075-3.6505-.9567-3.1916-1.8224.0771-.1454.2033-.2031.3633-.2031.6463 0 1.823.9551 2.3283.9551.113 0 .196-.0865.2285-.2031.2249-.8045-3.2787-1.0522-2.9846-2.1642.0519-.1967.193-.2757.3907-.2754.854 0 2.7704 1.4923 3.172 1.4923.0307 0 .0525-.0085.0645-.0274.2012-.3227.1096-.5865-1.3087-1.4395-1.4182-.8533-2.4315-1.329-1.8653-1.9416.0651-.0707.1574-.1015.2695-.1015.8611.0002 2.8948 1.84 2.8948 1.84s.5487.5683.8809.5683c.0762 0 .1416-.0315.1855-.1054.2355-.3946-2.1858-2.2183-2.3224-2.971-.0926-.51.0641-.7676.3555-.7676-.0006.008.1701-.0285.4942.1759zm16.2257.5918c-.1366.7526-2.5579 2.5764-2.3224 2.9709.044.074.1092.1055.1855.1055.3321 0 .881-.5684.881-.5684s2.0336-1.8397 2.8947-1.84c.1121 0 .2044.0308.2695.1016.5662.6125-.447 1.0882-1.8653 1.9415-1.4183.853-1.51 1.1168-1.3087 1.4396.012.0188.0337.0273.0644.0273.4016 0 2.3181-1.4923 3.1721-1.4923.1977-.0002.3388.0787.3907.2754.294 1.112-3.2095 1.3597-2.9846 2.1642.0325.1166.1156.2032.2285.2032.5054 0 1.682-.9552 2.3283-.9552.16 0 .2862.0577.3633.2032.459.8656-3.1623 1.8149-3.1916 1.8224-.5958.1535-1.6605.336-2.6975.336-.6351 0-1.261-.0409-1.7638-.2599-.2949-.1472-.5488-.3516-.7383-.625-.0411-.0682-.1026-.1476-.1426-.205-.5726-.9679-.455-1.7371.4903-2.676 1.0254-1.0182 1.6212-2.508 1.6212-2.508s.2044-.7891.666-.7891a.4318.4318 0 0 1 .0665.0039c.5078.0796.88 1.3732-.1836 2.1642-.7074.5257-.3797.9395.039.9395.211 0 .445-.1047.5821-.3535.4092-.7426 1.5264-2.6527 2.1056-3.0178.5588-.3524.99-.1816.8497.5918z" />
-                        </svg>
-                        Hugging Face
-                    </a>
-                    <a href="mailto:brennocmiranda@outlook.com" class="contact-link email-tooltip"
-                        data-email="brennocmiranda@outlook.com">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                            </path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        Email
-                    </a>
-                </div>
-            </div>
+        <div class="cm-group">
+            <p class="cm-group-name">Volunteering</p>
+            <a class="cm-row" href="#xp-the-tor-project-tor-bridge-operator" data-tip="Tor Bridge Operator, Sep 2026 – Present" aria-label="Tor Bridge Operator, The Tor Project: Sep 2026 – Present">
+                <span class="cm-label">Tor Project</span>
+                <span class="cm-tip" aria-hidden="true">Tor Bridge Operator<br><span>Sep 2026 – Present</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--volunteer cm-bar--now" style="--a:0.8333;--b:0.8542;--f:0.8542"></span></span>
+            </a>
+            <a class="cm-row" href="#xp-hackersonsteroids-security-researcher-ctf-player" data-tip="Security Researcher &amp; CTF Player, Aug 2026 – Present" aria-label="Security Researcher &amp; CTF Player, hackersOnSteroids: Aug 2026 – Present">
+                <span class="cm-label">hackersOnSteroids</span>
+                <span class="cm-tip" aria-hidden="true">Security Researcher &amp; CTF Player<br><span>Aug 2026 – Present</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--volunteer cm-bar--now" style="--a:0.8229;--b:0.8542;--f:0.8542"></span></span>
+            </a>
+            <a class="cm-row" href="#xp-lics-lead-cybersecurity-researcher" data-tip="Lead Cybersecurity Researcher, Feb 2025 – Dec 2026" aria-label="Lead Cybersecurity Researcher, LICS | UNICAMP Cybersecurity League: Feb 2025 – Dec 2026">
+                <span class="cm-label">LICS</span>
+                <span class="cm-tip" aria-hidden="true">Lead Cybersecurity Researcher<br><span>Feb 2025 – Dec 2026</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--volunteer cm-bar--ongoing cm-bar--now" style="--a:0.6354;--b:0.8542;--f:0.8646"></span></span>
+            </a>
+            <a class="cm-row" href="#xp-lbu-web3-security-researcher" data-tip="Web3 Security Researcher, Feb 2023 – Dec 2023" aria-label="Web3 Security Researcher, LBU | UNICAMP Blockchain League: Feb 2023 – Dec 2023">
+                <span class="cm-label">LBU</span>
+                <span class="cm-tip" aria-hidden="true">Web3 Security Researcher<br><span>Feb 2023 – Dec 2023</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--volunteer" style="--a:0.3854;--b:0.4896;--f:0.4896"></span></span>
+            </a>
+            <a class="cm-row" href="#xp-funda-o-estudar-multiplicadores-program-voluntee" data-tip=""Multiplicadores" Program | Volunteer Seller, May 2022 – Aug 2022" aria-label=""Multiplicadores" Program | Volunteer Seller, Fundação Estudar: May 2022 – Aug 2022">
+                <span class="cm-label">Fundação Estudar</span>
+                <span class="cm-tip" aria-hidden="true">"Multiplicadores" Program | Volunteer Seller<br><span>May 2022 – Aug 2022</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--volunteer" style="--a:0.2917;--b:0.3229;--f:0.3229"></span></span>
+            </a>
+            <a class="cm-row" href="#xp-digital-innovation-one-dio-voluntary-program-usa" data-tip="DIO Voluntary Program | Usability Tester, Mar 2022 – Dec 2022" aria-label="DIO Voluntary Program | Usability Tester, Digital Innovation One: Mar 2022 – Dec 2022">
+                <span class="cm-label">DIO</span>
+                <span class="cm-tip" aria-hidden="true">DIO Voluntary Program | Usability Tester<br><span>Mar 2022 – Dec 2022</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--volunteer" style="--a:0.2708;--b:0.3646;--f:0.3646"></span></span>
+            </a>
         </div>
+        <div class="cm-group">
+            <p class="cm-group-name">Education</p>
+            <a class="cm-row" href="#xp-state-university-of-campinas-unicamp-bachelor-of" data-tip="Bachelor of Technology in Systems Analysis and Development, Mar 2022 – Jul 2027" aria-label="Bachelor of Technology in Systems Analysis and Development, State University of Campinas (UNICAMP): Mar 2022 – Jul 2027">
+                <span class="cm-label">UNICAMP</span>
+                <span class="cm-tip" aria-hidden="true">Bachelor of Technology in Systems Analysis and Development<br><span>Mar 2022 – Jul 2027</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--edu cm-bar--ongoing cm-bar--now" style="--a:0.2708;--b:0.8542;--f:0.9375"></span></span>
+            </a>
+            <a class="cm-row" href="#xp-state-university-of-campinas-unicamp-higher-inte" data-tip="Higher Interdisciplinary Training Program (ProFIS), Mar 2020 – Apr 2021" aria-label="Higher Interdisciplinary Training Program (ProFIS), State University of Campinas (UNICAMP): Mar 2020 – Apr 2021">
+                <span class="cm-label">ProFIS</span>
+                <span class="cm-tip" aria-hidden="true">Higher Interdisciplinary Training Program (ProFIS)<br><span>Mar 2020 – Apr 2021</span></span>
+                <span class="cm-track"><span class="cm-bar cm-bar--edu" style="--a:0.0208;--b:0.1562;--f:0.1562"></span></span>
+            </a>
+        </div>
+        <figcaption>Each bar runs from the start to the end of a role. Click one for details.</figcaption>
+    </figure>
+    </header>
+    <main class="cv">
+<section>
+<h2>Professional experience</h2>
+<ol class="roles"><li class="role" id="xp-serasa-experian-cybersecurity-engineer">
+    <p class="when"><span>Jun 2025 – Present</span><span>Remote</span></p>
+    <div>
+        <h3>Cybersecurity Engineer</h3>
+        <p class="org">Serasa Experian</p>
+        <div class="role-text"><p>Serasa Experian, part of the global Experian group, is a credit bureau and datatech that provides risk analysis, authentication, and fraud prevention solutions for businesses, as well as consumer services like the Serasa Score and debt negotiation.</p>
+<p class="lead-in">Key responsibilities:</p>
+<ul><li>Automating IAM Assurance workflows to improve speed, reliability, and audit readiness</li><li>Implementing and advocating for role-based access control (RBAC) in IAM processes</li><li>Maintaining and enhancing Identity Governance & Administration (IGA) platforms like
+                        SailPoint and Privileged Access Management (PAM) solutions like CyberArk</li></ul></div>
     </div>
-
-    <footer>
-        <p>&copy; 20∞</p>
-    </footer>
+</li><li class="role" id="xp-darede-cyber-defense-analyst-soc">
+    <p class="when"><span>May 2023 – Dec 2024</span><span>1 year 8 months</span><span>Remote</span></p>
+    <div>
+        <h3>Cyber Defense Analyst | SOC</h3>
+        <p class="org">Darede</p>
+        <div class="role-text"><p>Darede is a consultancy company specializing in Information Technology (IT) services. As a partner of Amazon Web Services and Microsoft Azure, Darede aims to bring innovation and excellence by offering its customers the best services in the market.</p>
+<p class="lead-in">Key responsibilities:</p>
+<ul><li>Operating vulnerability management and SIEM systems, aiming for the shortest response time
+                        to security incidents</li><li>Working with identity management and access provisioning</li><li>Executing playbooks and monitoring incident conditions</li><li>Preparing reports and indicators of security threats and incidents</li><li>Operating in clients' AWS infrastructure, working with services like CloudTrail, IAM, WAF,
+                        GuardDuty, Inspector, and CloudWatch</li></ul></div>
+    </div>
+</li></ol>
+</section>
+<section>
+<h2>Volunteer experience</h2>
+<ol class="roles"><li class="role" id="xp-the-tor-project-tor-bridge-operator">
+    <p class="when"><span>Sep 2026 – Present</span></p>
+    <div>
+        <h3>Tor Bridge Operator</h3>
+        <p class="org">The Tor Project</p>
+        <div class="role-text"><p>The Tor Project is a nonprofit developing free and open-source privacy and anti-censorship technology, relied on by journalists, activists, and everyday users in countries with restricted internet access.</p>
+<p class="lead-in">Key contributions:</p>
+<ul><li>Deploying and maintaining an obfs4 bridge relay, providing an unlisted entry point that helps users in censored regions connect to the Tor network undetected</li><li>Hardening and monitoring the underlying server infrastructure (firewall, intrusion prevention, automated security patching) to keep the relay reliable and secure</li><li>Building automated monitoring (uptime alerts and daily network-status reporting via the Tor Metrics API) to track relay health and availability</li><li>Following Tor Project operational best practices for relay configuration and contact reporting</li></ul></div>
+    </div>
+</li><li class="role" id="xp-hackersonsteroids-security-researcher-ctf-player">
+    <p class="when"><span>Aug 2026 – Present</span></p>
+    <div>
+        <h3>Security Researcher &amp; CTF Player</h3>
+        <p class="org">hackersOnSteroids</p>
+        <div class="role-text"><p>hackersOnSteroids is Brazil's #1-ranked team on Hack The Box (peak #9 worldwide), an international collective of ~30 pentesters, exploit/malware developers, and infrastructure and mobile security specialists competing together since 2024.</p>
+<p class="lead-in">Key contributions:</p>
+<ul><li>Competing weekly in Hack The Box's active season, working through machines across Web, Pwn, Reverse Engineering, Active Directory, and Cryptography categories under competitive time pressure</li><li>Writing internal write-ups on retired machines, exploit notes, and custom tooling for the team's blog, documenting techniques for other members to learn from</li><li>Studying and applying emerging offensive security techniques and TTPs to stay competitive against top-ranked global teams</li><li>Collaborating with teammates and partner crews on knowledge-sharing and post-competition retrospectives to continuously improve team performance</li></ul></div>
+    </div>
+</li><li class="role" id="xp-lics-lead-cybersecurity-researcher">
+    <p class="when"><span>Feb 2025 – Dec 2026</span><span>1 year 11 months</span></p>
+    <div>
+        <h3>Lead Cybersecurity Researcher</h3>
+        <p class="org">LICS | UNICAMP Cybersecurity League</p>
+        <div class="role-text"><p>LICS (UNICAMP Cybersecurity League) is a student-led organization focused on hands-on cybersecurity learning through events, workshops, and community-driven study.</p>
+<p class="lead-in">Key contributions:</p>
+<ul><li>Led the LICS OffSec Festival, a free online event featuring 4 well-known cybersecurity professionals and nearly 900 registrations, designed to bridge academia and industry by making professional-level talks accessible at no cost</li><li>Built and maintained the group's study roadmap, helping members follow a structured path across core offensive and defensive security topics</li><li>Created training materials (technical and theoretical) to support continuous learning and practical skill development</li><li>Helped plan and prepare CTF practice sessions to strengthen hands-on security skills and teamwork</li></ul></div>
+    </div>
+</li><li class="role" id="xp-lbu-web3-security-researcher">
+    <p class="when"><span>Feb 2023 – Dec 2023</span><span>11 months</span></p>
+    <div>
+        <h3>Web3 Security Researcher</h3>
+        <p class="org">LBU | UNICAMP Blockchain League</p>
+        <div class="role-text"><p>LBU (UNICAMP Blockchain League) is a student-led group focused on blockchain learning and practical applications through community-driven content.</p>
+<p class="lead-in">Key contributions:</p>
+<ul><li>Writing 4 technical articles on Web3 and blockchain security topics, translating concepts into practical takeaways for students</li><li>Creating technical and theoretical learning materials to support the group's study track</li><li>Supporting the newsletter by proposing themes, doing content review, and ensuring technical accuracy and clarity</li></ul></div>
+    </div>
+</li><li class="role" id="xp-funda-o-estudar-multiplicadores-program-voluntee">
+    <p class="when"><span>May 2022 – Aug 2022</span><span>4 months</span><span>Social Services</span></p>
+    <div>
+        <h3>"Multiplicadores" Program | Volunteer Seller</h3>
+        <p class="org">Fundação Estudar</p>
+        <div class="role-text"><p>Fundação Estudar is a non-profit organization dedicated to education. Its core belief is that Brazil will become a better country with more determined young people pursuing paths that make a positive impact.</p>
+<p>In my volunteer role, I worked in a sales position with the mission of reaching and influencing as many people as possible.</p></div>
+    </div>
+</li><li class="role" id="xp-digital-innovation-one-dio-voluntary-program-usa">
+    <p class="when"><span>Mar 2022 – Dec 2022</span><span>10 months</span></p>
+    <div>
+        <h3>DIO Voluntary Program | Usability Tester</h3>
+        <p class="org">Digital Innovation One</p>
+        <div class="role-text"><p>DIO, which stands for Digital Innovation One, is an EdTech company that collaborates with leading players in the Brazilian market to democratize technology education.</p>
+<p>As a DIO Tester, I contributed by providing feedback on upcoming advertising content and participating in surveys aimed at enhancing Digital Innovation One's digital services.</p></div>
+    </div>
+</li></ol>
+</section>
+<section>
+<h2>Education</h2>
+<ol class="roles"><li class="role" id="xp-state-university-of-campinas-unicamp-bachelor-of">
+    <p class="when"><span>Mar 2022 – Jul 2027</span></p>
+    <div>
+        <h3>Bachelor of Technology in Systems Analysis and Development</h3>
+        <p class="org">State University of Campinas (UNICAMP)</p>
+        <div class="role-text"><p>The Technology in Systems Analysis and Development (TADS) program is a UNICAMP course in the IT field. This course is designed for students interested in pursuing careers related to software analysis, design, development, testing, and maintenance.</p></div>
+    </div>
+</li><li class="role" id="xp-state-university-of-campinas-unicamp-higher-inte">
+    <p class="when"><span>Mar 2020 – Apr 2021</span></p>
+    <div>
+        <h3>Higher Interdisciplinary Training Program (ProFIS)</h3>
+        <p class="org">State University of Campinas (UNICAMP)</p>
+        <div class="role-text"><p>The Higher Interdisciplinary Training Program (ProFIS) is an exclusive undergraduate course offered by UNICAMP for students from public schools in Campinas. The program selects the top two students from each school based on their ENEM scores, and I had the honor of ranking first at my school.</p></div>
+    </div>
+</li></ol>
+</section>
+<section>
+<h2>Technical skills</h2>
+<ul class="plain-list"><li><span>Cybersecurity</span><span class="detail"></span></li><li><span>Penetration Testing</span><span class="detail"></span></li><li><span>Web Application Security</span><span class="detail"></span></li><li><span>Network Security</span><span class="detail"></span></li><li><span>Red Team Operations</span><span class="detail"></span></li><li><span>Cloud Security</span><span class="detail">AWS</span></li><li><span>DevSecOps</span><span class="detail">CI/CD security, SAST, DAST, SCA</span></li><li><span>Software Developer</span><span class="detail">C/C++, Java, Python, Go, Rust</span></li><li><span>Automation Developer</span><span class="detail">PowerShell</span></li></ul>
+</section>
+<section>
+<h2>Certifications</h2>
+<ul class="plain-list dated-list"><li class="dated"><span class="when">Sep 2026</span><span>CompTIA Security+ (SY0-701)<span class="detail">CompTIA</span></span></li><li class="dated"><span class="when">Mar 2026</span><span>Junior Penetration Tester (eJPT)<span class="detail">INE Security</span></span></li><li class="dated"><span class="when">Apr 2025</span><span>Certified Blockchain Practitioner (CBP)<span class="detail">The SecOps Group</span></span></li><li class="dated"><span class="when">Apr 2025</span><span>Certified Cloud Security Practitioner – AWS (CCSP-AWS)<span class="detail">The SecOps Group</span></span></li><li class="dated"><span class="when">Mar 2025</span><span>Certified Network Security Practitioner (CNSP)<span class="detail">The SecOps Group</span></span></li><li class="dated"><span class="when">Jan 2025</span><span>Certified AppSec Practitioner (CAP)<span class="detail">The SecOps Group</span></span></li><li class="dated"><span class="when">Jun 2024</span><span>Multi-Cloud Red Team Analyst (MCRTA)<span class="detail">CyberWarfare Labs</span></span></li><li class="dated"><span class="when">Aug 2023</span><span>AWS Certified Cloud Practitioner (AWS CCP)<span class="detail">Amazon Web Services (AWS)</span></span></li></ul>
+</section>
+<section>
+<h2>Courses</h2>
+<ul class="plain-list"><li><span>The Foundations of Cybersecurity</span><span class="detail">Coursera, Kennesaw State University</span></li><li><span>Data Security &amp; Information Privacy</span><span class="detail">Coursera, Macquarie University</span></li><li><span>Identity Access Management (IAM) and Secure Authentication</span><span class="detail">Coursera, Macquarie University</span></li><li><span>Cyber Academy 2025</span><span class="detail">Febraban</span></li><li><span>Ethical Hacking Web API (EHAPI)</span><span class="detail">GoHacking</span></li><li><span>Security Essentials (GHSE)</span><span class="detail">GoHacking</span></li><li><span>Web Penetration Tester Path</span><span class="detail">HTB Academy</span></li><li><span>Recon Badge</span><span class="detail">PentesterLab</span></li><li><span>Introduction to Offensive Security with Artificial Intelligence</span><span class="detail">Red Team Leaders</span></li><li><span>Introduction to Red Team Operation Management</span><span class="detail">Red Team Leaders</span></li><li><span>OpSec &amp; Anonymity for Red Teams</span><span class="detail">Red Team Leaders</span></li><li><span>DevSecOps Learning Path</span><span class="detail">TryHackMe</span></li><li><span>Jr Penetration Tester Learning Path</span><span class="detail">TryHackMe</span></li><li><span>Web Fundamentals Learning Path</span><span class="detail">TryHackMe</span></li><li><span>Android Application Analysis</span><span class="detail">WB Educação</span></li><li><span>Maltego as a Cyber Intelligence Tool</span><span class="detail">WB Educação</span></li><li><span>OSINT on Cloud</span><span class="detail">WB Educação</span></li><li><span>Tor as a Privacy Framework</span><span class="detail">WB Educação</span></li><li><span>OPSEC</span><span class="detail">CTI Expert</span></li></ul>
+</section>
+<section>
+<h2>Contact</h2>
+<ul class="contact"><li><a href="https://www.linkedin.com/in/brennocm/">LinkedIn</a></li><li><a href="http://github.com/brennocm">GitHub</a></li><li><a href="https://huggingface.co/brennocm">Hugging Face</a></li><li><a href="mailto:brennocmiranda@outlook.com">brennocmiranda@outlook.com</a></li></ul>
+</section>
+    </main>
+    </div>
+</div>
 </body>
-
 </html>
