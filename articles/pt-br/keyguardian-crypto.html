@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="stylesheet" href="../../assets/css/site.css">
+   <link rel="stylesheet" href="../../assets/css/post.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>keyguardian.</title>
+</head>
+
+<body>
+    <nav class="site-nav post-nav">
+        <p class="crumb"><a href="/index.html">brennocm</a><span aria-hidden="true">/</span><a href="/index.html#technical">artigos</a><span aria-hidden="true">/</span><span aria-current="page">keyguardian</span></p>
+        <p class="lang" aria-label="Idioma">
+            <a href="../pt-br/keyguardian-crypto.html" lang="pt-BR" aria-current="page">PT</a>
+            <span aria-hidden="true">/</span>
+            <a href="../en-us/keyguardian-crypto.html" lang="en">EN</a>
+        </p>
+    </nav>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>KeyGuardian: consertando a criptografia do meu próprio cofre de senhas</h1>
+         <p class="meta">
+            <time>24 nov 2026</time>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            O <a href="https://github.com/brennocm/keyguardian">KeyGuardian</a> é um gerenciador de senhas em Flutter
+            que fiz na faculdade. O usuário entra com Firebase, define uma chave-mestra que só ele conhece, e as senhas
+            vão para o Firestore cifradas no próprio aparelho. A promessa era que o backend guardasse só texto cifrado.
+            <br><br>
+            Relendo o código, vi que a primeira versão cumpria essa promessa só em parte. A chave-mestra virava a chave
+            AES quase sem tratamento, nada protegia a integridade do que estava salvo, e quem conseguisse ler o banco
+            poderia testar chaves-mestras offline, uma operação AES por palpite. Este post mostra o que estava errado,
+            o esquema novo e a migração dos cofres antigos. A mudança inteira está em um commit.
+         </p>
+
+         <h2>Conceitos</h2>
+
+         <p>
+            <b>KDF (função de derivação de chave)</b>
+            <br>
+            <br> Uma senha digitada por uma pessoa tem pouca entropia e não serve direto como chave de cifra. Uma KDF
+            de senha, como PBKDF2, scrypt ou Argon2id, transforma a senha numa chave do tamanho certo e, de propósito,
+            gasta tempo (e, no caso das duas últimas, memória) a cada cálculo. Esse custo é pago uma vez pelo usuário
+            no desbloqueio e uma vez por palpite por quem tenta adivinhar a senha. O salt, aleatório por usuário,
+            impede que o mesmo trabalho sirva para atacar várias contas.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Cifra autenticada (AEAD)</b>
+            <br>
+            <br> AES-CBC só garante sigilo. Se alguém alterar o texto cifrado, a decifração devolve outro texto, ou
+            lixo, sem acusar nada. Uma AEAD como AES-GCM gera também uma tag de autenticação: qualquer bit alterado no
+            texto cifrado, no nonce ou nos dados associados faz a decifração falhar. Os dados associados (AAD) não são
+            cifrados, mas entram na tag, o que permite amarrar um valor ao contexto em que ele foi gravado.
+         </p>
+
+         <br>
+         <h2>O desenho original</h2>
+
+         <p>
+            Toda a criptografia ficava num <i>EncryptionService</i> com o pacote <i>encrypt</i>. A chave vinha
+            daqui:
+         </p>
+         <pre class="code-block"><code>enc.Key _prepareKey(String masterKey) {
+  String keyString = masterKey.padRight(32, '0').substring(0, 32);
+  return enc.Key.fromUtf8(keyString);
+}</code></pre>
+         <p>
+            A chave-mestra era completada com o caractere <i>'0'</i> até 32 caracteres, cortada em 32 e usada como
+            chave AES-256 em modo CBC, com um IV aleatório por valor. O formato salvo era <i>iv:texto_cifrado</i>, em
+            base64. Para saber se a chave-mestra digitada estava certa, o app gravava em <i>users/{uid}</i> a frase
+            fixa <i>MASTER_KEY_VERIFICATION_2024</i> cifrada com essa mesma chave e, no desbloqueio, conferia se ela
+            voltava igual.
+         </p>
+
+         <br>
+         <h2>O que estava errado</h2>
+
+         <p>
+            <b>Palpites baratos</b>
+            <br><br>
+            O problema mais sério é a falta de KDF. O valor de verificação é um texto conhecido (está no código-fonte),
+            cifrado com uma chave que é a própria chave-mestra. Quem lê o documento <i>users/{uid}</i>, seja por uma
+            regra do Firestore mal configurada, por uma credencial de administrador vazada ou por ter acesso ao projeto
+            Firebase, pode testar chaves-mestras offline. Cada palpite custa um preenchimento com zeros e uma
+            decifração AES de dois blocos, então um notebook testa milhões por segundo, e uma chave-mestra comum cai
+            rápido.
+            <br><br>
+            <b>Chave previsível</b>
+            <br><br>
+            O preenchimento com <i>'0'</i> faz com que uma chave-mestra de 10 caracteres gere uma chave em que 22 dos
+            32 bytes são conhecidos. O corte em 32 caracteres também ignora tudo o que vem depois, e uma frase longa
+            perde parte do que tem de forte. Isso pesa menos que a falta de KDF, porque o espaço de busca continua
+            sendo o da chave-mestra, mas não ajuda.
+            <br><br>
+            <b>Sem integridade</b>
+            <br><br>
+            CBC sem MAC é maleável. Inverter um bit do IV inverte o mesmo bit no primeiro bloco do texto decifrado, e
+            quem tem permissão de escrita no banco pode alterar os primeiros 16 bytes de uma senha salva de forma
+            controlada, sem conhecer a chave, se souber ou adivinhar o conteúdo. Como todos os valores usavam a mesma
+            chave e nada os ligava ao lugar onde estavam, também dava para copiar o texto cifrado de uma credencial
+            para outra, ou de um campo para outro, e o app decifraria normalmente.
+         </p>
+
+         <br>
+         <h2>O esquema novo</h2>
+
+         <pre class="code-block"><code> chave-mestra
+      │  PBKDF2-HMAC-SHA256, 600.000 iterações,
+      │  salt de 16 bytes por usuário
+      ▼
+ chave do cofre (32 bytes, só na memória)
+      │  AES-256-GCM por valor: nonce aleatório de 96 bits,
+      │  tag de 128 bits, AAD = keyguardian:v2:&lt;uid&gt;:&lt;campo&gt;
+      ▼
+ Firestore: v2:&lt;nonce b64&gt;:&lt;cifrado+tag b64&gt;</code></pre>
+
+         <p>
+            <b>Derivação</b>
+            <br><br>
+            A chave-mestra passa por PBKDF2-HMAC-SHA256 com 600.000 iterações, o valor que o OWASP Password Storage
+            Cheat Sheet recomenda para esse algoritmo, e um salt aleatório de 16 bytes por usuário. O salt, o número
+            de iterações e o nome do algoritmo ficam em <i>users/{uid}.kdf</i>. A chave-mestra nunca é gravada nem
+            enviada, e a chave derivada só existe na memória, num objeto <i>VaultKey</i> cujo <i>toString()</i>
+            imprime <i>&lt;redacted&gt;</i>, para não acabar num log por acidente.
+            <br><br>
+            Argon2id resiste melhor a GPU e seria a escolha ideal. Fiquei com PBKDF2 porque ele tem vetores de teste
+            públicos (RFC 7914) e implementação madura em Dart puro, sem dependência nativa. Como o algoritmo e os
+            parâmetros agora ficam salvos junto do cofre, trocar para Argon2id numa versão futura é uma migração como a
+            descrita abaixo.
+            <br><br>
+            O app recusa parâmetros abaixo de 600.000 iterações ou um algoritmo desconhecido. Um documento adulterado
+            já não abriria o cofre, porque a verificação falharia, mas a regra impede que um bug ou uma versão futura
+            passe a aceitar um custo menor sem ninguém perceber.
+            <br><br>
+
+            <b>Cifra</b>
+            <br><br>
+            Cada valor é cifrado com AES-256-GCM, um nonce aleatório de 96 bits e uma tag de 128 bits. Com nonces
+            aleatórios, o limite do NIST é de 2<sup>32</sup> valores por chave, muito acima do que um cofre pessoal
+            guarda. O AAD é <i>keyguardian:v2:&lt;uid&gt;:&lt;campo&gt;</i>: um valor copiado para outra conta ou
+            para outro campo falha na tag. A verificação da chave-mestra usa o mesmo mecanismo, e uma chave errada
+            agora falha na tag em vez de devolver lixo.
+         </p>
+
+         <br>
+         <h2>Desempenho</h2>
+
+         <p>
+            O primeiro teste com o PBKDF2 do pointycastle levou cerca de 6,8 s para 600.000 iterações no meu desktop,
+            o que é demais para uma tela de desbloqueio. O motivo é que a implementação genérica reprocessa a chave do
+            HMAC e aloca buffers a cada chamada. No PBKDF2 com HMAC-SHA256, a chave do HMAC é sempre a mesma senha,
+            então os estados internos do SHA-256 depois de processar <i>ipad</i> e <i>opad</i> podem ser calculados
+            uma vez só. Com isso, cada iteração custa exatamente duas compressões de SHA-256, e o tempo caiu para
+            cerca de 0,8 s na mesma máquina.
+            <br><br>
+            Reescrever uma primitiva criptográfica é o tipo de coisa que eu barraria num code review sem testes. A
+            implementação nova é conferida contra os dois vetores do RFC 7914 (1 e 80.000 iterações) e comparada com o
+            pointycastle em senhas e salts aleatórios, com tamanhos escolhidos para cair nas bordas do padding do
+            SHA-256 e na regra de senhas maiores que um bloco. A derivação roda num isolate separado com
+            <i>compute()</i>, para a interface não travar.
+         </p>
+
+         <br>
+         <h2>Migração dos cofres antigos</h2>
+
+         <p>
+            Quem já usava o app tinha senhas no formato antigo, e ninguém deveria perder dados nem precisar fazer nada.
+            No desbloqueio, o app olha <i>users/{uid}</i>. Se não houver o campo <i>kdf</i>, o cofre é da versão
+            antiga: a chave-mestra é conferida com o esquema antigo e, se estiver certa, o app lê todas as
+            credenciais, decifra cada uma com o esquema antigo, cifra de novo com o novo e grava tudo, junto com os
+            parâmetros do KDF e a nova verificação, num único batch do Firestore.
+            <br><br>
+            O batch é atômico. Se a gravação falhar no meio, nada muda, e a migração é tentada de novo no próximo
+            desbloqueio. Valores que já estão no formato <i>v2</i> são pulados, e um valor antigo que não decifra fica
+            como está. O Firestore aceita no máximo 500 escritas por batch, e uma delas vai para o documento do
+            usuário, então a migração atende cofres de até 499 credenciais. Acima disso, o app avisa e não migra pela
+            metade.
+         </p>
+
+         <br>
+         <h2>Testes</h2>
+
+         <p>
+            O núcleo criptográfico fica em <i>lib/core/crypto/vault_crypto.dart</i>, sem dependência do Flutter, e
+            tem 15 testes:
+         </p>
+         <ol>
+            <li>os vetores do RFC 7914 e a comparação com o pointycastle, descritos acima;</li>
+            <li>ida e volta com valor vazio e com caracteres fora do ASCII, e um nonce diferente para cada valor;</li>
+            <li>rejeição de chave errada, de um byte alterado no texto cifrado e de um valor movido para outro
+               usuário ou campo;</li>
+            <li>rejeição de entradas malformadas e de parâmetros de KDF rebaixados;</li>
+            <li>decifração de um valor gerado pela versão antiga do app, para garantir que a migração lê o que
+               existe hoje.</li>
+         </ol>
+         <pre class="code-block"><code>git clone https://github.com/brennocm/keyguardian.git &amp;&amp; cd keyguardian
+flutter test</code></pre>
+
+         <br>
+         <h2>Limitações</h2>
+
+         <p>
+            A chave-mestra não tem recuperação: esquecer significa perder o cofre. As regras de segurança do Firestore
+            ficam no console do Firebase, fora do repositório, e cada usuário só deve ler e escrever em
+            <i>users/{seu uid}/**</i>. Os testes cobrem a criptografia, mas a migração ainda não foi exercitada contra
+            um projeto Firebase real. Os 0,8 s foram medidos num desktop; num celular intermediário o desbloqueio deve
+            demorar mais, e ainda não medi.
+            <br><br>
+            Há também um bug que já existia e continua: uma credencial que não decifra aparece como
+            <i>******</i>, e editar e salvar essa credencial grava os asteriscos por cima da senha real. Nada disso
+            protege contra um aparelho comprometido, onde quem controla o sistema lê a chave-mestra enquanto ela é
+            digitada.
+         </p>
+
+         <br>
+         <h2>Considerações finais</h2>
+
+         <p>
+            O erro do KeyGuardian é comum em apps que cifram do lado do cliente: a cifra estava lá, mas a chave saía
+            direto de uma senha e nada verificava a integridade. Hoje, quando reviso um app assim, começo por três
+            perguntas: de onde vem a chave, o que acontece se alguém alterar um texto cifrado, e quanto custa um
+            palpite para quem tem uma cópia do banco. Na primeira versão do KeyGuardian, as respostas eram "de uma
+            senha com zeros no fim", "nada" e "quase nada".
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="stylesheet" href="../../assets/css/site.css">
+   <link rel="stylesheet" href="../../assets/css/post.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>keyguardian.</title>
+</head>
+
+<body>
+    <nav class="site-nav post-nav">
+        <p class="crumb"><a href="/index-en.html">brennocm</a><span aria-hidden="true">/</span><a href="/index-en.html#technical">articles</a><span aria-hidden="true">/</span><span aria-current="page">keyguardian</span></p>
+        <p class="lang" aria-label="Language">
+            <a href="../pt-br/keyguardian-crypto.html" lang="pt-BR">PT</a>
+            <span aria-hidden="true">/</span>
+            <a href="../en-us/keyguardian-crypto.html" lang="en" aria-current="page">EN</a>
+        </p>
+    </nav>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>KeyGuardian: fixing the crypto in my own password vault</h1>
+         <p class="meta">
+            <time>Nov 24, 2026</time>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            <a href="https://github.com/brennocm/keyguardian">KeyGuardian</a> is a Flutter password manager I built
+            in college. The user signs in with Firebase and sets a master key only they know, and passwords go to
+            Firestore encrypted on the device. The promise was that the backend would only ever hold ciphertext.
+            <br><br>
+            Rereading the code, I found that the first version only partly kept that promise. The master key became
+            the AES key with almost no processing, nothing protected the integrity of stored values, and anyone who
+            could read the database could test master keys offline at the cost of one AES operation per guess. This
+            post covers what was wrong, the new scheme and how existing vaults were migrated. The whole change is one
+            commit.
+         </p>
+
+         <h2>Concepts</h2>
+
+         <p>
+            <b>KDF (key derivation function)</b>
+            <br>
+            <br> A password typed by a person has little entropy and can't be used directly as a cipher key. A
+            password KDF such as PBKDF2, scrypt or Argon2id turns the password into a key of the right size and is
+            deliberately slow (the last two also use memory). The user pays that cost once per unlock, and whoever is
+            guessing pays it once per guess. A random per-user salt keeps the same work from being reused against
+            several accounts.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Authenticated encryption (AEAD)</b>
+            <br>
+            <br> AES-CBC only provides confidentiality. If someone changes the ciphertext, decryption returns a
+            different plaintext, or garbage, and reports nothing. An AEAD such as AES-GCM also produces an
+            authentication tag: any bit changed in the ciphertext, the nonce or the associated data makes decryption
+            fail. The associated data (AAD) isn't encrypted but is covered by the tag, which lets you bind a value to
+            the context it was written in.
+         </p>
+
+         <br>
+         <h2>The original design</h2>
+
+         <p>
+            All the crypto lived in an <i>EncryptionService</i> built on the <i>encrypt</i> package. The key came from
+            here:
+         </p>
+         <pre class="code-block"><code>enc.Key _prepareKey(String masterKey) {
+  String keyString = masterKey.padRight(32, '0').substring(0, 32);
+  return enc.Key.fromUtf8(keyString);
+}</code></pre>
+         <p>
+            The master key was padded with the character <i>'0'</i> to 32 characters, cut at 32 and used as an
+            AES-256 key in CBC mode, with a random IV per value. The stored format was <i>iv:ciphertext</i> in base64.
+            To check whether the master key was right, the app stored the fixed string
+            <i>MASTER_KEY_VERIFICATION_2024</i> in <i>users/{uid}</i>, encrypted with that same key, and on unlock
+            checked whether it decrypted back to the same string.
+         </p>
+
+         <br>
+         <h2>What was wrong</h2>
+
+         <p>
+            <b>Cheap guesses</b>
+            <br><br>
+            The most serious problem is the missing KDF. The verification value is a known plaintext (it's in the
+            source code) encrypted under a key that is the master key itself. Anyone who can read the
+            <i>users/{uid}</i> document, through a misconfigured Firestore rule, a leaked admin credential or access
+            to the Firebase project, can test master keys offline. Each guess costs a zero-padding step and a two-block
+            AES decryption, so a laptop tests millions per second and an ordinary master key falls quickly.
+            <br><br>
+            <b>Predictable key</b>
+            <br><br>
+            Padding with <i>'0'</i> means a 10-character master key yields a key in which 22 of the 32 bytes are
+            known. Cutting at 32 characters also drops everything after that, so a long passphrase loses some of its
+            strength. This matters less than the missing KDF, since the search space is still the master key's, but
+            it doesn't help.
+            <br><br>
+            <b>No integrity</b>
+            <br><br>
+            CBC without a MAC is malleable. Flipping a bit in the IV flips the same bit in the first block of the
+            decrypted plaintext, so someone with write access to the database can change the first 16 bytes of a
+            stored password in a controlled way without knowing the key, as long as they know or can guess the
+            contents. Since every value used the same key and nothing tied a value to where it was stored, you could
+            also copy the ciphertext of one credential into another, or from one field to another, and the app would
+            decrypt it normally.
+         </p>
+
+         <br>
+         <h2>The new scheme</h2>
+
+         <pre class="code-block"><code> master key
+      │  PBKDF2-HMAC-SHA256, 600,000 iterations,
+      │  16-byte salt per user
+      ▼
+ vault key (32 bytes, memory only)
+      │  AES-256-GCM per value: random 96-bit nonce,
+      │  128-bit tag, AAD = keyguardian:v2:&lt;uid&gt;:&lt;field&gt;
+      ▼
+ Firestore: v2:&lt;nonce b64&gt;:&lt;ciphertext+tag b64&gt;</code></pre>
+
+         <p>
+            <b>Derivation</b>
+            <br><br>
+            The master key goes through PBKDF2-HMAC-SHA256 with 600,000 iterations, the value the OWASP Password
+            Storage Cheat Sheet recommends for this algorithm, and a random 16-byte salt per user. The salt, the
+            iteration count and the algorithm name are stored in <i>users/{uid}.kdf</i>. The master key is never
+            stored or sent, and the derived key only exists in memory, in a <i>VaultKey</i> object whose
+            <i>toString()</i> prints <i>&lt;redacted&gt;</i> so it can't end up in a log by accident.
+            <br><br>
+            Argon2id holds up better against GPUs and would be the ideal choice. I stayed with PBKDF2 because it has
+            public test vectors (RFC 7914) and a mature pure-Dart implementation with no native dependency. Since the
+            algorithm and parameters are now stored with the vault, moving to Argon2id in a future version is a
+            migration like the one described below.
+            <br><br>
+            The app refuses parameters below 600,000 iterations or an unknown algorithm. A tampered document already
+            wouldn't open the vault, because the verification would fail, but the rule keeps a bug or a future version
+            from silently accepting a lower cost.
+            <br><br>
+
+            <b>Encryption</b>
+            <br><br>
+            Each value is encrypted with AES-256-GCM, a random 96-bit nonce and a 128-bit tag. With random nonces,
+            NIST's limit is 2<sup>32</sup> values per key, far above what a personal vault holds. The AAD is
+            <i>keyguardian:v2:&lt;uid&gt;:&lt;field&gt;</i>, so a value copied into another account or another field
+            fails the tag check. The master key verification uses the same mechanism, and a wrong key now fails the
+            tag check instead of returning garbage.
+         </p>
+
+         <br>
+         <h2>Performance</h2>
+
+         <p>
+            The first test with pointycastle's PBKDF2 took about 6.8 s for 600,000 iterations on my desktop, which is
+            too long for an unlock screen. The generic implementation reprocesses the HMAC key and allocates buffers
+            on every call. In PBKDF2 with HMAC-SHA256 the HMAC key is always the same password, so the SHA-256 states
+            after processing <i>ipad</i> and <i>opad</i> can be computed once. Each iteration then costs exactly two
+            SHA-256 compressions, and the time dropped to about 0.8 s on the same machine.
+            <br><br>
+            Rewriting a crypto primitive is the kind of thing I'd block in a code review if it came without tests.
+            The new implementation is checked against both RFC 7914 vectors (1 and 80,000 iterations) and compared
+            with pointycastle on random passwords and salts, with lengths chosen to hit the SHA-256 padding edges and
+            the rule for passwords longer than one block. Derivation runs in a separate isolate with
+            <i>compute()</i> so the UI doesn't freeze.
+         </p>
+
+         <br>
+         <h2>Migrating existing vaults</h2>
+
+         <p>
+            Existing users had passwords in the old format, and nobody should lose data or have to do anything. On
+            unlock, the app reads <i>users/{uid}</i>. If there's no <i>kdf</i> field, the vault is from the old
+            version: the master key is checked with the old scheme and, if it's correct, the app reads every
+            credential, decrypts it with the old scheme, encrypts it again with the new one and writes everything,
+            together with the KDF parameters and the new verification value, in a single Firestore batch.
+            <br><br>
+            The batch is atomic. If the write fails halfway, nothing changes, and the migration runs again on the next
+            unlock. Values already in the <i>v2</i> format are skipped, and an old value that doesn't decrypt is left
+            as is. Firestore accepts at most 500 writes per batch and one goes to the user document, so the migration
+            handles vaults of up to 499 credentials. Above that, the app reports it and doesn't migrate halfway.
+         </p>
+
+         <br>
+         <h2>Tests</h2>
+
+         <p>
+            The crypto core is in <i>lib/core/crypto/vault_crypto.dart</i>, with no Flutter dependency, and has 15
+            tests:
+         </p>
+         <ol>
+            <li>the RFC 7914 vectors and the comparison with pointycastle described above;</li>
+            <li>round trips with an empty value and non-ASCII characters, and a different nonce for every value;</li>
+            <li>rejection of a wrong key, of one changed byte in the ciphertext and of a value moved to another user
+               or field;</li>
+            <li>rejection of malformed input and of downgraded KDF parameters;</li>
+            <li>decryption of a value produced by the old version of the app, so the migration can read what exists
+               today.</li>
+         </ol>
+         <pre class="code-block"><code>git clone https://github.com/brennocm/keyguardian.git &amp;&amp; cd keyguardian
+flutter test</code></pre>
+
+         <br>
+         <h2>Limitations</h2>
+
+         <p>
+            The master key can't be recovered: forgetting it means losing the vault. Firestore security rules live in
+            the Firebase console, outside the repository, and each user should only read and write
+            <i>users/{their uid}/**</i>. The tests cover the crypto, but the migration hasn't yet been exercised
+            against a real Firebase project. The 0.8 s was measured on a desktop; on a mid-range phone unlocking will
+            take longer, and I haven't measured it yet.
+            <br><br>
+            One older bug is still there: a credential that fails to decrypt shows up as <i>******</i>, and editing
+            and saving it writes the asterisks over the real password. None of this protects against a compromised
+            device, where whoever controls the system can read the master key as it's typed.
+         </p>
+
+         <br>
+         <h2>Final thoughts</h2>
+
+         <p>
+            KeyGuardian's mistake is common in apps that encrypt on the client: the cipher was there, but the key came
+            straight from a password and nothing checked integrity. When I review an app like this now, I start with
+            three questions: where does the key come from, what happens if someone changes a ciphertext, and how much
+            does a guess cost for someone holding a copy of the database. For the first version of KeyGuardian the
+            answers were "from a password with zeros at the end", "nothing" and "almost nothing".
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>

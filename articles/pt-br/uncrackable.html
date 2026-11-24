@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="stylesheet" href="../../assets/css/site.css">
+   <link rel="stylesheet" href="../../assets/css/post.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>uncrackable.</title>
+</head>
+
+<body>
+    <nav class="site-nav post-nav">
+        <p class="crumb"><a href="/index.html">brennocm</a><span aria-hidden="true">/</span><a href="/index.html#technical">artigos</a><span aria-hidden="true">/</span><span aria-current="page">uncrackable</span></p>
+        <p class="lang" aria-label="Idioma">
+            <a href="../pt-br/uncrackable.html" lang="pt-BR" aria-current="page">PT</a>
+            <span aria-hidden="true">/</span>
+            <a href="../en-us/uncrackable.html" lang="en">EN</a>
+        </p>
+    </nav>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>OWASP UnCrackable: engenharia reversa dos níveis 1 a 3 no Android</h1>
+         <p class="meta">
+            <time>24 nov 2026</time>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            Os UnCrackable são os crackmes oficiais do <a href="https://mas.owasp.org/crackmes/">OWASP MASTG</a>, o
+            guia de testes de segurança de apps mobile. Cada app pede um segredo e mostra "Success!" quando ele está
+            certo, e a cada nível aparece uma proteção nova: detecção de root em Java no primeiro, a verificação
+            movida para código nativo com anti-debug no segundo, e checagem de integridade, detecção de Frida e um
+            segredo gerado por código ofuscado no terceiro.
+            <br><br>
+            Resolvi os três por análise estática: jadx para o bytecode, objdump para as bibliotecas nativas e, no
+            nível 3, o Unicorn para executar só a função que monta o segredo, sem rodar o app. Para cada nível também
+            deixo o caminho dinâmico com Frida, para quem tem um emulador com root, e o controle do MASVS que a
+            proteção tenta atender. No fim, o que isso diz para quem escreve as defesas.
+            <br><br>
+            Os APKs são os do <a href="https://github.com/OWASP/mastg/tree/master/Crackmes/Android">repositório do
+            MASTG</a>. Para conferir que é a mesma versão:
+         </p>
+         <pre class="code-block"><code># sha256
+UnCrackable-Level1.apk
+  1da8bf57d266109f9a07c01bf7111a1975ce01f190b9d914bcd3ae3dbef96f21
+UnCrackable-Level2.apk
+  4c7980ef1f6cc29508f38417c2a5b5b7721eeb4a3d7f00a0c1a08f5192fa6ddd
+UnCrackable-Level3.apk
+  6827f776b7d2844342711be6f13695ae8d1a5f209fc0072dbaf8b85e2fcff4b7</code></pre>
+
+         <h2>Conceitos</h2>
+
+         <p>
+            <b>APK, DEX e jadx</b>
+            <br>
+            <br> Um APK é um zip com o manifesto, os recursos, o bytecode do app (<i>classes.dex</i>) e, quando há
+            código nativo, bibliotecas <i>.so</i> em <i>lib/&lt;arquitetura&gt;/</i>. O jadx transforma o DEX de volta
+            em Java legível. Nomes de classes e métodos ofuscados (<i>a</i>, <i>b</i>, <i>c</i>) continuam assim, mas a
+            lógica aparece inteira.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>JNI e bibliotecas nativas</b>
+            <br>
+            <br> Um método Java marcado como <i>native</i> é implementado em C ou C++ numa <i>.so</i>, carregada com
+            <i>System.loadLibrary</i>. Por convenção, a função exportada se chama
+            <i>Java_&lt;pacote&gt;_&lt;classe&gt;_&lt;método&gt;</i>, e por isso fica fácil achá-la na tabela de símbolos.
+            O jadx não vê esse código; para ele é preciso um disassembler.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Frida</b>
+            <br>
+            <br> O Frida injeta um runtime JavaScript no processo do app e permite trocar a implementação de métodos
+            Java (<i>Java.use</i>) e interceptar funções nativas (<i>Interceptor.attach</i>) com o app rodando. No modo
+            spawn (<i>-f</i>), o Frida inicia o app já com os hooks, antes de qualquer código do app rodar.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>MASVS-RESILIENCE</b>
+            <br>
+            <br> O MASVS é o padrão de requisitos de segurança mobile do OWASP. O grupo RESILIENCE trata de dificultar
+            a engenharia reversa: RESILIENCE-1 valida a integridade da plataforma (root, emulador), RESILIENCE-2 é
+            anti-tampering, RESILIENCE-3 dificulta a análise estática e RESILIENCE-4 dificulta a análise dinâmica
+            (debugger, instrumentação). Nenhum desses controles impede um ataque; eles aumentam o custo.
+         </p>
+
+         <br>
+         <h2>Nível 1: tudo em Java</h2>
+
+         <p>
+            O <i>onCreate</i> roda três checagens de root (um <i>su</i> no <i>PATH</i>, <i>Build.TAGS</i> com
+            <i>test-keys</i> e uma lista de arquivos do SuperSU) e uma de app debuggable. Se qualquer uma dá positivo,
+            aparece um diálogo cujo único botão chama <i>System.exit(0)</i>. O segredo é conferido em
+            <i>sg.vantagepoint.uncrackable1.a</i>:
+         </p>
+         <pre class="code-block"><code>bArrA = sg.vantagepoint.a.a.a(
+    b("8d127684cbc37c17616d806cf50473cc"),
+    Base64.decode("5UJiFctbmgbDoLXmpL12mkno8HT4Lv8dlat8FxR2GOc=", 0));
+return str.equals(new String(bArrA));</code></pre>
+         <p>
+            A função <i>sg.vantagepoint.a.a.a</i> decifra com <i>Cipher.getInstance("AES")</i>, que no Android
+            significa AES/ECB/PKCS5Padding. A chave e o texto cifrado estão no próprio código, então dá para decifrar
+            fora do app:
+         </p>
+         <pre class="code-block"><code>import base64
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
+key = bytes.fromhex("8d127684cbc37c17616d806cf50473cc")
+ct = base64.b64decode("5UJiFctbmgbDoLXmpL12mkno8HT4Lv8dlat8FxR2GOc=")
+d = Cipher(algorithms.AES(key), modes.ECB()).decryptor()
+print(d.update(ct) + d.finalize())
+# b'I want to believe\x0f\x0f...'  (os \x0f são o padding PKCS#7)</code></pre>
+         <p>
+            O segredo é <i>I want to believe</i>.
+            <br><br>
+            <b>Com Frida</b>
+            <br><br>
+            As checagens de root estão em <i>sg.vantagepoint.a.c</i>, e a decifração devolve o segredo em claro. Basta
+            neutralizar uma e ler o retorno da outra:
+         </p>
+         <pre class="code-block"><code>// frida -U -f owasp.mstg.uncrackable1 -l level1.js
+Java.perform(() =&gt; {
+  const root = Java.use('sg.vantagepoint.a.c');
+  root.a.implementation = () =&gt; false;
+  root.b.implementation = () =&gt; false;
+  root.c.implementation = () =&gt; false;
+
+  const JString = Java.use('java.lang.String');
+  const aes = Java.use('sg.vantagepoint.a.a');
+  aes.a.implementation = function (key, data) {
+    const out = this.a(key, data);
+    console.log('segredo: ' + JString.$new(out));
+    return out;
+  };
+});</code></pre>
+         <p>
+            O hook da decifração só dispara depois que algum texto é enviado no app. Controles: RESILIENCE-1 (root) e,
+            pela chave no código, MASVS-CRYPTO-2, que trata de gestão de chaves.
+         </p>
+
+         <br>
+         <h2>Nível 2: o segredo vai para o código nativo</h2>
+
+         <p>
+            O Java continua com as mesmas checagens de root e ganha uma <i>AsyncTask</i> que fica em loop até
+            <i>Debug.isDebuggerConnected()</i> ser verdadeiro e então mostra o diálogo que fecha o app. A verificação agora é
+            <i>CodeCheck.bar(byte[])</i>, um método nativo em <i>libfoo.so</i>, e o <i>onCreate</i> chama antes um
+            <i>init()</i> nativo.
+            <br><br>
+            Na versão x86_64 da biblioteca, o <i>init</i> chama <i>fork</i>. O processo filho se anexa ao pai com
+            <i>ptrace</i> e fica esperando com <i>waitpid</i>. Um processo só aceita um tracer por vez, então um
+            debugger não consegue mais se anexar ao app. O <i>bar</i> fica assim no objdump (trecho):
+         </p>
+         <pre class="code-block"><code>112d: cmp    BYTE PTR [rip+0x2ed8],0x1      ; init() já rodou?
+1134: jne    119a                           ; se não, retorna false
+113f: movaps xmm0,XMMWORD PTR [rip+0x7a]    ; 16 bytes constantes
+1146: movaps XMMWORD PTR [rsp],xmm0
+114a: mov    DWORD PTR [rsp+0x10],0x66206568 ; "he f"
+1152: mov    WORD PTR [rsp+0x14],0x7369      ; "is"
+1159: mov    BYTE PTR [rsp+0x16],0x68        ; "h"
+...
+1181: cmp    eax,0x17                        ; a entrada tem 23 bytes?
+1189: mov    edx,0x17
+1191: call   strncmp@plt</code></pre>
+         <p>
+            O segredo é montado na pilha: 16 bytes copiados de uma constante do binário e mais 7 gravados como
+            imediatos, em little-endian. Juntando os pedaços: <i>Thanks for all the fish</i>, com 23 bytes, o mesmo
+            tamanho que o código exige.
+            <br><br>
+            A primeira comparação também importa. O <i>bar</i> só funciona se uma flag global, ligada pelo
+            <i>init</i>, valer 1. Quem tentar remover o anti-debug apagando a chamada a <i>init()</i> no smali recebe
+            "Nope..." para qualquer entrada, inclusive a certa.
+            <br><br>
+            <b>Com Frida</b>
+            <br><br>
+            O modo spawn resolve o anti-debug: o Frida já está dentro do processo antes do <i>init</i> criar o
+            filho. O segredo chega em claro como segundo argumento do <i>strncmp</i> da libc, e o filtro pelo tamanho
+            23 evita imprimir todas as comparações do processo:
+         </p>
+         <pre class="code-block"><code>// frida -U -f owasp.mstg.uncrackable2 -l level2.js
+Java.perform(() =&gt; {
+  const root = Java.use('sg.vantagepoint.a.b');
+  root.a.implementation = () =&gt; false;
+  root.b.implementation = () =&gt; false;
+  root.c.implementation = () =&gt; false;
+});
+
+const strncmp = Process.getModuleByName('libc.so')
+  .getExportByName('strncmp');
+Interceptor.attach(strncmp, {
+  onEnter(args) {
+    if (args[2].toInt32() === 23) {
+      console.log('segredo: ' + args[1].readUtf8String(23));
+    }
+  }
+});</code></pre>
+         <p>
+            É preciso digitar qualquer texto de 23 caracteres, porque com outro tamanho o <i>bar</i> retorna antes do
+            <i>strncmp</i>. Controles: RESILIENCE-1 e RESILIENCE-4 (debugger).
+         </p>
+
+         <br>
+         <h2>Nível 3: integridade, anti-Frida e um segredo ofuscado</h2>
+
+         <p>
+            <b>As defesas em Java</b>
+            <br><br>
+            Antes de tudo, <i>verifyLibs()</i> abre o próprio APK como zip, compara o CRC32 de cada
+            <i>lib/&lt;arquitetura&gt;/libfoo.so</i> com valores guardados nos recursos e o CRC32 do
+            <i>classes.dex</i> com o valor devolvido pelo método nativo <i>baz()</i>. Qualquer diferença marca
+            <i>tampered = 31337</i>. Repacotar o APK com um smali alterado, portanto, já dispara a detecção. Depois
+            vêm as mesmas checagens de root (agora em <i>sg.vantagepoint.util.RootDetection</i>), o loop de debugger e
+            uma chamada a <i>init(xorkey)</i>, onde <i>xorkey</i> é <i>pizzapizzapizzapizzapizz</i>.
+            <br><br>
+
+            <b>As defesas nativas</b>
+            <br><br>
+            A biblioteca tem um construtor em <i>.init_array</i>, que roda assim que o <i>System.loadLibrary</i> a
+            carrega, antes de qualquer método nativo ser chamado. Ele cria uma thread que lê <i>/proc/self/maps</i> em
+            loop, com um <i>usleep</i> entre as leituras, procurando as strings <i>frida</i> e <i>xposed</i> com
+            <i>strstr</i>. Se encontrar, registra "Tampering detected! Terminating..." e chama <i>goodbye()</i>, que
+            faz <i>raise</i> e <i>_exit</i>. Depois, o <i>init</i> copia a <i>xorkey</i> para uma variável global e
+            repete o <i>fork</i> com <i>ptrace</i> do nível 2.
+            <br><br>
+            O construtor e o <i>init</i> somam 1 cada a um contador global, e o <i>bar</i> só aceita a entrada se esse
+            contador valer 2. Como no nível 2, remover uma das defesas no binário quebra a verificação junto.
+            <br><br>
+
+            <b>O segredo</b>
+            <br><br>
+            O <i>bar</i> exige uma entrada de 24 bytes e confere, byte a byte, se
+            <i>entrada[i] == xorkey[i] ^ buf[i]</i>. O <i>buf</i> é preenchido por uma função sem nome, no endereço
+            <i>0x12c0</i> da versão x86_64. Ela tem cerca de 2.300 instruções, faz 100 chamadas a <i>malloc</i> e usa
+            as constantes <i>0x41c64e6d</i> e <i>0x3039</i>, as do gerador congruencial linear clássico do
+            <i>rand()</i>, para montar e percorrer estruturas que não influenciam o resultado. Ler isso à mão levaria
+            horas.
+            <br><br>
+            Executar a função foi mais rápido. Ela não depende do estado do app e só chama <i>malloc</i>, então dá para
+            rodá-la isolada no Unicorn: carregar os segmentos da <i>.so</i>, aplicar as relocações (o código lê
+            ponteiros da GOT), trocar o <i>malloc</i> por um alocador que só avança um ponteiro e chamar a função com
+            um buffer vazio:
+         </p>
+         <pre class="code-block"><code>BASE, OUT, STOP = 0x10000000, 0x50000000, 0x60000000
+MALLOC_PLT = BASE + 0xc70
+
+# ... mapeia os PT_LOAD em BASE, aplica R_X86_64_RELATIVE e GLOB_DAT,
+#     mapeia heap, pilha, OUT e STOP
+
+def on_code(uc, addr, size, _):
+    if addr == MALLOC_PLT:                       # malloc(n): alocador linear
+        n = uc.reg_read(UC_X86_REG_RDI)
+        uc.reg_write(UC_X86_REG_RAX, heap.alloc(n))
+        ret_to_caller(uc)                        # desempilha e volta
+
+mu.hook_add(UC_HOOK_CODE, on_code)
+mu.reg_write(UC_X86_REG_RDI, OUT)                # buffer de saída
+push_return_address(mu, STOP)
+mu.emu_start(BASE + 0x12c0, STOP)
+
+buf = bytes(mu.mem_read(OUT, 24))
+print(bytes(b ^ k for b, k in zip(buf, b"pizzapizzapizzapizzapizz")))</code></pre>
+         <pre class="code-block"><code>buf     1d0811130f1749150d0003195a1d1315080e5a0017081314
+segredo b'making owasp great again'</code></pre>
+         <p>
+            Depois de ter o resultado, procurei os bytes no binário. Os 16 primeiros estão em sequência na
+            <i>.rodata</i>, no endereço <i>0x3b40</i>, logo antes da string <i>/proc/self/maps</i>. A ofuscação esconde
+            como os bytes chegam ao buffer; os bytes continuam no arquivo.
+            <br><br>
+            <b>Com Frida</b>
+            <br><br>
+            O APK não precisa ser alterado, então a checagem de CRC não atrapalha. Sobram as checagens de root, que
+            saem como nos níveis anteriores, e a thread que procura <i>frida</i> no <i>/proc/self/maps</i>. Um hook no
+            <i>strstr</i> da libc que responde "não encontrado" para essas duas agulhas desarma a thread sem tocar na
+            biblioteca do app. Como a thread nasce no carregamento da <i>libfoo.so</i>, o modo spawn é obrigatório,
+            para o hook já estar lá antes do <i>System.loadLibrary</i>:
+         </p>
+         <pre class="code-block"><code>// frida -U -f owasp.mstg.uncrackable3 -l level3.js
+const strstr = Process.getModuleByName('libc.so')
+  .getExportByName('strstr');
+Interceptor.attach(strstr, {
+  onEnter(args) {
+    const needle = args[1].readUtf8String();
+    this.hide = needle === 'frida' || needle === 'xposed';
+  },
+  onLeave(retval) {
+    if (this.hide) retval.replace(ptr(0));
+  }
+});
+
+Java.perform(() =&gt; {
+  const root = Java.use('sg.vantagepoint.util.RootDetection');
+  root.checkRoot1.implementation = () =&gt; false;
+  root.checkRoot2.implementation = () =&gt; false;
+  root.checkRoot3.implementation = () =&gt; false;
+});</code></pre>
+         <p>
+            Com o app aberto e instrumentado, o segredo ainda precisa sair do <i>buf</i>, que só existe na pilha
+            durante o <i>bar</i>. Para isso, o caminho mais curto continua sendo a emulação acima. Controles:
+            RESILIENCE-1, RESILIENCE-2 (CRC do APK), RESILIENCE-3 (a função ofuscada) e RESILIENCE-4 (ptrace e
+            detecção de Frida).
+         </p>
+
+         <br>
+         <h2>O que isso diz para quem defende</h2>
+
+         <p>
+            Todas as proteções dos três níveis rodam no aparelho e terminam num booleano ou numa chamada a
+            <i>exit</i>, e quem controla o aparelho controla os dois. A detecção de Frida, por exemplo, procura uma
+            string fixa com uma função da libc, e um hook nessa função basta para cegá-la. Detecções mais sérias
+            procuram vários sinais ao mesmo tempo (portas, threads com nomes conhecidos, trechos de código do agente na
+            memória), fazem as chamadas por syscall direta e checam a própria integridade, mas continuam rodando no
+            território de quem ataca.
+            <br><br>
+            O segredo também nunca deveria estar no cliente. Nos três níveis, ele está inteiro no APK, cifrado com
+            uma chave que está no APK ou escondido atrás de ofuscação que um emulador atravessa. Num app real, o
+            equivalente é uma chave de API, um segredo de assinatura ou uma regra de negócio que só o cliente checa.
+            <br><br>
+            Para mim, a conclusão é usar essas proteções como atrito e como telemetria: elas atrasam quem ataca e
+            avisam o backend que algo está errado, e a decisão fica no servidor. No Android, isso significa pedir um
+            veredito do Play Integrity e validá-lo no backend, em vez de confiar no que o app diz sobre si mesmo.
+         </p>
+
+         <br>
+         <h2>Considerações finais</h2>
+
+         <p>
+            Quase todo o trabalho do nível 3 ficou na função ofuscada, e executá-la num emulador de CPU foi bem mais
+            rápido que lê-la. Ofuscação desse tipo custa caro para quem lê o código e quase nada para quem pode
+            rodá-lo. O nível 4 (r2pay) e os dois crackmes de licença do mesmo repositório usam ofuscação mais pesada
+            e ficam para um próximo post.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
