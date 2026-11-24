@@ -166,186 +166,212 @@
     }
 }
 
-/* Mini-mapa da carreira (coluna da esquerda): eixo de anos no topo, uma linha por
-   experiência, grade vertical por ano e a linha tracejada de "hoje". O trecho
-   previsto depois de hoje (curso até 2027) é tracejado. */
+/* Mapa da carreira (coluna da esquerda), no formato de um `git log --graph`:
+   o mais recente no topo, uma trilha por frente (formação, trabalho, voluntariado).
+   Cada experiência nasce num nó e segue como uma linha vertical enquanto durou;
+   as que chegam ao "hoje" continuam. As linhas param no ano em que terminaram. */
 
 .career-map {
-    --label: 8rem;
-    --years: 8; /* 2020 a 2028 */
-    /* verde do site um passo mais escuro: barras cheias precisam de L <= 0.67 no fundo escuro */
-    --bar-work: #74a521;
-    --bar-other: #7d7d7d;
+    --lane: 0.75rem;
+    --lane-gap: 0.3125rem;
+    --lanes: 5;
+    --mark: 1.5rem;            /* altura das linhas de ano e de "hoje" */
+    --node: 0.5625rem;
+    --c-work: var(--signal);
+    --c-vol: #7a7a7a;          /* 4.0:1 sobre --canvas */
+    --c-edu: var(--ink-muted);
     margin: 2.25rem 0 0;
     font-size: 0.8125rem;
 }
 
-.cm-axis,
-.cm-row {
+.cm-graph {
+    position: relative;
     display: grid;
-    grid-template-columns: var(--label) 1fr;
-    align-items: center;
-    gap: 0.75rem;
+    grid-template-columns: repeat(var(--lanes), var(--lane)) 1fr;
+    column-gap: var(--lane-gap);
+    grid-template-rows: repeat(var(--rows), auto);
 }
 
-.cm-axis {
+/* "hoje": régua tracejada atravessando as trilhas; o que está em andamento cruza ela */
+.cm-graph::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--mark) / 2);
+    left: 0;
+    width: calc(var(--lanes) * (var(--lane) + var(--lane-gap)));
+    border-top: 1px dashed var(--ink-faint);
+}
+
+/* linhas de ano e "hoje": só o rótulo, na coluna de texto */
+.cm-mark {
+    grid-column: calc(var(--lanes) + 1);
+    height: var(--mark);
+    margin: 0 0 0 0.25rem;
     color: var(--ink-faint);
     font-size: 0.75rem;
+    line-height: var(--mark);
     font-variant-numeric: tabular-nums;
 }
 
-.cm-ticks {
-    position: relative;
-    height: 2.1rem;
+.cm-mark--now {
+    color: var(--ink-muted);
 }
 
-.cm-ticks > span {
+/* trilho de uma experiência: do topo da linha onde termina até o seu nó */
+.cm-line {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.cm-line::before {
+    content: "";
     position: absolute;
+    top: calc(var(--mark) / 2);
+    bottom: 0;
+    left: calc(50% - 1px);
+    width: 2px;
+    border-radius: 1px;
+    background: var(--c);
+}
+
+.cm-line--work { --c: var(--c-work); }
+.cm-line--vol { --c: var(--c-vol); }
+.cm-line--edu { --c: var(--c-edu); }
+
+/* ainda em andamento: o trilho atravessa o "hoje" até o topo do mapa */
+.cm-line--now::before {
     top: 0;
-    left: calc(var(--x) * 100%);
-    transform: translateX(-50%);
+    border-radius: 0 0 1px 1px;
 }
 
-.cm-ticks > .cm-now {
-    top: 1rem;
-    color: var(--ink-muted);
-}
-
-.cm-group {
-    margin-top: 0.75rem;
-}
-
-.cm-group-name {
-    margin: 0 0 0.125rem;
-    color: var(--ink-muted);
-    font-weight: 600;
-}
-
+/* a linha inteira é o link; o nó fica na trilha, o texto na última coluna */
 .cm-row {
+    --x: calc(var(--lane-i, 0) * (var(--lane) + var(--lane-gap)) + var(--lane) / 2);
     position: relative;
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
     margin: 0 -0.375rem;
-    padding: 0 0.375rem;
+    padding: 0.3125rem 0.375rem 0.4375rem calc(var(--lanes) * (var(--lane) + var(--lane-gap)) + 0.625rem);
     border-radius: 4px;
     color: var(--ink-faint);
+    line-height: 1.35;
     text-decoration: none;
     transition: background-color 150ms var(--ease), color 150ms var(--ease);
 }
 
-.cm-row:hover,
-.cm-row:focus-visible {
-    z-index: 2;
-    background: var(--raised, #1c1c1c);
-    color: var(--ink);
+.cm-row--work { --c: var(--c-work); }
+.cm-row--vol { --c: var(--c-vol); }
+.cm-row--edu { --c: var(--c-edu); }
+
+
+/* trecho do trilho dentro da própria linha: do topo até o nó */
+.cm-row::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    height: calc(0.3125rem + 0.55em);
+    left: calc(0.375rem + var(--x) - 1px);
+    width: 2px;
+    background: var(--c);
 }
 
-.cm-label {
+.cm-node {
+    position: absolute;
+    z-index: 2;
+    top: calc(0.3125rem + 0.55em - var(--node) / 2);
+    left: calc(0.375rem + var(--x) - var(--node) / 2);
+    width: var(--node);
+    height: var(--node);
+    border-radius: 50%;
+    background: var(--c);
+    transition: box-shadow 150ms var(--ease);
+}
+
+/* formação: nó vazado, para não depender só da cor */
+.cm-row--edu .cm-node {
+    background: var(--canvas);
+    box-shadow: inset 0 0 0 2px var(--c);
+}
+
+.cm-org {
+    color: var(--ink-muted);
+    font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-/* trilha da altura da linha: a grade de anos e o "hoje" ficam contínuos entre as linhas */
-.cm-track {
-    position: relative;
-    height: 1.625rem;
-    background: repeating-linear-gradient(to right,
-            var(--rule) 0 1px,
-            transparent 1px calc(100% / var(--years)));
-}
-
-.cm-track::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: calc(var(--today) * 100%);
-    border-left: 1px dashed var(--ink-faint);
-}
-
-.cm-bar {
-    position: absolute;
-    top: 50%;
-    height: 0.5rem;
-    left: calc(var(--a) * 100%);
-    width: max(6px, calc((var(--b) - var(--a)) * 100%));
-    transform: translateY(-50%);
-    border-radius: 4px;
-    background: var(--bar-other);
-    transition: background-color 150ms var(--ease), box-shadow 150ms var(--ease);
-}
-
-.cm-bar--work {
-    background: var(--bar-work);
-}
-
-.cm-bar--edu {
-    background: none;
-    box-shadow: inset 0 0 0 1.5px var(--bar-other);
-}
-
-/* ainda em andamento: a barra encosta em "hoje" com a ponta reta */
-.cm-bar--now {
-    border-radius: 4px 0 0 4px;
-}
-
-.cm-bar--ongoing::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    width: calc((var(--f) - var(--b)) / (var(--b) - var(--a)) * 100%);
-    border-top: 1.5px dashed var(--bar-other);
-}
-
-.cm-row:hover .cm-bar,
-.cm-row:focus-visible .cm-bar {
-    background: var(--ink);
-}
-
-.cm-row:hover .cm-bar--work,
-.cm-row:focus-visible .cm-bar--work {
-    background: var(--signal);
-}
-
-.cm-row:hover .cm-bar--edu,
-.cm-row:focus-visible .cm-bar--edu {
-    background: none;
-    box-shadow: inset 0 0 0 1.5px var(--ink);
-}
-
-/* cargo e período logo abaixo da linha, ao passar o mouse ou focar */
-.cm-tip {
-    position: absolute;
-    top: calc(100% + 0.25rem);
-    left: 0;
-    right: 0;
-    padding: 0.5rem 0.625rem;
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    background: #1f1f1f;
-    color: var(--ink);
-    line-height: 1.4;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 120ms var(--ease), visibility 120ms;
-    pointer-events: none;
-}
-
-.cm-tip span {
-    color: var(--ink-faint);
+.cm-when {
+    font-size: 0.75rem;
     font-variant-numeric: tabular-nums;
 }
 
-.cm-row:hover .cm-tip,
-.cm-row:focus-visible .cm-tip {
-    opacity: 1;
-    visibility: visible;
+.cm-row:hover,
+.cm-row:focus-visible {
+    background: var(--raised, #1c1c1c);
+    color: var(--ink-muted);
+}
+
+.cm-row:hover .cm-org,
+.cm-row:focus-visible .cm-org {
+    color: var(--ink);
+}
+
+.cm-row:hover .cm-node,
+.cm-row:focus-visible .cm-node {
+    box-shadow: 0 0 0 2px var(--raised, #1c1c1c), 0 0 0 3.5px var(--c);
+}
+
+.cm-row--edu:hover .cm-node,
+.cm-row--edu:focus-visible .cm-node {
+    background: var(--raised, #1c1c1c);
+    box-shadow: inset 0 0 0 2px var(--c), 0 0 0 2px var(--raised, #1c1c1c), 0 0 0 3.5px var(--c);
 }
 
 .career-map figcaption {
     margin-top: 1rem;
     color: var(--ink-faint);
     text-wrap: pretty;
+}
+
+.career-map figcaption p {
+    margin: 0.5rem 0 0;
+}
+
+.cm-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-muted);
+}
+
+.cm-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+}
+
+.cm-key::before {
+    content: "";
+    width: var(--node);
+    height: var(--node);
+    border-radius: 50%;
+    background: var(--c);
+}
+
+.cm-key--work { --c: var(--c-work); }
+.cm-key--vol { --c: var(--c-vol); }
+.cm-key--edu { --c: var(--c-edu); }
+
+.cm-key--edu::before {
+    background: none;
+    box-shadow: inset 0 0 0 2px var(--c);
 }
 
 .role {
@@ -367,12 +393,17 @@
 }
 
 /* a experiência que está na tela fica marcada no mapa */
-.cm-row.is-current {
+.cm-row.is-current .cm-org {
     color: var(--ink);
+    font-weight: 600;
 }
 
-.cm-row.is-current .cm-label {
-    font-weight: 600;
+.cm-row.is-current .cm-node {
+    box-shadow: 0 0 0 2px var(--canvas), 0 0 0 3.5px var(--c);
+}
+
+.cm-row--edu.is-current .cm-node {
+    box-shadow: inset 0 0 0 2px var(--c), 0 0 0 2px var(--canvas), 0 0 0 3.5px var(--c);
 }
 
 /* Contato: uma linha de terminal. Ao passar o mouse o e-mail "decifra" (JS) e fica verde. */
