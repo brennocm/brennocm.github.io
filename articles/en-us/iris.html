@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="../../assets/css/articles.css">
+   <link rel="stylesheet" href="../../assets/css/site.css">
+   <link rel="stylesheet" href="../../assets/css/post.css">
+   <link rel="icon" type="image/png" href="/img/home/favicon.png" />
+   <title>iris.</title>
+</head>
+
+<body>
+    <nav class="site-nav post-nav">
+        <p class="crumb"><a href="/index-en.html">brennocm</a><span aria-hidden="true">/</span><a href="/index-en.html#technical">articles</a><span aria-hidden="true">/</span><span aria-current="page">iris</span></p>
+        <p class="lang" aria-label="Language">
+            <a href="../pt-br/iris.html" lang="pt-BR">PT</a>
+            <span aria-hidden="true">/</span>
+            <a href="../en-us/iris.html" lang="en" aria-current="page">EN</a>
+        </p>
+    </nav>
+   <!-- Main Content -->
+   <main class="content">
+      <header class="article-header">
+         <h1>Iris: an Android self-protection SDK that decides nothing</h1>
+         <p class="meta">
+            <time>Dec 1, 2026</time>
+         </p>
+      </header>
+      <section class="article-body">
+         <p>
+            In the <a href="uncrackable.html">UnCrackable post</a>, every protection fell to one hook: root
+            detection, anti-debugging, Frida detection. Each one ended in a boolean inside the app, and whoever
+            controls the device controls that boolean. I came out of it with a question: what would a detection
+            library look like if it were written with that in mind from the start?
+            <br><br>
+            <a href="https://github.com/brennocm/iris">Iris</a> is my answer. It's an Android SDK in Kotlin and C
+            that looks for root, Frida, Xposed, debuggers and repackaged APKs, and makes no decision at all. It
+            returns a report signed with an Android Keystore key, and a reference server in Go verifies the
+            signature and decides whether to allow, review or deny. The name comes from Greek myth: Iris is the
+            messenger of the gods, who carries the message and judges no one.
+            <br><br>
+            I tested it on an Android 14 emulator, clean, rooted and with Frida injected, but not yet on a range of
+            real devices. Don't use it in production yet.
+         </p>
+
+         <h2>Concepts</h2>
+
+         <p>
+            <b>RASP</b>
+            <br>
+            <br> Runtime application self-protection is code that runs inside the app and tries to notice when the
+            environment has been compromised: root, instrumentation, a debugger, a modified binary. OWASP MASVS
+            groups these controls under RESILIENCE. The weakness is well known: the detection code runs in the same
+            process the attacker controls.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Key attestation</b>
+            <br>
+            <br> When an app creates an Android Keystore key with a challenge, the device's secure hardware (TEE or
+            StrongBox) issues a certificate chain that ends at a Google root. The key's certificate carries an
+            extension with the challenge, the package and signing certificate of the app that asked for the key,
+            and the bootloader state. Those fields are written by the hardware, outside the app's process, so a hook
+            in the app can't change them.
+            <br>
+            <br>
+         </p>
+
+         <p>
+            <b>Play Integrity</b>
+            <br>
+            <br> Google's API that returns a verdict about the app and the device, signed by Google and checked on
+            the server. It takes a <i>requestHash</i> field, which binds the verdict to one specific request.
+         </p>
+
+         <br>
+         <h2>Why the SDK doesn't decide</h2>
+
+         <p>
+            Iris has no <i>isSafe()</i>, doesn't block screens and doesn't close the app. Each check becomes a signal
+            with a fixed code (ROOT-001, HOOK-001, DEBUG-001, TAMPER-001) and the evidence behind it, and the report
+            goes to the backend. If the app decided on its own, one hook on that decision would switch everything
+            off. On the server, the decision is out of reach for whoever holds the device.
+            <br><br>
+            The other rule is that a check that couldn't run is reported as unavailable, never as clean. If someone
+            blocks reads of <i>/proc/self/maps</i>, the report says it couldn't look, and the server sends it to
+            review instead of allowing it.
+         </p>
+         <pre class="code-block"><code>{"schema":1,
+ "signals":[{"id":"HOOK-001","probe":"maps",
+             "evidence":"/memfd:frida-agent-64.so (deleted)"}],
+ "unavailable":[{"probe":"tracer",
+                 "reason":"could not read /proc/self/status"}]}</code></pre>
+
+         <br>
+         <h2>Reading /proc without going through libc</h2>
+
+         <p>
+            The cheapest bypass I saw in the crackmes was hooking libc: make <i>open</i> fail for
+            <i>/proc/self/maps</i>, or make <i>strstr</i> never find "frida". So the native part of Iris doesn't call
+            libc to read files. On arm64 and x86_64, <i>openat</i>, <i>read</i>, <i>close</i>, <i>faccessat</i> and
+            <i>getdents64</i> are issued with the syscall instruction written inline (<i>svc #0</i> and
+            <i>syscall</i>), and string matching happens in Kotlin. In the release AAR, the 64-bit libraries import
+            no libc file functions. The 32-bit ABIs fall back to libc's <i>syscall()</i> wrapper, which can be
+            hooked.
+            <br><br>
+            The checks in version 0.1:
+         </p>
+         <ol>
+            <li>ROOT-001: <i>su</i> and Magisk binaries at known paths;</li>
+            <li>ROOT-002: a system image signed with <i>test-keys</i>;</li>
+            <li>ROOT-003: Magisk mounts in <i>/proc/self/mounts</i>;</li>
+            <li>HOOK-001: Frida, Xposed, LSPosed and Substrate libraries in <i>/proc/self/maps</i>;</li>
+            <li>HOOK-002: Frida agent threads in <i>/proc/self/task/*/comm</i>;</li>
+            <li>DEBUG-001 to 003: <i>TracerPid</i>, a debuggable build and a connected Java debugger;</li>
+            <li>TAMPER-001: an APK signing certificate other than the expected one.</li>
+         </ol>
+
+         <br>
+         <h2>The signed report</h2>
+
+         <p>
+            A report on its own is just JSON. A clean report captured on another device can be replayed, one can be
+            built by a script, or it can be edited in transit. To close that, the full flow is:
+         </p>
+         <pre class="code-block"><code> server   POST /v1/challenge
+          32 bytes, single use, valid 2 minutes
+     │
+     ▼
+ app      iris.inspectAndSign(context, challenge)
+          checks → JSON report
+          new P-256 key in the TEE, attested
+          with the challenge
+          signs the report, deletes the key
+     │
+     ▼
+ server   POST /v1/verify
+          chain to Google's root, revocation
+          challenge, package, signer, boot
+          signature over the report
+          signals → allow, review or deny</code></pre>
+         <p>
+            The key is new for every challenge and deleted right after, so no long-lived key sits on the device for
+            someone to reuse. When the Keystore fails, which happens on old devices or broken implementations, the
+            message goes out unsigned with the reason in <i>attestation_error</i>, and the server treats it as a
+            missing check.
+            <br><br>
+            The attestation proves that the message was created after the challenge, that the key lives in secure
+            hardware, which package and signing certificate asked for the key, and whether the bootloader is locked.
+            A repackaged APK shows up here even if someone switched off TAMPER-001 in the app. What it doesn't prove
+            is that the report is honest: whoever controls the process can call the same Keystore API and sign a
+            clean report. That's why the server weighs the attested fields more heavily than the signals.
+         </p>
+
+         <br>
+         <h2>The verifier</h2>
+
+         <p>
+            The repository's <i>server/</i> is a Go service that uses only the standard library. It issues
+            challenges and, for each message, checks the chain to Google's roots (by the root's public key), the
+            revocation list, the challenge, the attestation security level, the package, the app's certificate, the
+            ECDSA signature over the report and the boot state. The default policy:
+            <br><br>
+            <b>deny</b>: an invalid chain or one outside Google's roots, a revoked certificate, an unknown or reused
+            challenge, software attestation, the wrong package or signer, a signature that doesn't verify, any HOOK
+            or TAMPER signal.
+            <br><br>
+            <b>review</b>: ROOT or DEBUG signals, unavailable checks, a message without attestation, an unlocked
+            bootloader or unverified boot.
+            <br><br>
+            <b>allow</b>: none of the above.
+            <br><br>
+            The app can sign anything with its own attested key, including a certificate. An attacker creates a
+            genuinely attested key and uses it to sign a fake certificate with an extension that says "bootloader
+            locked" and whatever challenge they want. That chain verifies signature by signature up to Google's
+            root. What breaks it is requiring the attestation extension to appear only on the first certificate: in
+            the attack, the genuine certificate moves to second place and also carries the extension. A test builds
+            exactly this chain, and it fails if the rule is removed.
+            <br><br>
+            Play Integrity sits behind an interface. Checking the verdict is done (package, <i>requestHash</i> equal
+            to the report's SHA-256, token age, app recognition and device integrity), but the binary doesn't make
+            the authenticated call to Google yet.
+         </p>
+
+         <br>
+         <h2>Testing on the emulator</h2>
+
+         <p>
+            I used an Android 14 emulator with the <i>google_apis</i> x86_64 image, a userdebug build: it accepts
+            <i>adb root</i> and ships <i>/system/xbin/su</i>. A sample app asks the server for a challenge, runs
+            <i>inspectAndSign</i> and sends the message to <i>/v1/verify</i>.
+            <br><br>
+            <b>Clean app</b>
+            <br><br>
+            The report came back without signals. With only Google's roots, the server denied it: the emulator's
+            chain ends at "Droid Unregistered Device CA", a Google test root. Trusting that root and allowing
+            software attestation (two options that exist only for testing and log a warning), the answer was
+            <i>review</i>, because the emulator has no hardware root of trust.
+            <br><br>
+            <b>Root</b>
+            <br><br>
+            This one surprised me. The report still had no signals, with <i>su</i> right there in the system.
+            SELinux denies apps the search of <i>/system/xbin</i>, so <i>faccessat</i> returns EACCES both for
+            <i>su</i> and for a name that doesn't exist. Until then Iris treated EACCES as "can't tell", which was
+            right by accident. Now it checks a control name in the same directory: if the control returns ENOENT,
+            the directory is searchable and the EACCES came from the file itself, which exists. On the emulator the
+            answer is still "can't tell", with no false positive. <i>adb root</i> doesn't give the app anything
+            either; it only restarts adbd as root. What gives this device away is the attestation.
+            <br><br>
+            <b>Frida</b>
+            <br><br>
+            I injected Frida 17.27.5 with <i>frida-inject</i> into the running app, with a script that does what
+            bypass scripts usually do: hook libc's <i>openat</i>, <i>read</i> and <i>strstr</i> to strip "frida" from
+            <i>/proc/self/maps</i> and make any search for "frida" fail. Then I ran the inspection again in the same
+            process:
+         </p>
+         <pre class="code-block"><code>HOOK-001 (maps): /memfd:frida-agent-64.so (deleted)
+HOOK-002 (threads): gmain
+HOOK-002 (threads): gdbus
+HOOK-002 (threads): gum-js-loop
+→ deny</code></pre>
+         <p>
+            The hooks were active, but Iris's reads don't go through libc, and both signals fired. A script that
+            intercepts the syscall instruction or patches <i>libiris.so</i> would get past it. That limit is in the
+            project's threat model.
+            <br><br>
+            The same three device tests run in CI on an emulator on every push.
+         </p>
+
+         <br>
+         <h2>What the review found</h2>
+
+         <p>
+            Before opening the repository, I reviewed the code for bugs, and four of them went against the project's
+            own rule that a blinded check must leave a trace:
+         </p>
+         <ol>
+            <li>if <i>libiris.so</i> was missing or failed to load, <i>inspect()</i> threw and crashed the app using
+               the SDK. The native checks are now reported as unavailable;</li>
+            <li><i>/proc</i> files larger than 4 MiB were cut off silently. An attacker who mapped thousands of
+               regions could push the Frida agent past the cut. A truncated read with no signals is now
+               unavailable;</li>
+            <li>the thread list stopped at 2048 without saying so. It now grows, and above 65536 threads the check
+               is unavailable;</li>
+            <li><i>inspectAndSign</i> handled only some Keystore exceptions, and <i>load()</i> can throw
+               IOException. Any failure now produces an unattested message, and a device that returns only the
+               key's own certificate (no attestation support) is reported as such.</li>
+         </ol>
+         <p>
+            On the server, a <i>String()</i> could panic on an out-of-range value, and every challenge request
+            scanned the whole map while holding the lock. Both are fixed, with tests.
+         </p>
+
+         <br>
+         <h2>Hands-on</h2>
+
+         <pre class="code-block"><code>git clone https://github.com/brennocm/iris.git &amp;&amp; cd iris
+mise install
+mise run check          # Kotlin, C, lint and Go tests
+
+# server, pointed at the sample app
+cd server
+IRIS_PACKAGE_NAME=io.github.brennocm.iris.sample \
+  go run ./cmd/iris-verifier</code></pre>
+         <p>
+            In the app, the integration takes a few lines:
+         </p>
+         <pre class="code-block"><code>val iris = Iris(IrisConfig(signingCertSha256 = setOf("AB:CD:…")))
+
+// off the main thread
+val challenge = api.getChallenge()
+val message = iris.inspectAndSign(context, challenge)
+api.verify(message.toJson(), playIntegrityToken)</code></pre>
+         <p>
+            The step-by-step for the emulator scenarios, with the Frida script, is in <i>docs/scenarios.md</i>.
+         </p>
+
+         <br>
+         <h2>Limitations</h2>
+
+         <p>
+            Anything that runs on the device can be forged by whoever controls the process, and Iris doesn't change
+            that: hooking the SDK's Kotlin methods or patching <i>libiris.so</i> gets past the checks. Name matching
+            catches default setups and misses a renamed Frida. Magisk with DenyList hides its mounts. A rooted
+            device with a locked bootloader, or a leaked attestation keybox, passes attestation; the revocation list
+            and Play Integrity narrow that risk without removing it.
+            <br><br>
+            The server's challenge store lives in memory and only works with one instance. It still needs testing on
+            real devices (a locked phone, one with Magisk, one with LSPosed) and the Play Integrity call wired in.
+         </p>
+
+         <br>
+         <h2>Final thoughts</h2>
+
+         <p>
+            After breaking the UnCrackable apps, I expected to spend most of the time on detection techniques. They
+            turned out to be the smaller part. What took the most thought was deciding what to do with each result,
+            keeping "I couldn't look" apart from "I looked and it's clean", and writing down what attestation proves
+            and what it doesn't. The most serious bugs I found were exactly the places where the SDK went blind
+            without saying so.
+         </p>
+      </section>
+   </main>
+   <br>
+   <footer>
+      <p>&copy; 20∞</p>
+   </footer>
+    <script src="../../assets/js/article-toc.js" defer></script>
+</body>
+
+</html>
